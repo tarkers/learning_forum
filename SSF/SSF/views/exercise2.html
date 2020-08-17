@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <script src="jquery.js"></script>
+    <title>jquery練習</title>
+    <style type="text/css">
+        @import "style.css"
+    </style>
+</head>
+<body>
+<div id="out">
+    <div id="middle">
+        <h2>test</h2>
+    </div>
+    <h2></h2>
+    <span class="a">asdd</span>
+        <a class="ans" >asdfghjhgfes</a>
+</div>
+<br>
+<strong id="aaa">222222</strong>
+<br>
+<button type="button" class="trigger">我是按鈕</button>
+<button type="button" class="trigger">我是按鈕</button>
+<br>
+<img src="img1.jpg" width="300px">
+<br>
+<div id="newPage">
+    <button type="button">我是按鈕</button>
+</div>
+<div class="tooltip" id="textSup">
+    <h5>文字輔助框</h5>
+    <p>1234567890</p>
+</div>
+<script>
+    function MI(e){
+        $(this).css("background-color","#FFAAAA");
+        //alert(e.pageX);
+    }
+    function MO(e){
+        $(this).css("background-color","#FFAAFF");
+    }
+    function show(msg){
+        alert(msg.data.msg);
+    }
+$(document).ready(function() {
+    $(".ans").hide();
+    $("span").hover(function(){
+        //$(this).next(".ans").fadeIn();
+        $(this).next(".ans").slideDown();
+    },
+    function(){
+        //$(this).next(".ans").fadeOut();
+        $(this).next(".ans").slideUp(1000,'linear');
+    });
+    $("#middle + h2").html("asdj");
+    //$("#middle > h2").text("aaaa");
+    //$("#middle").append("<h3>123456</h3>");
+    //$("#middle").prepend("<h3>456</h3>");
+    //$("#out").before("<p>before</p>");
+    //$('#out').after("<p>after<p>");
+    //$('#out').remove();
+    //$('p').replaceWith("<h1>xxxx</h1>");
+    $('div > h2').addClass('a');
+    $('div > h2').removeClass('a');
+    $('div > h2').toggleClass('a');
+    $("h2.a").css("font-size","200%");
+    $(".a").css({"font-size":"300%","background-color":"#FFAAFF"});
+    $('#out').append("<h1>H1<h1>");
+    $('h1').addClass('a');
+    //$("h2").attr('aa','bb');
+    $('span').each(function(){
+        //alert($(this).text() + "1個h1"); 
+    });
+    $('h1').bind('click',{msg:$('h1').text()},show);
+    $('h2.a').mousemove(MI);
+    $('h2.a').mouseout(MO);
+    $('span').hover(MI,MO);
+    $('html').dblclick(function(e){
+       alert(String(e.pageY)+'px');
+    });
+    $('#aaa').mousemove(function(){
+        $(this).animate({marginLeft:'100px'},1000);
+    });
+    $('strong + br +button').click(function(){
+        $(this).animate({marginLeft:'+=50px'},1000,function(){
+            $(this).animate({marginLeft:'-=50px'},1000);
+        });
+    });
+    $('button + button').click(function(){
+        $(this).fadeOut().fadeIn();
+    });
+    $('img').click(function(){
+        let imgNum = parseInt($(this).attr('src')[3]) + 1;
+        if(imgNum > 6) imgNum = 1;
+        $(this).attr('src','img'+imgNum+'.jpg');
+    });
+    $('button.trigger').hover(function(e){
+        $('#textSup').show();
+        //alert(String(e.pageX)+'px');
+        $('#textSup').css('margin-left', String(e.pageX)+'px');
+        $('#textSup').css('margin-top', String(parseInt(e.pageY) - window.screenTop)+'px');
+    },function(){
+        $('#textSup').hide();
+    });
+    $('#newPage button').click(function(){
+        $('#newPage').load(location.href);
+    });
+});
+</script>
+</body>
+</html>
