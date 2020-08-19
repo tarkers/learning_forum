@@ -42,6 +42,33 @@
     <Content Include="views\exercise.html" />
     <Content Include="views\exercise2.html" />
     <Content Include="views\index.html" />
+    <Content Include="views\Page1.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page2.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page3.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page4.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page5.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page6.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page7.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page8.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\Page9.html">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
