@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var JB = require('./routes/JB');
+var DB = require('./routes/DB');
 var app = express();
 
 app.engine('.html', require('ejs').__express)
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/JB', JB);
+app.use('/DB', DB);
 
 //以下為最後除錯中間件 勿刪 發布時用
 //// catch 404 and forward to error handler

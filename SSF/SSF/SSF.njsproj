@@ -31,6 +31,9 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="public\javascripts\jquery.js" />
+    <Content Include="routes\DB.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="routes\index.js" />
     <Content Include="routes\JB.js">
       <SubType>Code</SubType>
