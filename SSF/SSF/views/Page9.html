@@ -3,9 +3,107 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/javascripts/jquery.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <title>發帖區</title>
 </head>
 <body>
+    <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
+        <div class="text-center">
+            <h1>發帖區<small><%=ID%></small></h1>
+            <small>sand to <%=board_ID%></small>
+        </div>
+        <br>
+        <div class="col-sm-8 ">
+            <span>主題:</span><input id="title" type="text" style="width:100%"><br />
+            <span>內容:</span><br />
+            <textarea style="width:100%;" id="include"></textarea><br />
+        </div>
+        <div class="col-sm-4 ">
+            插入成功後請不要破壞出現的標記式語言<br />
+            <input type="button" value="插入大標題" /><br />
+            <input type="button" value="插入小標題" /><br />
+            <input type="button" value="插入圖片" /><br />
+            <input type="button" value="插入網址" /><br />
+            <input type="button" value="插入Gsuit分享連結" /><br />
+            <input type="button" value="test" /><br />
+            <pre id="type"><%=type%></pre>
+            <form action="/DB/post_public" method="post">
+                <pre name="ID"><%=ID%></pre>
+                <pre name="board_ID"><%=board_ID%></pre>
+                <pre name="title"></pre>
+                <pre name="include"></pre>
+                <input type="submit" value="寄出" />
+            </form>
+            <form action="/DB/post_private" method="post">
+                <pre name="ID"><%=ID%></pre>
+                <pre name="board_ID"><%=board_ID%></pre>
+                <pre name="title"></pre>
+                <pre name="include"></pre>
+                <input type="text" placeholder="發文密碼" name="board_password"><br />
+                <input type="submit" value="寄出" />
+            </form>
+        </div>
+    </div>
+    <script>
+        function init() {
+            $('pre').hide();
+            $('form').each(function () {
+                if ($(this).attr('action') == '/DB/post_public' && $('#type').text() == 'private')
+                    $(this).hide();
+                else if ($(this).attr('action') == '/DB/post_private' && $('#type').text() == 'public')
+                    $(this).hide();
+            });
+            $('textarea').css('height', $(window).height() * 0.7);
+        }
+        $(document).ready(function () {
+            init();
+            $("form").submit(function (e) {
+                if ($('#type').text() == 'private')
+                    if ($(this).children('input[type="text"]').val() == '') {
+                        password = prompt("你還沒輸入私版密碼, 請在下方輸入密碼");
+                        $(this).children('input[type="text"]').val(password);
+                    }
+                $(this).children('pre[name="title"]').html($("#title").val());
+                $(this).children('pre[name="include"]').html($("#include").text());
+            });
 
+            $('input[type="button"]').click(function () {
+                var tmp = '';
+                switch ($(this).attr('value')) {
+                    case '插入大標題':
+                        tmp = prompt('請輸入你想寫的大標題');
+                        $("#include").text($("#include").text() + '<h3>' + tmp + '</h3>');
+                        break;
+                    case '插入小標題':
+                        tmp = prompt('請輸入你想寫的小標題');
+                        $("#include").text($("#include").text() + '<h4>' + tmp + '</h4>');
+                        break;
+                    case '插入圖片':
+                        tmp = prompt('請輸入你想放圖片的URL');
+                        $("#include").text($("#include").text() + '<img src="' + tmp + '"/>');
+                        break;
+                    case '插入網址':
+                        var URL = prompt('請輸入你想放的網址');
+                        var name = prompt('請輸入你想放網址代稱');
+                        $("#include").text($("#include").text() + '<a src="' + URL + '">' + name + '</a>');
+                        break;
+                    case '插入Gsuit分享連結':
+                        tmp = prompt('請輸入你想分享的Gsuit連結');
+                        $("#include").text($("#include").text() + '<iframe src="'+tmp+'" style="width:100%;"></iframe>');
+                        break;
+                    default:
+                        alert($("#include").text());
+                        break;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
