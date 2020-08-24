@@ -31,7 +31,7 @@
             <textarea style="width:100%;" id="include" readonly></textarea><br />
         </div>
         <div class="col-sm-4 ">
-            插入成功後請不要破壞出現的標記式語言<br />
+            插入成功後請不要破壞出現的標記式語言(內容允許直接刪除)<br />
             <input type="button" value="插入大標題" /><br />
             <input type="button" value="插入小標題" /><br />
             <input type="button" value="插入一般文字" /><br />
@@ -39,7 +39,8 @@
             <input type="button" value="插入網址" /><br />
             <input type="button" value="插入Gsuit分享連結" /><br />
             <input type="button" value="清空內容" /><br />
-            <input type="button" value="test" /><br />
+            <input type="button" value="局部刪除" /><br />
+            <input type="button" value="預覽" /><br />
             <pre id="type"><%=type%></pre>
             <form action="/DB/post_public" method="post">
                 <input type="text" name="ID" value="<%=ID%>" />
@@ -49,10 +50,10 @@
                 <input type="submit" value="寄出" />
             </form>
             <form action="/DB/post_private" method="post">
-                <input type="text" name="ID" value="<%=ID%>"/>
-                <input type="text" name="board_ID" value="<%=board_ID%>"/>
-                <input type="text" name="title"/>
-                <input type="text" name="include"/>
+                <input type="text" name="ID" value="<%=ID%>" />
+                <input type="text" name="board_ID" value="<%=board_ID%>" />
+                <input type="text" name="title" />
+                <input type="text" name="include" />
                 <input type="password" placeholder="發文密碼" name="board_password"><br />
                 <input type="submit" value="寄出" />
             </form>
@@ -107,7 +108,7 @@
                         break;
                     case '插入Gsuit分享連結':
                         tmp = prompt('請輸入你想分享的Gsuit連結');
-                        $("#include").val($("#include").val() + '\r\n<br><iframe src="' + tmp + '" style="width:100%;"></iframe><br>\r\n');
+                        $("#include").val($("#include").val() + '\r\n<br><iframe src="' + tmp + '" style="width:100%;height:800px"></iframe><br>\r\n');
                         break;
                     case '清空內容':
                         $("#include").val('');
@@ -116,9 +117,22 @@
                     case '插入一般文字':
                         $("#general_input").show();
                         break;
-                    default:
-                        alert($("#include").val());
+                    case '局部刪除':
+                        var str = $("#include").val();
+                        $("#include").val(str.substr(0, str.length - 1));
                         break;
+                    default:
+                        if ($(this).val() == '預覽') {
+                            let x = $('#include').val();
+                            window.open('/DB/post_preview?html=' + window.encodeURI(x).replace(/%/g, '%25'), '預覽窗');
+                        }
+                        break;
+                }
+            });
+
+            $("#general_input_textarea").keydown(function (event) {
+                if (event.which == 13) {
+                    $(this).val($(this).val() + '<br/>');
                 }
             });
 
