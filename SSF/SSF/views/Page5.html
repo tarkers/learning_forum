@@ -2,10 +2,27 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title></title>
 </head>
 <body>
-
+    <div class="container h-100">
+        <div class="col-md-12  align-self-center text-center ">
+            <form method="post" action="/JB/to_private_board">
+                <input type='text' name='board_ID' style="margin: 10px;" placeholder="Board_ID" />
+                <br>
+                <input type='password' name='board_password' style="margin: 5px;" placeholder="Board_password"/>
+                <input type='text' name='ID' value='<%=ID%>' style="display: none;" />
+                <br>
+                <input type='submit' value="進入" style="margin: 5px;" />
+            </form>
+            <pre>輸入你老師的房號與密碼，自動跳轉與加入你的最愛
+        </pre>
+        </div>
+    </div>
 </body>
 </html>

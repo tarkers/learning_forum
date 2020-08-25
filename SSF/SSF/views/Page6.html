@@ -1,11 +1,150 @@
 ﻿<!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
+
 <body>
 
+    <div class=" container-fluid">
+        <div class="row" style="height: 600px;">
+            <div class="col-md-8 ">
+                <p class=" text-center"><%=DE%>系</p>
+                <div>
+                    <div class=" text-center">
+                        <p class=" text-center">篩選設定</p>
+                        <div class="dropdown " style=" display:inline-block">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                常見關鍵字搜尋
+                            </button>
+                            <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <%for(var key in keywords){%>
+                                <a class="dropdown-item" id='keywords<%=key%>' onclick=unlock_List()><%=keywords[key]%></a>
+                                <%}%>
+                                </span>
+                                <span> &nbsp; &nbsp;<input id='self-search' type='text' placeholder="自訂關鍵字搜尋:" onclick=unlock_List()> </span>
+                                <br> 
+                        </div>                     
+                    </div>
+                </div>
+                <br>
+                
+                <div class="btn-tab">
+                    <%for(var key in tabs){%>
+                        <button type="button" id='tabs<%=key%>' class="btn btn-primary " onclick=unlock_List()><%=tabs[key]%></button>
+                    <%}%>                   
+                </div> 
+                <br>
+                <div class="list-group flex-fill" id="list-tab" role="tablist" style=" height:400px; overflow-y:auto">               
+                    <%for(var i=0;i<boards.length;i++){%>
+                        <a class="list-group-item list-group-item-action clearfix"
+                            id='list-<%=boards[i]['board_ID']%>' data-toggle="list"
+                            href='#panel-<%=boards[i]['board_ID']%>' role="tab"
+                            aria-controls=<%=boards[i]['board_ID']%> text-tab="<%=boards[i]['tab']%>" text-title="<%=boards[i]['title']%>"
+                            style="display:none">
+                            <strong class=" text-center"><%=boards[i]['title']%></strong>
+                             <!--change page button-->
+                             <input type="submit" class="btn btn-danger  float-right" name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>            
+                            <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>" 
+                                name="<%=boards[i]['tab']%>">
+                                <input type='text' name='ID' style="display: none;">
+                                <input type='text' name="<%=boards[i]['board_ID']%>" style="display: none;">
+                                <input type='text' value="<%=boards[i]['include']%>" style="display: none;">                             
+                            </form>
+                        </a>
+                    <%}%>
+                    
+                </div>
+                
+            </div>
+            <div class="col-md-4 h-100" style="background-color:lavenderblush;">
+                <div class=" tab-content" id="nav-tabContent">
+                    <%for(var i=0;i<boards.length;i++){%>
+                        <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
+                            aria-labelledby='list-<%=boards[i]['board_ID']%>'>
+                            <%=boards[i]['include']%>
+                        </div>
+                    <%}%>
+                    <br>
+                </div>
+            </div>        
+        </div>
+    </div>
+
+    <script>
+        var lock=false;
+        var item=null;
+        function unlock_List(){
+            lock=false; 
+            if(item!=null){
+                $(item).removeClass('active');
+                $('#panel-'+item.attr('id').substring(5)).removeClass('show active');
+                item=null;
+            }          
+
+        }
+        $('.dropdown-menu a').click(function(){
+            var kind =$(this).text();
+            $(".dropdown-toggle").text(kind);         
+            select_Topic('text-title',kind);
+          });
+          
+        $('.list-group-item').mouseover(function(){  
+            console.log(lock);
+            if(lock==false){
+                if(item!=null){
+                    $(item).removeClass('active');
+                    $('#panel-'+item.attr('id').substring(5)).removeClass('show active');
+                }
+                $(this).addClass('active');        
+                item=$(this);
+                $('#panel-'+item.attr('id').substring(5)).addClass('show active');
+            }               
+        });
+        $('.btn-tab button').click(function(){ 
+            $(".dropdown-toggle").text("常見關鍵字搜尋");   
+            if($(this).text()==="全部"){
+                $('.list-group-item').attr('style','display:block');
+            }
+            else{
+                select_Topic('text-tab',$(this).text());
+            }              
+          });
+        $('.list-group-item').click(function(){          
+            lock=true;      
+        });
+
+        $("#self-search").on('keyup', function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+               select_Topic('text-title',$(this).val());
+            }
+        });
+
+        $("#submit-btn").click(function(){           
+            $('#'+$(this).attr('name')).submit();
+          });
+
+        function select_Topic(mode,kind){
+            var tab_list=document.getElementsByClassName("list-group-item");
+            for(var i=0;i<tab_list.length;++i){
+                if((tab_list[i].getAttribute(mode)).toString().includes(kind) ){
+                    tab_list[i].setAttribute('style','display:block');
+                }
+                else{
+                    tab_list[i].setAttribute('style','display:none');
+                }
+            }
+        }
+
+    </script>
 </body>
+    
 </html>

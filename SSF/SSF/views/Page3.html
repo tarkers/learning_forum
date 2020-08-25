@@ -1,11 +1,61 @@
 ﻿<!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
 
+<head>
+    <title></title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <img class="col-md-6 Thumbnail" src="http://localhost:1337/images/ttt.jpg" alt="Your image" width="350">
+            <div class="col card" style="height: 500px;">
+                <div class="card-header bg-danger"><%=header%></div>
+                <div class="card-body">
+                    <%for(var i=0;i<data.length;i++){%>
+                        <%if(i==0){%>
+                            <div id='<%=i%>' style="display:block">
+                                <pre><%-data[i]%></pre>
+                            </div>
+                        <%}else{%>
+                            <div id='<%=i%>' style="display:none">
+                                <pre><%-data[i]%></pre>   
+                            </div>
+                        <%}%>
+                    <%}%>
+                </div>
+                <br>
+                <button type="button" class="Dark"
+                        style="position: absolute; bottom: 0; right: 0;">
+                    Next Page
+                </button>
+                <form style="display: none;">
+                    <input type='text' value=ID name=ID>
+                    <input submit>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        var i = 0;
+        $('button').on('click', function () {
+            $('#' + (i + 1)).show();
+            $('#' + (i)).hide();
+            i++;    
+            if (i == '<%-data.length%>') {   //test the code
+                $("form").attr("method", "post")
+                .attr("action", "/CB/direct_to_4")
+                .appendTo('form');
+                $('form').submit();
+            }      
+        });
+    </script>
 </body>
+
 </html>
