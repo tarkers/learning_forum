@@ -35,7 +35,7 @@
                     Next Page
                 </button>
                 <form style="display: none;">
-                    <input type='text' value=ID name=ID>
+                    <input type='text' value='<%=ID%>' name=ID>
                     <input submit>
                 </form>
             </div>
@@ -47,7 +47,7 @@
         $('button').on('click', function () {
             $('#' + (i + 1)).show();
             $('#' + (i)).hide();
-            i++;    
+            i++; 
             if (i == '<%-data.length%>') {   //test the code
                 $("form").attr("method", "post")
                 .attr("action", "/CB/direct_to_4")

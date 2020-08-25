@@ -50,14 +50,13 @@
                             href='#panel-<%=boards[i]['board_ID']%>' role="tab"
                             aria-controls=<%=boards[i]['board_ID']%> text-tab="<%=boards[i]['tab']%>" text-title="<%=boards[i]['title']%>"
                             style="display:none">
-                            <strong class=" text-center"><%=boards[i]['title']%></strong>
+                            <strong class=" text-center"><%=boards[i]['tab']%>: <%=boards[i]['title']%></strong>
                              <!--change page button-->
                              <input type="submit" class="btn btn-danger  float-right" name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>            
                             <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>" 
                                 name="<%=boards[i]['tab']%>">
-                                <input type='text' name='ID' style="display: none;">
-                                <input type='text' name="<%=boards[i]['board_ID']%>" style="display: none;">
-                                <input type='text' value="<%=boards[i]['include']%>" style="display: none;">                             
+                                <input type='text' name='ID' value='<%=ID%>' style="display: none;">
+                                <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>" style="display: none;">                       
                             </form>
                         </a>
                     <%}%>
