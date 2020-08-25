@@ -62,7 +62,7 @@
         </div>
         <form style="display: none;" method="POST">
             <input type='text' id='ID' value='<%=ID%>' name=ID>
-            <input type='text' id='nick_name' name=nick_name>
+            <input type='text' id='nick_name' name='nick_name'>
             <input submit>
         </form>
         <div class="row" style="background-color: bisque;">
@@ -76,6 +76,7 @@
     <script>
         function department(value,nick_name) {
             $('#nick_name').val(nick_name);
+            console.log(nick_name);
             $('form').attr('action','/CB/department/'+value);
             $('form').submit();      
         }

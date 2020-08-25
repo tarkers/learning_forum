@@ -33,15 +33,16 @@ router.post('/CB/direct_to_4', function (_req, res) {
 });
 
 /* POST Page 5 Page6 -teacher department*/
-router.post('/CB/department/:de_Name', function (_req, res) {
-    var de_Name = _req.params.de_Name;
-    if (de_Name === "YT") {
+router.post('/CB/department/:de_title', function (_req, res) {
+    var de_title = _req.params.de_title;
+    var de_name =_req.body.nick_name;
+    if (de_title === "YT") {
         res.render('Page5', { ID: 123456 });
     }
     else {
         res.render('Page6', {
             ID:12564,
-            DE: de_Name,
+            DE: de_name,
             introduce:"系的介紹----------",
             keywords: [ 'AI',  'IOT', 'ML', '機器學習','姆咪','嘻嘻' ], 
             tabs: ['全部', '固力',  '熱流', '控制', '設計', '製造' ],
