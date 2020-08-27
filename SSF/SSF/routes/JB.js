@@ -9,7 +9,7 @@ function jumpPublic(board_ID, ID, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("board").collection(board_ID);
-        var findThing = {};
+        var findThing = { hide: 'false' };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
