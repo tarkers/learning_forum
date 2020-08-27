@@ -1,11 +1,98 @@
 ﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title></title>
 </head>
-<body>
 
+<body>
+    <div class="jumbotron text-center">
+        <h1>選擇你想要的科系</h1>
+    </div>
+    <div class="container">
+        <div class="row -group ">
+         <%for(var i=0;i<data.length;i++){%>
+            <%if(i==data.length-1){%>
+                <div class="col-4" style="width:250px; border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
+                onmouseover="description('<%-i%>')">    
+                <figure class="text-center">
+                    <img  src="<%=image[i]%>" style="width:45%">
+                    <figcaption><%=nick_name[i]%></figcaption>
+                </figure>
+            </div>
+            <%}else{%>
+                <div class="col-2" style="width:200px; border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
+                onmouseover="description('<%-i%>')">               
+                <figure class="text-center">
+                    <img  src="<%=image[i]%>" style="width:100%">
+                    <figcaption><%=nick_name[i]%></figcaption>
+                </figure>
+            </div>
+            <%}%>
+        <%}%>
+            
+            <!-- <div class=" col-2 " style="width:200px; border:none" onclick="department('ECON')"
+                onmouseover="description(1)" >              
+                <figure class="text-center">
+                    <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
+                    <figcaption>經濟系</figcaption>
+                </figure>
+            </div>
+            <div class=" col-2" style="width:200px; border:none;" onclick="department('PSY')"
+                onmouseover="description(2)">             
+                <figure class="text-center">
+                    <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
+                    <figcaption>心理系</figcaption>
+                </figure>
+            </div>
+            <div class=" col-2" style="width:200px; border:none" onclick="department('LAW')"
+                onmouseover="description(3)">            
+                <figure class="text-center">
+                    <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
+                    <figcaption>法律系</figcaption>
+                </figure>
+            </div> -->
+            
+        </div>
+        <form style="display: none;" method="POST">
+            <input type='text' id='ID' value='<%=ID%>' name=ID>
+            <input type='text' id='nick_name' name='nick_name'>
+            <input submit>
+        </form>
+        <div class="row" style="background-color: bisque;">
+            <%for(var i=0;i<data.length;i++){%>
+            <div id='<%=i%>' style="display: none;">
+                <pre><%=data[i]%></pre>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <script>
+        function department(value,nick_name) {
+            $('#nick_name').val(nick_name);
+            console.log(nick_name);
+            $('form').attr('action','/CB/department/'+value);
+            $('form').submit();      
+        }
+
+        function description(de){           
+            for(var i =0;i<5;++i){
+                if(de==i){
+                    $('#'+(i)).show();
+                }
+                else{
+                    $('#'+(i)).hide();
+                }           
+            }
+        }
+        
+    </script>
 </body>
+
 </html>

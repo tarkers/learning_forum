@@ -1,13 +1,80 @@
 ﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!--head boostrap mode-->
+
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title></title>
 </head>
-<body>
-    <%for(var i=0;i<num;i++){%>
-    <div><%-title%></div>
-    <%}%>
+
+<body id="main">
+    <div class="container-fluid">
+        <div class="row ">
+            <div id="content-div" class="col-md-4 align-self-center">
+                <div id="log-in-form" class="div-collapse collapse " data-parent="#content-div">
+                    <form method="post" action="/SAN/sign_in">
+                        <input type="text" name='ID' placeholder="ID" />
+                        <input type="password" name='password' placeholder="password" />
+                        <input type="submit" />
+                    </form>
+                </div>
+
+                <div id="intro-div" class="div-collapse collapse" data-parent="#content-div">
+                    <%-title%>
+                    <%-include%>
+                </div>
+
+                <div id="register-form" class="div-collapse collapse" data-parent="#content-div">
+                    <form method="post" action="/SAN/register">
+                        <input type="text" name='ID' placeholder="ID" />
+                        <input type="text" name='password' placeholder="password" />
+                        <input type="text" name='name' placeholder="name" />
+                        <input type="email" name='e-mail' placeholder="mail" />
+                        <input type="text" name='school' placeholder="school" />
+                        <input type="text" name='gender' placeholder="gender" />
+                        <input type="submit" />
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <div name="Title" class="jumbotron text-center">
+                    <h2>社科體驗營</h2>
+                </div>
+                <div class="btn-group-vertical">
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#log-in-form"
+                        value='log-in'>
+                        登入
+                    </button>
+                    <form method="get" action="/CB/direct_to_3">
+                        <button type="submit" class="btn btn-primary" value="XX">
+                            直接進入
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#intro-div"
+                        value='introduction'>
+                        介紹
+                    </button>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#register-form"
+                        value='register'>
+                        註冊
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#main").on('click', function () {
+            if (!$(":input").is(":focus")) {
+                $('#main .div-collapse').collapse('hide')
+            }
+        });
+    </script>
 </body>
+
 </html>
