@@ -77,20 +77,8 @@ router.post('/post_private', function (req, res) {
 router.get('/post_preview', function (req, res) {
     res.render('preview', { html: urlencode.decode(req.query.html) });
 });
-//test data  { "_id" : ObjectId("5f467c9f452c6bd802ab5974"), "board_ID" : "private_0002", "type" : "private", "title" : "test", "introduce" : "<h1>testtesttest</h1>", "password" : "0000" }
-router.get('/get_board_introduce', function (req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
-        var table = db.db("board").collection('all_board_number');
-        var findThing = { board_ID: req.query.board_ID };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
-            if (err) throw err;
-            db.close();
-            console.log(result);
-            res.send({ data: result, num: result.length });
-        });
-    });
-});
+
+
 
 router.post('/discuss', function (req, res) {
     console.log(req.body);

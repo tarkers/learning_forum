@@ -17,8 +17,9 @@
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
         <div class="text-center">
             <h1><small><%=board_ID%></small></h1>
-            <small>You are <%=ID%></small>
+            <small>You are <%=ID%></small><button type="button">加到我的最愛</button>
         </div>
+
         <br>
         <div id="introduce" style="text-align:center"></div>
         <br><br>
@@ -30,16 +31,16 @@
         </form>
         <br>
         <div>
-            <%for(var i = 0;i< num;i++){%>
+            <%for(var i = num-1;i >= 0;i--){%>
             <%=data[i]['ID']%><br />
             <%=data[i]['title']%><br />
             <%-data[i]['include']%><br />
             <form action="/DB/discuss" method="post">
-                <input type="text" name="num" value="<%=data[i]['data']%>" />
+                <input type="text" name="num" value="<%=data[i]['num']%>" />
                 <input type="text" name="ID" value="<%=ID%>" />
                 <input type="text" name="board_ID" value="<%=board_ID%>" />
                 <input class="form-control" type="text" name="include" value=""  />
-                <input type="submit" value="我要留言" />
+                <input type="button" value="我要留言" />
             </form>
             <br>
             <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
@@ -49,9 +50,13 @@
             <%}%>
         </div>
     </div>
+    <input id="Hidden1" type="hidden" value="<%=place%>"/>
     <script>
         $(document).ready(function () {
-            $.get("../DB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
+            //待新增過濾機制 ,下方是當轉換於此有place時直接觸發過濾機制找到其
+            //if (('#Hidden1').val())
+            //過濾機制  和 找特定貼文(place)記得做
+            $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
                 $("#introduce").html(result['data'][0]['introduce']);
                 $('.text-center > h1').html(result['data'][0]['title'] + $('h1').html());
                 $("#get_type").val(result['data'][0]['type']);
@@ -59,6 +64,18 @@
             $('input').hide();
             $('.form-control').show();
             $('input[type = "submit"]').show();
+            //加入我的最愛功能
+            $('button').click(function () {
+                $.get("../JB/g", function (result) {
+
+                });
+            });
+            //加入留言功能
+            $('form > input[type = "button"]').click(function () {
+                $.get("../JB/g", function (result) {
+
+                });
+            });
         });
     </script>
 </body>
