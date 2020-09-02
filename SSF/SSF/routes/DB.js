@@ -5,23 +5,29 @@ var urlencode = require('urlencode');
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 var uri = "mongodb://localhost:27017/";
-//getpassword
+
+//function block
+
+//post public && post private
+
 function getPassword_private(req,res) {
     MongoClient.connect(uri , { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
-        var table = db.db("board").collection("all_board_number");
+        var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result[0]['password'] == req.body.board_password)
-            if (result[0]['password'] == req.body.board_password) {
-                getCount_public(req, res);
+            if (result.length > 0) {
+                console.log(result[0]['public_password'] == req.body.password)
+                if (result[0]['public_password'] == req.body.password) {
+                    getCount_public(req, res);
+                }
             }
         });
     });
 }
-//updataNum
+
 function getCount_public(req,res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
@@ -35,7 +41,20 @@ function getCount_public(req,res) {
         });
     });
 }
-//insert public
+
+function plus_follower(req, num) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("follow").collection(req.body.board_ID);
+        var insertThing = { num: num + 1 };
+        insertThing[req.body.ID] = req.body.ID;
+        table.insertOne(insertThing, function (err, result) {
+            if (err) throw err;
+            db.close();
+        });
+    });
+}
+
 function insert_public(req, res,num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
@@ -45,11 +64,12 @@ function insert_public(req, res,num) {
             if (err) throw err;
             db.close();
             //console.log(result);
+            plus_follower(req, num);
             jumpPublic(req.body.board_ID, req.body.ID, res);
         });
     });
 }
-//jump to public board
+
 function jumpPublic(board_ID, ID, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
@@ -63,14 +83,117 @@ function jumpPublic(board_ID, ID, res) {
         });
     });
 }
-//router.post('/to_post_page', function (req, res) {
+
+//add lover
+function add_lover(req,res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("people").collection("personal_lover");
+        var filter = { ID: req.query.ID };
+        var goal = {};
+        goal[req.query.board_ID] = req.query.board_ID;
+        table.updateOne(filter, { $set: goal }, function (err, result) {
+            if (err) {
+                res.end({ result: 'error' });
+                throw err;
+            }
+            db.close();
+            //console.log(result);
+            res.end({ result: 'success' });
+        });
+    });
+}
+
+//discuss
+function discuss_getNum(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("board").collection(req.body.board_ID);
+        var findThing = { num: req.body.num };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) throw err;
+            db.close();
+            //console.log(result);
+            discuss_update(req, res, Object.keys(result[0]).length - 5 + 1);
+        });
+    });
+}
+
+function discuss_update(req, res, num) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("board").collection(req.body.board_ID);
+        var filter = { num: req.body.num };
+        var goal = {};
+        goal[num.toString()] = req.body.ID + ':' + req.body.include;
+        table.updateOne(filter, { $set: goal }, function (err, result) {
+            if (err) {
+                res.end({ result: 'error' });
+                throw err;
+            }
+            db.close();
+            //console.log(result);
+            discuss_notice(req);
+            res.end({ result: 'success' });
+        });
+    });
+}
+
+function discuss_notice(req) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("follow").collection(req.body.board_ID);
+        var findThing = { num: req.body.num };
+        table.find(findThing, { projection: { _id: 0,num:0 } }).toArray(function (err, result) {
+            if (err) throw err;
+            db.close();
+            //console.log(result);
+            discuss_notice_add(req, result[0]);
+        });
+    });
+}
+
+function discuss_notice_add(req,data) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("follow").collection(req.body.board_ID);
+        var filter = { num: req.body.num };
+        var goal = {};
+        goal[req.body.ID] = req.body.ID;
+        table.updateOne(filter, { $set: goal }, function (err, result) {
+            if (err) { throw err;}
+            db.close();
+            //console.log(result);
+            var list = Object.keys(data);
+            for (var i in list) 
+                discuss_notice_send(i, req.body.board_ID + '_' + req.body.num);
+        });
+    });
+}
+
+function discuss_notice_send(id,key) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("people").collection("personal_notice");
+        var filter = { ID: id };
+        var goal = {};
+        goal[key] = key;
+        table.updateOne(filter, { $set: goal }, function (err, result) {
+            if (err) { throw err; }
+            db.close();
+            console.log(id+'->' + key);
+        });
+    });
+}
+
+//router block
 router.post('/post_public', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     getCount_public(req, res);
 });
 
 router.post('/post_private', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     getPassword_private(req, res);
 });
 
@@ -78,10 +201,14 @@ router.get('/post_preview', function (req, res) {
     res.render('preview', { html: urlencode.decode(req.query.html) });
 });
 
-
+router.get('/add_lover', function (req, res) {
+    //res.render('preview', { html: urlencode.decode(req.query.html) });
+    add_lover(req, res);
+});
 
 router.post('/discuss', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
+    discuss_getNum(req, res);
 });
 
 module.exports = router;
