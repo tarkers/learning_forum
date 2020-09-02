@@ -42,9 +42,9 @@
                                         style="display:none" size="8" name="password" placeholder="password" />
                                     <input type="submit" style="display: none" />
                                     <%}%>                                   
-                                    <input name=ID value="<%= ID %>" style="display:none"/>
-                                    <input name=type value="<%= l_inform[0] %>" style="display:none" />
-                                    <input name=board_ID value="<%= l_inform[1] %>" style="display:none" />
+                                    <input name='ID' value="<%= ID %>" style="display:none"/>
+                                    <input name='type' value="<%= l_inform[0] %>" style="display:none" />
+                                    <input name='board_ID' value="<%= l_inform[1] %>" style="display:none" />
                                 </form>
                             </div>
                         </div>
@@ -74,10 +74,10 @@
                                         style="display:none" size="8" name="password" placeholder="password" />
                                     <input type="submit" style="display: none" />
                                     <%}%>                                        
-                                    <input name=ID value="<%= ID %>" style="display:none"/>
-                                    <input name=type value=<%= n_inform[0] %> style="display:none" />
-                                    <input name=board_ID value=<%= n_inform[1] %> style="display:none" />
-                                    <input name=place value=<%= n_inform[2] %> style="display:none" />
+                                    <input name='ID' value="<%= ID %>" style="display:none"/>
+                                    <input name='type' value='<%= n_inform[0] %>' style="display:none" />
+                                    <input name='board_ID' value='<%= n_inform[1] %>' style="display:none" />
+                                    <input name='place' value='<%= n_inform[2] %>' style="display:none" />
                                 </form>
                             </div>
                         </div>
@@ -144,7 +144,6 @@
             }
 
         }
-
 
         function delete_List(In, mode) {
             var inform = In.split('_');

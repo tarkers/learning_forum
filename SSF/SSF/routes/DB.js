@@ -18,9 +18,10 @@ function getPassword_private(req,res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
+            console.log(result);
             if (result.length > 0) {
-                console.log(result[0]['public_password'] == req.body.password)
-                if (result[0]['public_password'] == req.body.password) {
+                console.log(result[0]['password_public'] == req.body.board_password)
+                if (result[0]['password_public'] == req.body.board_password) {
                     getCount_public(req, res);
                 }
             }
@@ -36,7 +37,7 @@ function getCount_public(req,res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            //console.log(result);
+            console.log(result);
             insert_public(req, res, result.length);
         });
     });
@@ -46,11 +47,12 @@ function plus_follower(req, num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("follow").collection(req.body.board_ID);
-        var insertThing = { num: num + 1 };
+        var insertThing = { num: (num + 1).toString() };
         insertThing[req.body.ID] = req.body.ID;
         table.insertOne(insertThing, function (err, result) {
             if (err) throw err;
             db.close();
+            //console.log(result);
         });
     });
 }
@@ -59,18 +61,18 @@ function insert_public(req, res,num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("board").collection(req.body.board_ID);
-        var insertThing = { num: num+1 ,ID: req.body.ID, title: req.body.title, include: req.body.include, hide: 'false'};
+        var insertThing = { num: (num + 1).toString(), ID: req.body.ID, title: req.body.title, include: req.body.include, hide: 'false' };
         table.insertOne(insertThing, function (err, result) {
             if (err) throw err;
             db.close();
-            //console.log(result);
+            console.log(result);
             plus_follower(req, num);
-            jumpPublic(req.body.board_ID, req.body.ID, res);
+            jumpPublic(req,req.body.board_ID, req.body.ID, res);
         });
     });
 }
 
-function jumpPublic(board_ID, ID, res) {
+function jumpPublic(req,board_ID, ID, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("board").collection(board_ID);
@@ -78,8 +80,13 @@ function jumpPublic(board_ID, ID, res) {
         table.find(findThing, { projection: { _id: 0} }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            //console.log(result);
-            res.render('Page8', { board_ID: board_ID , ID: ID, data: result, num: result.length });
+            console.log(result);
+            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length };
+            if (req.body.place)
+                pkg['place'] = req.body.place;
+            else
+                pkg['place'] = 'NA';
+            res.render('Page8', pkg);
         });
     });
 }
@@ -94,12 +101,12 @@ function add_lover(req,res) {
         goal[req.query.board_ID] = req.query.board_ID;
         table.updateOne(filter, { $set: goal }, function (err, result) {
             if (err) {
-                res.end({ result: 'error' });
+                res.json({ result: 'error' });
                 throw err;
             }
             db.close();
             //console.log(result);
-            res.end({ result: 'success' });
+            res.json({ result: 'success' });
         });
     });
 }
@@ -113,7 +120,7 @@ function discuss_getNum(req, res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            //console.log(result);
+            console.log(result);
             discuss_update(req, res, Object.keys(result[0]).length - 5 + 1);
         });
     });
@@ -128,13 +135,13 @@ function discuss_update(req, res, num) {
         goal[num.toString()] = req.body.ID + ':' + req.body.include;
         table.updateOne(filter, { $set: goal }, function (err, result) {
             if (err) {
-                res.end({ result: 'error' });
+                res.json({ result: 'error' });
                 throw err;
             }
             db.close();
             //console.log(result);
             discuss_notice(req);
-            res.end({ result: 'success' });
+            res.json({ result: 'success' });
         });
     });
 }
@@ -193,7 +200,7 @@ router.post('/post_public', function (req, res) {
 });
 
 router.post('/post_private', function (req, res) {
-    //console.log(req.body);
+    console.log(req.body);
     getPassword_private(req, res);
 });
 
@@ -203,11 +210,12 @@ router.get('/post_preview', function (req, res) {
 
 router.get('/add_lover', function (req, res) {
     //res.render('preview', { html: urlencode.decode(req.query.html) });
+    console.log(req.query);
     add_lover(req, res);
 });
 
 router.post('/discuss', function (req, res) {
-    //console.log(req.body);
+    console.log(req.body);
     discuss_getNum(req, res);
 });
 

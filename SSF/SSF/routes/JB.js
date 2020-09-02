@@ -19,7 +19,7 @@ function test_type(req, res ,type) {
             if (result[0]['type'] == type && type == 'public') {
                 jumpboard(req, res);
             }
-            else if (result[0]['type'] == type && type == 'private' && result[0]['password_public'] == req.body.password) {
+            else if (result[0]['type'] == type && type == 'private' && result[0]['password_public'] == req.body.board_password) {
                 jumpboard(req, res);
             }
         });
@@ -35,9 +35,11 @@ function jumpboard(req, res) {
             if (err) throw err;
             db.close();
             //console.log(result);
-            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length };
+            var pkg = { board_ID: req.body.board_ID, ID: req.body.ID, data: result, num: result.length };
             if (req.body.place)
                 pkg['place'] = req.body.place;
+            else
+                pkg['place'] = 'NA';
             res.render('Page8', pkg );
         });
     });
@@ -52,8 +54,8 @@ function get_board_information(req, res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
-            res.send({ title: result[0]['title'], introduce: result[0]['introduce'] });
+            //console.log(result);
+            res.send({ title: result[0]['title'], introduce: result[0]['introduce'], type: result[0]['type'] });
         });
     });
 }
@@ -61,14 +63,17 @@ function get_board_information(req, res) {
 //to post
 
 router.post('/to_public_board', function (req, res) {
+    //console.log(req.body);
     test_type(req, res,'public');
 });
 
 router.post('/to_private_board', function (req, res) {
+    //console.log(req.body);
     test_type(req, res,'private');
 });
 
 router.get('/get_board_introduce', function (req, res) {
+    //console.log(req.query);
     get_board_information(req, res);
 });
 
