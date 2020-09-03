@@ -23,6 +23,13 @@
         <br>
         <div id="introduce" style="text-align:center"></div>
         <br><br>
+            <div id="find">
+                輸入篩選主題關鍵字: <input type="text" /><input type="button" value="篩選主題" /><br />
+                輸入顯示幾號後貼文: <input type="text" /><input type="button" value="屏蔽貼文" /><br />
+                輸入目標貼文的號碼: <input type="text" id="where"/><input type="button" value="指定貼文" /><br />
+                <input type="button" value="解除所有限制" />
+            </div>
+        <br><br>
         <form action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
@@ -32,49 +39,116 @@
         <br>
         <div>
             <%for(var i = num-1;i >= 0;i--){%>
-            <%=data[i]['ID']%><br />
-            <%=data[i]['title']%><br />
-            <%-data[i]['include']%><br />
-            <form action="/DB/discuss" method="post">
-                <input type="text" name="num" value="<%=data[i]['num']%>" />
-                <input type="text" name="ID" value="<%=ID%>" />
-                <input type="text" name="board_ID" value="<%=board_ID%>" />
-                <input class="form-control" type="text" name="include" value=""  />
-                <input type="button" value="我要留言" />
-            </form>
-            <br>
-            <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
-            <%=data[i][j.toString()]%><br />
+            <div id="<%=data[i]['num']%>" class="post">
+                <strong>帳號:</strong><%=data[i]['ID']%><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small>貼文編號: <%=data[i]['num']%></small><br />
+                <%-data[i]['include']%><br />
+                <form action="/DB/discuss" method="post">
+                    <input type="text" name="num" value="<%=data[i]['num']%>" />
+                    <input type="text" name="ID" value="<%=ID%>" />
+                    <input type="text" name="board_ID" value="<%=board_ID%>" />
+                    <label>展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" />
+                    <input class="form-control" type="text" name="include" value="" />
+                </form>
+                <div name ="reply">
+                    <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
+                    <%=data[i][j.toString()]%><br />
+                    <%}%>
+                </div>
+                <br /><br />
+            </div>
             <%}%>
-            <br /><br />
-            <%}%>
+            <br/>
         </div>
     </div>
-    <input id="Hidden1" type="hidden" value="<%=place%>"/>
+    <%if(place){%>
+    <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <%}%>
     <script>
-        $(document).ready(function () {
-            //待新增過濾機制 ,下方是當轉換於此有place時直接觸發過濾機制找到其
-            //if (('#Hidden1').val())
-            //過濾機制  和 找特定貼文(place)記得做
+        function init() {
             $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
-                $("#introduce").html(result['data'][0]['introduce']);
-                $('.text-center > h1').html(result['data'][0]['title'] + $('h1').html());
-                $("#get_type").val(result['data'][0]['type']);
+                $("#introduce").html(result['introduce']);
+                $('.text-center > h1').html(result['title'] + $('h1').html());
+                $("#get_type").val(result['type']);
             });
             $('input').hide();
             $('.form-control').show();
             $('input[type = "submit"]').show();
+            $('input[type = "button"]').show();
+            $('input[type = "checkbox"]').show();
+            $('#find > input').show();
+            if ($('#Hidden1').val() != 'NA') {
+                $('#where').val($('#Hidden1').val());
+                alert("您藉由提醒功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
+            }
+            $('div[name = "reply"]').hide();
+        }
+        $(document).ready(function () {
+            init();
+            //篩選功能
+            $('#find > input[type = "button"]').click(function () {
+                var text = $(this).prev().val();
+                switch ($(this).val()) {
+                    case "篩選主題":
+                        $('.post').each(function () {
+                            if ($(this).find('span').text().indexOf(text) < 0)
+                                $(this).hide();
+                         });
+                        break;
+                    case "屏蔽貼文":
+                         var number = parseInt(text);
+                        $('.post').each(function () {
+                            $(this).show();
+                            if (parseInt($(this).attr('id')) < number)
+                                $(this).hide();
+                         });
+                        break;
+                    case "指定貼文":
+                        var place = parseInt(text);
+                        $('.post').each(function () {
+                            $(this).show();
+                            if (parseInt($(this).attr('id')) != place)
+                                $(this).hide();
+                         });
+                        break;
+                    default:
+                          $('.post').each(function () {
+                                $(this).show();
+                           });
+                        break;
+                }
+                
+            });
             //加入我的最愛功能
             $('button').click(function () {
-                $.get("../JB/g", function (result) {
-
+                $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID="  + '<%-board_ID%>', function (result) {
+                    alert(result['result']);
                 });
             });
             //加入留言功能
             $('form > input[type = "button"]').click(function () {
-                $.get("../JB/g", function (result) {
-
-                });
+                var text = $(this).next('input');
+                $(this).closest('form').next('div').append( '<%-ID%>:' + $(this).next('input').val() + '<br/>');
+                if ('我要留言' == $(this).val()) {
+                    $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val() }, function (result) {
+                        alert(result['result']);
+                        if (result['result'] != 'success') {
+                            alert('並沒有實際儲存請再留言一次');
+                        }
+                        text.val('');
+                    });
+                }
+            });
+            //留言展開
+            $('label').click(function () {
+                if ($(this).text() == '展開留言') {
+                    $(this).text('收合留言');
+                    $(this).closest('form').next('div').show();
+                }
+                else {
+                    $(this).text('展開留言');
+                    $(this).closest('form').next('div').hide();
+                }
             });
         });
     </script>
