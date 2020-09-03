@@ -18,9 +18,9 @@ function getPassword_private(req,res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
+            //console.log(result);
             if (result.length > 0) {
-                console.log(result[0]['password_public'] == req.body.board_password)
+                //console.log(result[0]['password_public'] == req.body.board_password)
                 if (result[0]['password_public'] == req.body.board_password) {
                     getCount_public(req, res);
                 }
@@ -37,7 +37,7 @@ function getCount_public(req,res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
+            //console.log(result);
             insert_public(req, res, result.length);
         });
     });
@@ -65,7 +65,7 @@ function insert_public(req, res,num) {
         table.insertOne(insertThing, function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
+            //console.log(result);
             plus_follower(req, num);
             jumpPublic(req,req.body.board_ID, req.body.ID, res);
         });
@@ -80,7 +80,7 @@ function jumpPublic(req,board_ID, ID, res) {
         table.find(findThing, { projection: { _id: 0} }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
+            //console.log(result);
             var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length };
             if (req.body.place)
                 pkg['place'] = req.body.place;
@@ -120,7 +120,7 @@ function discuss_getNum(req, res) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             db.close();
-            console.log(result);
+            //console.log(result);
             discuss_update(req, res, Object.keys(result[0]).length - 5 + 1);
         });
     });
@@ -200,7 +200,7 @@ router.post('/post_public', function (req, res) {
 });
 
 router.post('/post_private', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     getPassword_private(req, res);
 });
 
@@ -210,12 +210,12 @@ router.get('/post_preview', function (req, res) {
 
 router.get('/add_lover', function (req, res) {
     //res.render('preview', { html: urlencode.decode(req.query.html) });
-    console.log(req.query);
+    //console.log(req.query);
     add_lover(req, res);
 });
 
 router.post('/discuss', function (req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     discuss_getNum(req, res);
 });
 
