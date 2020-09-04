@@ -23,13 +23,15 @@
         <br>
         <div id="introduce" style="text-align:center"></div>
         <br><br>
-            <div id="find">
-                輸入篩選主題關鍵字: <input type="text" /><input type="button" value="篩選主題" /><br />
-                輸入顯示幾號後貼文: <input type="text" /><input type="button" value="屏蔽貼文" /><br />
-                輸入目標貼文的號碼: <input type="text" id="where"/><input type="button" value="指定貼文" /><br />
-                <input type="button" value="解除所有限制" />
-            </div>
+        <!-- 篩選功能-->
+        <div id="find">
+            輸入篩選主題關鍵字: <input type="text" /><input type="button" value="篩選主題" /><br />
+            輸入顯示幾號後貼文: <input type="text" /><input type="button" value="屏蔽貼文" /><br />
+            輸入目標貼文的號碼: <input type="text" id="where" /><input type="button" value="指定貼文" /><br />
+            <input type="button" value="解除所有限制" />
+        </div>
         <br><br>
+        <!-- 發文跳轉 -->
         <form action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
@@ -38,11 +40,13 @@
         </form>
         <br>
         <div>
+            <!-- 每則貼文主體 -->
             <%for(var i = num-1;i >= 0;i--){%>
             <div id="<%=data[i]['num']%>" class="post">
                 <strong>帳號:</strong><%=data[i]['ID']%><br />
                 <strong>標題:</strong><span><%=data[i]['title']%></span><small>貼文編號: <%=data[i]['num']%></small><br />
                 <%-data[i]['include']%><br />
+                <!-- 寄留言-->
                 <form action="/DB/discuss" method="post">
                     <input type="text" name="num" value="<%=data[i]['num']%>" />
                     <input type="text" name="ID" value="<%=ID%>" />
@@ -50,7 +54,8 @@
                     <label>展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" />
                     <input class="form-control" type="text" name="include" value="" />
                 </form>
-                <div name ="reply">
+                <!-- 回應區-->
+                <div name="reply">
                     <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
                     <%=data[i][j.toString()]%><br />
                     <%}%>
@@ -58,12 +63,10 @@
                 <br /><br />
             </div>
             <%}%>
-            <br/>
+            <br />
         </div>
     </div>
-    <%if(place){%>
     <input id="Hidden1" type="hidden" value="<%=place%>" />
-    <%}%>
     <script>
         function init() {
             $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
@@ -83,6 +86,16 @@
             }
             $('div[name = "reply"]').hide();
         }
+        function changeReply(THIS) {
+            if (THIS.text() == '展開留言') {
+                THIS.text('收合留言');
+                THIS.closest('form').next('div').show();
+            }
+            else {
+                THIS.text('展開留言');
+                THIS.closest('form').next('div').hide();
+            }
+        }
         $(document).ready(function () {
             init();
             //篩選功能
@@ -93,15 +106,15 @@
                         $('.post').each(function () {
                             if ($(this).find('span').text().indexOf(text) < 0)
                                 $(this).hide();
-                         });
+                        });
                         break;
                     case "屏蔽貼文":
-                         var number = parseInt(text);
+                        var number = parseInt(text);
                         $('.post').each(function () {
                             $(this).show();
                             if (parseInt($(this).attr('id')) < number)
                                 $(this).hide();
-                         });
+                        });
                         break;
                     case "指定貼文":
                         var place = parseInt(text);
@@ -109,46 +122,45 @@
                             $(this).show();
                             if (parseInt($(this).attr('id')) != place)
                                 $(this).hide();
-                         });
+                        });
                         break;
                     default:
-                          $('.post').each(function () {
-                                $(this).show();
-                           });
+                        $('.post').each(function () {
+                            $(this).show();
+                        });
                         break;
                 }
-                
             });
             //加入我的最愛功能
             $('button').click(function () {
-                $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID="  + '<%-board_ID%>', function (result) {
+                $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID=" + '<%-board_ID%>', function (result) {
                     alert(result['result']);
                 });
             });
             //加入留言功能
             $('form > input[type = "button"]').click(function () {
+                var include = $(this).next('input').val();
                 var text = $(this).next('input');
-                $(this).closest('form').next('div').append( '<%-ID%>:' + $(this).next('input').val() + '<br/>');
+                var div = $(this).closest('form').next('div');
+                var label = $(this).prev();
                 if ('我要留言' == $(this).val()) {
                     $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val() }, function (result) {
                         alert(result['result']);
-                        if (result['result'] != 'success') {
+                        if (result['result'] == 'success') {
+                            div.append('<%-ID%>:' + include + '<br/>');
+                            label.text('展開留言');
+                            div.show();
+                            text.val('');
+                        }
+                        else {
                             alert('並沒有實際儲存請再留言一次');
                         }
-                        text.val('');
                     });
                 }
             });
             //留言展開
             $('label').click(function () {
-                if ($(this).text() == '展開留言') {
-                    $(this).text('收合留言');
-                    $(this).closest('form').next('div').show();
-                }
-                else {
-                    $(this).text('展開留言');
-                    $(this).closest('form').next('div').hide();
-                }
+                changeReply($(this));
             });
         });
     </script>

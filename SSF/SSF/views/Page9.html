@@ -20,6 +20,7 @@
             <small>sand to <%=board_ID%></small>
         </div>
         <br>
+        <!-- 內容輸入區 左邊 -->
         <div class="col-sm-8 ">
             <span>主題:</span><br /><input id="title" type="text" style="width:100%"><br />
             <div id="general_input">
@@ -30,6 +31,7 @@
             <span>內容:</span><br />
             <textarea style="width:100%;" id="include" readonly></textarea><br />
         </div>
+        <!-- 編輯功能區 右邊 -->
         <div class="col-sm-4 ">
             <small>插入成功後請不要破壞出現的標記式語言<br />(內容允許直接刪除)<br /></small>
             <input type="button" value="插入大標題" /><br />
@@ -42,6 +44,7 @@
             <input type="button" value="局部刪除" /><br />
             <input type="button" value="預覽" /><br />
             <pre id="type"><%=type%></pre>
+            <!-- 發文寄出 -->
             <form action="/DB/post_public" method="post">
                 <input type="text" name="ID" value="<%=ID%>" />
                 <input type="text" name="board_ID" value="<%=board_ID%>" />
@@ -76,6 +79,7 @@
         }
         $(document).ready(function () {
             init();
+            //寄出發文前整理
             $("form").submit(function (e) {
                 if ($('#type').text() == 'private')
                     if ($(this).children('input[type="text"]').val() == '') {
@@ -85,7 +89,7 @@
                 $(this).children('input[name="title"]').val($("#title").val());
                 $(this).children('input[name="include"]').val($("#include").val());
             });
-
+            //編輯功能
             $('input[type="button"]').click(function () {
                 var tmp = '';
                 switch ($(this).attr('value')) {
@@ -129,13 +133,13 @@
                         break;
                 }
             });
-
+            //按enter 補換行符號
             $("#general_input_textarea").keydown(function (event) {
                 if (event.which == 13) {
                     $(this).val($(this).val() + '<br/>');
                 }
             });
-
+            //插入一般文字
             $('button').click(function () {
                 $("#include").val($("#include").val() + $('#general_input_textarea').val());
                 $('#general_input_textarea').val('');
