@@ -8,6 +8,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var users = require('./routes/users');
+var GBD = require('./routes/GBD');
+var MB = require('./routes/MB');
+var BM = require('./routes/BM');
 var app = express();
 
 app.engine('.html', require('ejs').__express)
@@ -22,7 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', users);
+app.use('/', users);
+app.use('/GBD', GBD)
+app.use('/MB', MB)
+app.use('/BM', BM)
 
 //以下為最後除錯中間件 勿刪 發布時用
 //// catch 404 and forward to error handler
