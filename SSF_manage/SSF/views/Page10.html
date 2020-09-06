@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -47,6 +47,12 @@
                     <span class="input-group-text">type</span>
                 </div>
                 <input type="text" class="form-control" name="type">
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">introduce</span>
+                </div>
+                <input type="text" class="form-control" name="introduce">
             </div>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
@@ -104,81 +110,96 @@
 
     </div>
     <script>
-        $('#information').click();
+        $(document).ready(function () {
+            $('#information').click();
+            if ('<%=board%>' == '不是建立看板後跳來,不提供預設看板號')
+                alert('<%=board%>');
+            else
+                alert('您剛剛建立的看板是 : ' + '<%=board%>');
 
-
-        $('#information').on('click', function () {
-            console.log('111');
-            if ('<%=board%>' != "") {   //original give board_id
-                $.ajax({
-                    type: "post",
-                    url: "/BM/get_information",
-                    dataType: "json",
-                    success: function (response) {
-                        var data = response.data;
-                        $("input[name='board_ID']:first").val(data['board_ID']);
-                        $("input[name='password']:first").val(data['password']);
-                        $("input[name='board']:first").val(data['board']);
-                        $("input[name='type']:first").val(data['type']);
-                        $("input[name='title']:first").val(data['title']);
-                        $("input[name='introduce']:first").val(data['introduce']);
-                        $("input[name='name']:first").val(data['name']);
-                        $("input[name='school']:first").val(data['school']);
-                        $("input[name='class']:first").val(data['class']);
-                        $("input[name='password_private']:first").val(data['password_private']);
-                        $("input[name='password_public']:first").val(data['password_public']);
-                        $("input[name='tab']:first").val(data['tab']);
-                        $("input[name='include']:first").val(data['include']);
-                    },
-                    error: function (response) {
-                        alert("fail");
-                    }
-                });
-            } else {
-                var board_num = prompt('請填入版號');
-                if (board_num != null && board_num != "") {
-                    console.log("go");
+            $('#information').on('click', function () {
+                //console.log('111');
+                if ('<%=board%>' != '不是建立看板後跳來,不提供預設看板號') {   //original give board_id
                     $.ajax({
                         type: "post",
                         url: "/BM/get_information",
                         data: {
-                            'board_ID': $("input[name='board_ID']:first").val(),
-                            'password': $("input[name='password']:first").val(),
-                            'board': board_num,
+                            'board_ID': '<%=board_ID%>',
+                            'password': '<%=password%>',
+                            'board': '<%=board%>'
                         },
                         dataType: "json",
                         success: function (response) {
-                            var data = response.data;
-                            $("input[name='board_ID']:first").val(data['board_ID']);
-                            $("input[name='password']:first").val(data['password']);
-                            $("input[name='board']:first").val(data['board']);
-                            $("input[name='type']:first").val(data['type']);
-                            $("input[name='title']:first").val(data['title']);
-                            $("input[name='introduce']:first").val(data['introduce']);
-                            $("input[name='name']:first").val(data['name']);
-                            $("input[name='school']:first").val(data['school']);
-                            $("input[name='class']:first").val(data['class']);
-                            $("input[name='password_private']:first").val(data['password_private']);
-                            $("input[name='password_public']:first").val(data['password_public']);
-                            $("input[name='tab']:first").val(data['tab']);
-                            $("input[name='include']:first").val(data['include']);
+                            var data = response['data'];
+                            if (response['length'] == 0)
+                                alert('不存在此看板');
+                            else {
+                                alert(data['board_ID'] + '號看板資料投入');
+                                //console.log(data);
+                                //$("input[name='board_ID']:first").val(data['board_ID']);
+                                //$("input[name='password']:first").val(data['password']);
+                                $("input[name='board']:first").val(data['board_ID']);
+                                $("input[name='type']:first").val(data['type']);
+                                $("input[name='title']:first").val(data['title']);
+                                $("input[name='introduce']:first").val(data['introduce']);
+                                $("input[name='name']:first").val(data['name']);
+                                $("input[name='school']:first").val(data['school']);
+                                $("input[name='class']:first").val(data['class']);
+                                $("input[name='password_private']:first").val(data['password_private']);
+                                $("input[name='password_public']:first").val(data['password_public']);
+                                $("input[name='tab']:first").val(data['tab']);
+                                $("input[name='include']:first").val(data['include']);
+                            }
                         },
                         error: function (response) {
                             alert("fail");
                         }
                     });
+                } else {
+                    var board_num = prompt('請填入版號');
+                    if (board_num != null && board_num != "") {
+                        console.log("go");
+                        $.ajax({
+                            type: "post",
+                            url: "/BM/get_information",
+                            data: {
+                                'board_ID': $("input[name='board_ID']:first").val(),
+                                'password': $("input[name='password']:first").val(),
+                                'board': board_num
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                var data = response['data'];
+                                if (response['length'] == 0)
+                                    alert('不存在此看板');
+                                else {
+                                    alert(data['board_ID'] + '號看板資料投入');
+                                    //console.log(data);
+                                    //$("input[name='board_ID']:first").val(data['board_ID']);
+                                    //$("input[name='password']:first").val(data['password']);
+                                    $("input[name='board']:first").val(data['board_ID']);
+                                    $("input[name='type']:first").val(data['type']);
+                                    $("input[name='title']:first").val(data['title']);
+                                    $("input[name='introduce']:first").val(data['introduce']);
+                                    $("input[name='name']:first").val(data['name']);
+                                    $("input[name='school']:first").val(data['school']);
+                                    $("input[name='class']:first").val(data['class']);
+                                    $("input[name='password_private']:first").val(data['password_private']);
+                                    $("input[name='password_public']:first").val(data['password_public']);
+                                    $("input[name='tab']:first").val(data['tab']);
+                                    $("input[name='include']:first").val(data['include']);
+                                }
+                            },
+                            error: function (response) {
+                                alert("fail");
+                            }
+                        });
+                    }
                 }
-
-            }
-
-
-        });
-        $('.change').on('click', function () {
-            $.ajax({
-                type: "post",
-                url: "/BM/update",
-                data: {
-                    'board_ID': $("input[name='<%=board_ID%>']:first").val(),
+            });
+            $('#change').on('click', function () {
+                $.post("/BM/update", {
+                    'board_ID': $("input[name='board_ID']:first").val(),
                     'password': $("input[name='password']:first").val(),
                     'board': $("input[name='board']:first").val(),
                     'type': $("input[name='type']:first").val(),
@@ -192,13 +213,10 @@
                     'tab': $("input[name='tab']:first").val(),
                     'include': $("input[name='include']:first").val(),
                 },
-                dataType: "dataType",
-                success: function (response) {
-                    alert("success");
-                },
-                error: function (response) {
-                    alert("fail");
-                }
+                    function (response) {
+                        alert(response['result']);
+                    }
+                );
             });
         });
     </script>

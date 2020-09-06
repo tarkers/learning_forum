@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -18,7 +18,7 @@
             <div class="p-2">
                 <strong>Post: </strong><input id="label-input" type="text" />
                 <button class=" btn btn-success" onclick="change_Label(false)">show</button>
-                <button class=" btn btn-danger" onclick="change_Label(true)">hide</button>          
+                <button class=" btn btn-danger" onclick="change_Label(true)">hide</button>
             </div>
             <div class="p-2">
                 幾號以下貼文過濾: <input id="filter-input" type="number" size="5" />
@@ -27,7 +27,7 @@
             </div>
             <div class="dropdown p-2" style=" display:inline-block">
                 <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     變更該版面
                 </button>
                 <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -43,7 +43,7 @@
         <div>
             <div>
                 <a class="list-group-item list-group-item-action list-group-item-dark text-center"
-                    onclick="$('#inform-data').toggle()"> <strong>版面資訊陳列</strong></a>
+                   onclick="$('#inform-data').toggle()"> <strong>版面資訊陳列</strong></a>
                 <div id="inform-data" class="row " style="display: none;">
                     <div class="col offset-1">
                         <p name="board">board:<span></span></p>
@@ -67,20 +67,20 @@
                 </div>
 
             </div>
-            <ul  class="list-group list-group-flush ">
+            <ul class="list-group list-group-flush ">
                 <% for(var i in data.reverse()){%>
-                    <% if(data[i]['hide']===false){%>
-                    <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-light float-left pb-0 pt-1">                     
+                <% if(data[i]['hide']==='true'){%>
+                <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-light float-left pb-0 pt-1">
                     <%}else{%>
-                     <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-success float-left pb-0 pt-1">
+                <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-success float-left pb-0 pt-1">
                     <%}%>
-                    <%=data[i]['num']%> <%=data[i]['title']%> <%=data[i]['ID']%>           
+                    <%=data[i]['num']%> <%=data[i]['title']%> <%=data[i]['ID']%>
                     <br />
-                    <%if(data[i]['hide']==false){%>
-                        <span class="badge badge-dark float-right ">hide</span>
+                    <%if(data[i]['hide']=='true'){%>
+                    <span class="badge badge-dark float-right ">hide</span>
                     <%}else{%>
-                        <span class="badge badge-dark float-right ">show</span>
-                    <%}%>            
+                    <span class="badge badge-dark float-right ">show</span>
+                    <%}%>
                     <label class=" pl-3"><%-data[i]['include']%></label>
                 </li>
                 <%}%>
@@ -90,78 +90,87 @@
 
     </div>
     <script>
-        var kind=null;
-        $.ajax({
-            type: "post",
-            url: "/MB/board_information",
-            data: {
-                'board_ID': '<%=board_ID %>',
-                'password': '<%=password %>',
-            },
-            dataType: "json",
-            success: function (response) {
-                var data = response.data;
-                $("p[name='board']:first").val(data['board']);
-                $("p[name='type']:first").val(data['type']);
-                $("p[name='title']:first").val(data['title']);
-                $("p[name='intorduce']:first").val(data['intorduce']);
-                $("p[name='name']:first").val(data['name']);
-                $("p[name='school']:first").val(data['school']);
-                $("p[name='class']:first").val(data['class']);
-                $("p[name='password-private']:first").val(data['password_private']);
-                $("p[name='password-public']:first").val(data['password_public']);
-                $("p[name='tab']:first").val(data['tab']);
-                $("p[name='include']:first").val(data['include']);
-            },
-            error: function () {
-                // alert("版面資訊未找到");
-            }
-        });
-
-        $('.dropdown-menu a').click(function () {
-            console.log("<%=data[0]['title']%>");
-            kind = $(this).text();
-            $(".dropdown-toggle").text(kind);
-        });
-
-        $('#confirm-btn').on('click',function(){
+        $(document).ready(function () {
+            var kind = null;
             $.ajax({
                 type: "post",
-                url: "/MB/board_update",
+                url: "/MB/board_information",
                 data: {
-                    board_ID:'<%=board_ID%>',
-                    password:'<%=password%>',
-                    type:kind,
-                    include:$('#include-input').val(),
+                    'board_ID': '<%=board_ID %>',
+                    'password': '<%=password %>',
                 },
-                dataType: "dataType",
+                dataType: "json",
                 success: function (response) {
-                    alart('變更成功,下次進入可以看到更改');
+                    var data = response.data;
+                    //alert(data['board_ID'])
+                    $("p[name='board']:first").find('span').text(data['board_ID']);
+                    $("p[name='type']:first").find('span').text(data['type']);
+                    $("p[name='title']:first").find('span').text(data['title']);
+                    $("p[name='intorduce']:first").find('span').text(data['introduce']);
+                    $("p[name='name']:first").find('span').text(data['name']);
+                    $("p[name='school']:first").find('span').text(data['school']);
+                    $("p[name='class']:first").find('span').text(data['class']);
+                    $("p[name='password-private']:first").find('span').text(data['password_private']);
+                    $("p[name='password-public']:first").find('span').text(data['password_public']);
+                    $("p[name='tab']:first").find('span').text(data['tab']);
+                    $("p[name='include']:first").find('span').text(data['include']);
                 },
-                error: function(response){
-                    alert('網路有問題, 建議過段時間再試一次');
+                error: function () {
+                    // alert("版面資訊未找到");
+                }
+            });
+
+            $('.dropdown-menu a').click(function () {
+                kind = $(this).text();
+                $(".dropdown-toggle").text(kind);
+            });
+
+            $('#confirm-btn').on('click', function () {
+                $.ajax({
+                    type: "post",
+                    url: "/MB/board_update",
+                    data: {
+                        board_ID: '<%=board_ID%>',
+                        password: '<%=password%>',
+                        type: kind,
+                        include: $('#include-input').val(),
+                    },
+                    dataType: "dataType",
+                    success: function (response) {
+                        alert('已嘗試更新,請重新整理檢查成功與否');
+                    },
+                    error: function (response) {
+                        alert('已嘗試更新,請重新整理檢查成功與否');
+                    }
+                });
+            });
+            $('#filter-btn').on('click', function () {
+                for (var i = $('#filter-input').val(); i >= 1; i--) {
+                    $('#list-' + i).hide();
+                    console.log('#list-' + i);
                 }
             });
         });
-        $('#filter-btn').on('click',function(){
-            for(var i = $('#filter-input').val();i>=1;i--){
-                    $('#list-'+i).hide();
-                    console.log('#list-'+i);
+        function change_Label(hide) {
+            console.log('#list-' + $('#label-input').val());
+            $.post('/MB/post_display', {
+                board_ID: '<%=board_ID%>',
+                password: '<%=password%>', hide: hide, num: $('#label-input').val()
+            }, function (data) {
+                    if (data['result'] == 'success')
+                        alert('變更成功');
+                    else
+                        alert('變更顯示狀態失敗');
+            });
+            if (!hide) {
+                $('#list-' + $('#label-input').val()).addClass('list-group-item-success');
+                $('#list-' + $('#label-input').val()).removeClass('list-group-item-light');
+                $('#list-' + $('#label-input').val() + " span").text('show');
             }
-        });
-
-        function change_Label(hide){
-            console.log('#list-'+$('#label-input').val());
-            if(!hide){
-                $('#list-'+$('#label-input').val()).addClass('list-group-item-success');
-                $('#list-'+$('#label-input').val()).removeClass('list-group-item-light');
-                $('#list-'+$('#label-input').val()+" span").text('show');
-
-            }
-            else{
-                $('#list-'+$('#label-input').val()).addClass('list-group-item-light');
-                $('#list-'+$('#label-input').val()).removeClass('list-group-item-success');           
-                $('#list-'+$('#label-input').val()+ ' span').text('hide');
+            else {
+                $('#list-' + $('#label-input').val()).addClass('list-group-item-light');
+                $('#list-' + $('#label-input').val()).removeClass('list-group-item-success');
+                $('#list-' + $('#label-input').val() + ' span').text('hide');
             }
         }
     </script>

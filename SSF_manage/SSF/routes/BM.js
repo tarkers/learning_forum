@@ -21,6 +21,7 @@ function login(req, res) {
 }
 
 function build_getCount(req, res) {
+    //console.log({ board_ID: req.body.board_ID, password: req.body.password});
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("board").collection("all_board_number");
@@ -32,6 +33,7 @@ function build_getCount(req, res) {
 }
 
 function build_insertManagerInformation(req, res, new_board_ID) {
+    //console.log({ board_ID: req.body.board_ID, password: req.body.password});
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("people").collection('manager_information');
@@ -50,7 +52,8 @@ function build_insertManagerInformation(req, res, new_board_ID) {
     });
 }
 
-function build_insertAllBoardNumber(req, res,new_board_ID) {
+function build_insertAllBoardNumber(req, res, new_board_ID) {
+    //console.log({ board_ID: req.body.board_ID, password: req.body.password});
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("board").collection('all_board_number');
@@ -63,12 +66,13 @@ function build_insertAllBoardNumber(req, res,new_board_ID) {
             if (req.body.type == 'public')
                 build_insertClass(req, res, new_board_ID);
             else
-                render('Page10', { board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID })
+                res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID })
         });
     });
 }
 
 function build_insertClass(req, res, new_board_ID) {
+    //console.log({ board_ID: req.body.board_ID, password: req.body.password });
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("data").collection(req.body.class + '_board');
@@ -79,6 +83,7 @@ function build_insertClass(req, res, new_board_ID) {
             if (err) throw err;
             db.close();
             res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
+            //console.log({ board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
         });
     });
 }
@@ -102,7 +107,7 @@ function update_managerInformation(req, res) {
             }
             db.close();
             //console.log(result);
-            update_AllBoardNumber(res, req);
+            update_AllBoardNumber(req, res);
         });
     });
 }
@@ -121,7 +126,7 @@ function update_AllBoardNumber(req, res) {
             db.close();
             //console.log(result);
             if (req.body.type == 'public')
-                update_ClassBoard(res, req);
+                update_ClassBoard(req, res);
             else
                 res.json({ result: 'success' });
         });
@@ -153,10 +158,10 @@ function get_information(req, res) {
         var findThing = { board_ID: req.body.board };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) {
-                res.json({ result: error });
+                res.json({ result: 'error' });
                 throw err;
             }
-            res.json({ result: success,data:result[0] });
+            res.json({ result: 'success', data: result[0], length: result.length });
         });
     });
 }
@@ -170,19 +175,22 @@ router.post('/to_manager_build', function (req, res) {
 //前往管理者資料更新頁
 router.post('/to_manager_update', function (req, res) {
     if (req.body.board_ID == core_ID && req.body.password == core_password)
-        res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password });
+        res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password ,board:'不是建立看板後跳來,不提供預設看板號'});
 });
 //管理者註冊(建立)
 router.post('/build', function (req, res) {
+    //console.log({ board_ID: req.body.board_ID, password: req.body.password});
     build_getCount(req, res);
 });
 //(AJAX)更新管理者註冊資料
 router.post('/update', function (req, res) {
+    console.log(req.body);
     if (req.body.board_ID == core_ID && req.body.password == core_password)
-        update_managerInformation(res, req);
+        update_managerInformation(req, res);
 });
 //(AJAX)獲得管理者註冊資料
 router.post('/get_information', function (req, res) {
+    //console.log(req.body);
     if (req.body.board_ID == core_ID && req.body.password == core_password)
         get_information(req,res);
 });

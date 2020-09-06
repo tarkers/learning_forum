@@ -43,6 +43,8 @@ router.post('/to_personal_data', function (req, res) {
 });
 //核心管理者獲得看板所有資料
 router.post('/to_all_data', function (req, res) {
+    //console.log("in to to all board");
+    //console.log(req.body);
     if (req.body.board_ID == core_ID && req.body.password == core_password)
         Render(req, res, 'Page8');
 });

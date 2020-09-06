@@ -33,7 +33,6 @@
     <Content Include="public\images\ttt.jpg" />
     <Content Include="public\javascripts\jquery.js" />
     <Content Include="routes\GBD.js" />
-    <Content Include="routes\index.js" />
     <Content Include="routes\MB.js" />
     <Content Include="routes\BM.js" />
     <Content Include="routes\users.js" />
