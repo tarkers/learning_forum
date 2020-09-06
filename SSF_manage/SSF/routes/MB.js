@@ -30,6 +30,7 @@ function ReJSON(req, res) {
                 res.json({ result: 'error' })
                 throw err;
             }
+            //console.log(result[0]);
             res.json({ data: result[0], result: 'success' });
         });
     });
@@ -46,12 +47,25 @@ function Render(req, res, other) {
     });
 }
 
+function RenderAll(req, res, other) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) throw err;
+        var table = db.db("board").collection("all_board_number");
+        var findThing = {};
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            res.render(other, { board_ID: req.body.board_ID, password: req.body.password, data: result });
+        });
+    });
+}
+
 function get_password(req, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) throw err;
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            //console.log(result);
+            //console.log(result[0]);
             force_jump(req, res, result[0]['password_private']);
         });
     });
@@ -176,7 +190,7 @@ router.post('/to_personal_manage', function (req, res) {
 //前往全體看板管理頁
 router.post('/to_all_manage', function (req, res) {
     if (req.body.board_ID == core_ID && req.body.password == core_password)
-        Render(req, res, 'Page6');
+        RenderAll(req, res, 'Page6');
 });
 //從全體看板管理頁指定個人看版管理頁跳躍
 router.post('/force_to_personal_manage', function (req, res) {

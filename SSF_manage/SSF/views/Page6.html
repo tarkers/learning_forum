@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -17,10 +17,10 @@
             <h1>多版面管理</h1>
         </div>
         <div class="p-3">
-            <form action="post" action="/MB/force_to_personal_manage">
+            <form method="post" action="/MB/force_to_personal_manage">
                 <input type=text name=board_ID value="<%=board_ID%>" style="display: none;">
                 <input type=text name=password value="<%=password%>" style="display: none;">
-                <strong>Board:</strong> <input type="text" />
+                <strong>Board:</strong> <input name="board" type="text" />
                 <input type="submit" class="btn btn-success" value="進入" />
             </form>
         </div>
