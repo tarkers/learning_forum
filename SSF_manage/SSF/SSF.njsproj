@@ -33,12 +33,23 @@
     <Content Include="public\images\ttt.jpg" />
     <Content Include="public\javascripts\jquery.js" />
     <Content Include="routes\GBD.js" />
+    <Content Include="routes\index.js" />
     <Content Include="routes\MB.js" />
     <Content Include="routes\BM.js" />
     <Content Include="routes\users.js" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
+    <Content Include="views\Page1.html" />
+    <Content Include="views\Page10.html" />
+    <Content Include="views\Page2.html" />
+    <Content Include="views\Page3.html" />
+    <Content Include="views\Page4.html" />
+    <Content Include="views\Page5.html" />
+    <Content Include="views\Page6.html" />
+    <Content Include="views\Page7.html" />
+    <Content Include="views\Page8.html" />
+    <Content Include="views\Page9.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />

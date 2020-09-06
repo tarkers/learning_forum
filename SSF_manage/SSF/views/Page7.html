@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div class=" container-fluid text-center">
+        <h1 class="jumbotron  p-2">版面管理<sub><small>ID: <%=board_ID %> </small> </sub></h1>
+        <div>
+            <button class="btn btn-lg btn-info">下載</button>
+            <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
+        </div>
+    </div>
+    <script>
+        $('.btn').on('click',function(){
+            $.ajax({
+                type: 'post',
+                url: "/GBD/download",
+                data: {
+                    board_ID:'<%=board_ID%>',
+                    password:'<%=password%>'
+                },
+                dataType: 'JSON',
+                success: function (response) {
+                    console.log("success");
+                    items = response.data;
+                   //transfer csv file
+                    const replacer = (key, value) => value === null ? '' : value;
+                    const header = Object.keys(items[0]);
+                    let csv = items.map(row => header.map(fieldName => JSON.stringify(row[
+                            fieldName], replacer))
+                        .join(','));
+                    csv.unshift(header.join(','));
+                    csv = csv.join('\r\n');
+                    var data = new Blob([csv]);
+                    $('.btn-link').attr('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
+                    csv));
+                    $('.btn-link').attr('download','版面編號:'+'<%=board_ID %>'+'.csv');
+                    $('.btn-link').show();
+                },
+                error: function(response){
+                    console.log('error');
+                }
+            });
+        });
+        $('.btn-link').on('click', function (e) {
+            $(this).slideUp();
+
+        });
+    </script>
+</body>
+
+</html>

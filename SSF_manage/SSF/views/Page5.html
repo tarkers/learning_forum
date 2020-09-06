@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div class=" container-fluid ">
+        <h1 class="jumbotron text-center p-2">版面管理<sub><small>ID: <%=board_ID %> </small> </sub></h1>
+        <div class=" text-center ">
+            <div class="p-2">
+                <strong>Post: </strong><input id="label-input" type="text" />
+                <button class=" btn btn-success" onclick="change_Label(false)">show</button>
+                <button class=" btn btn-danger" onclick="change_Label(true)">hide</button>          
+            </div>
+            <div class="p-2">
+                幾號以下貼文過濾: <input id="filter-input" type="number" size="5" />
+                <button id="filter-btn" class=" btn btn-info">過濾</button>
+                <button id="lift-btn" class=" btn btn-warning" onclick="$('.list-group li').show()">解除</button>
+            </div>
+            <div class="dropdown p-2" style=" display:inline-block">
+                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    變更該版面
+                </button>
+                <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" id='title'>title</a>
+                    <a class="dropdown-item" id='tab'>tab</a>
+                    <a class="dropdown-item" id='include'>include</a>
+                    <a class="dropdown-item" id='introduce'>introduce</a>
+                </span>
+                <span><input id="include-input" rows="3" cols="10" style=" resize:none" /></span>
+                <span><button id="confirm-btn" class="btn btn-primary">confirm</button></span>
+            </div>
+        </div>
+        <div>
+            <div>
+                <a class="list-group-item list-group-item-action list-group-item-dark text-center"
+                    onclick="$('#inform-data').toggle()"> <strong>版面資訊陳列</strong></a>
+                <div id="inform-data" class="row " style="display: none;">
+                    <div class="col offset-1">
+                        <p name="board">board:<span></span></p>
+                        <p name="type">type:<span></span></p>
+                        <p name="title">title:<span></span></p>
+                        <p name="intorduce">introduce:<span></span></p>
+
+                    </div>
+                    <div class="col offset-1">
+                        <p name="name">name:<span></span></p>
+                        <p name="school">school:<span></span></p>
+                        <p name="class">class:<span></span></p>
+                        <p name="password-private">password_private:<span></span></p>
+
+                    </div>
+                    <div class="col offset-1">
+                        <p name="password-public">password_public:<span></span></p>
+                        <p name="tab">tab:<span></span></p>
+                        <p name="include">include:<span></span></p>
+                    </div>
+                </div>
+
+            </div>
+            <ul  class="list-group list-group-flush ">
+                <% for(var i in data.reverse()){%>
+                    <% if(data[i]['hide']===false){%>
+                    <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-light float-left pb-0 pt-1">                     
+                    <%}else{%>
+                     <li id="list-<%=data[i]['num']%>" class="list-group-item list-group-item-success float-left pb-0 pt-1">
+                    <%}%>
+                    <%=data[i]['num']%> <%=data[i]['title']%> <%=data[i]['ID']%>           
+                    <br />
+                    <%if(data[i]['hide']==false){%>
+                        <span class="badge badge-dark float-right ">hide</span>
+                    <%}else{%>
+                        <span class="badge badge-dark float-right ">show</span>
+                    <%}%>            
+                    <label class=" pl-3"><%-data[i]['include']%></label>
+                </li>
+                <%}%>
+            </ul>
+        </div>
+
+
+    </div>
+    <script>
+        var kind=null;
+        $.ajax({
+            type: "post",
+            url: "/MB/board_information",
+            data: {
+                'board_ID': '<%=board_ID %>',
+                'password': '<%=password %>',
+            },
+            dataType: "json",
+            success: function (response) {
+                var data = response.data;
+                $("p[name='board']:first").val(data['board']);
+                $("p[name='type']:first").val(data['type']);
+                $("p[name='title']:first").val(data['title']);
+                $("p[name='intorduce']:first").val(data['intorduce']);
+                $("p[name='name']:first").val(data['name']);
+                $("p[name='school']:first").val(data['school']);
+                $("p[name='class']:first").val(data['class']);
+                $("p[name='password-private']:first").val(data['password_private']);
+                $("p[name='password-public']:first").val(data['password_public']);
+                $("p[name='tab']:first").val(data['tab']);
+                $("p[name='include']:first").val(data['include']);
+            },
+            error: function () {
+                // alert("版面資訊未找到");
+            }
+        });
+
+        $('.dropdown-menu a').click(function () {
+            console.log("<%=data[0]['title']%>");
+            kind = $(this).text();
+            $(".dropdown-toggle").text(kind);
+        });
+
+        $('#confirm-btn').on('click',function(){
+            $.ajax({
+                type: "post",
+                url: "/MB/board_update",
+                data: {
+                    board_ID:'<%=board_ID%>',
+                    password:'<%=password%>',
+                    type:kind,
+                    include:$('#include-input').val(),
+                },
+                dataType: "dataType",
+                success: function (response) {
+                    alart('變更成功,下次進入可以看到更改');
+                },
+                error: function(response){
+                    alert('網路有問題, 建議過段時間再試一次');
+                }
+            });
+        });
+        $('#filter-btn').on('click',function(){
+            for(var i = $('#filter-input').val();i>=1;i--){
+                    $('#list-'+i).hide();
+                    console.log('#list-'+i);
+            }
+        });
+
+        function change_Label(hide){
+            console.log('#list-'+$('#label-input').val());
+            if(!hide){
+                $('#list-'+$('#label-input').val()).addClass('list-group-item-success');
+                $('#list-'+$('#label-input').val()).removeClass('list-group-item-light');
+                $('#list-'+$('#label-input').val()+" span").text('show');
+
+            }
+            else{
+                $('#list-'+$('#label-input').val()).addClass('list-group-item-light');
+                $('#list-'+$('#label-input').val()).removeClass('list-group-item-success');           
+                $('#list-'+$('#label-input').val()+ ' span').text('hide');
+            }
+        }
+    </script>
+</body>
+
+</html>
