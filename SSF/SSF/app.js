@@ -64,3 +64,16 @@ var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
     console.log(process.env.PORT || 1337);
 });
+
+
+
+//Adding Block
+//const postRoute = require('./routes/posts')
+//app.use('/posts',postRoute)
+//const postRoute2 = require('./routes/SAN/register')
+//app.use('/SAN/register',postRoute2)
+const CB_route = require('./routes/CB')
+app.use('/CB',CB_route)
+const SAN_route = require('./routes/SAN')
+app.use('/SAN',SAN_route)
+//End of Adding Block
