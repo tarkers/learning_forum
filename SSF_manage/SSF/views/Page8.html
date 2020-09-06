@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div class=" container-fluid">
+        <h1 class="jumbotron text-center p-2">多版面資料取得</h1>
+    </div>
+    <div class=" text-center">
+        <p><strong>Board:</strong> <input type="text" /></p>
+        <p><button class="btn btn-lg btn-info">下載</button></p>
+        <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
+    </div>
+    <script>
+        var items = null;
+        $('.btn-info').on('click', function () {
+            var id = $('input:first').val();
+            $.ajax({
+                type: 'post',
+                url: "/GBD/download",
+                data: {
+                    board_ID: id,
+                    password: '<%=password%>'
+                },
+                dataType: 'JSON',
+                success: function (response) {
+                    console.log("success");
+                    items = response.data;
+                   //transfer csv file
+                    const replacer = (key, value) => value === null ? '' : value;
+                    const header = Object.keys(items[0]);
+                    let csv = items.map(row => header.map(fieldName => JSON.stringify(row[
+                            fieldName], replacer))
+                        .join(','));
+                    csv.unshift(header.join(','));
+                    csv = csv.join('\r\n');
+                    // console.log(csv);
+                    var data = new Blob([csv]);
+                    $('.btn-link').attr('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
+                    csv));
+                    $('.btn-link').attr('download','版面編號:'+id+'.csv');
+                    $('.btn-link').show();
+                },
+                error: function (response) {
+                    alert("fail");
+                },
+                complete: function () {
+                    //no matter success or error it will run
+                }
+            });
+        });
+        $('.btn-link').on('click', function (e) {
+            $(this).slideUp();
+        });
+    </script>
+</body>
+
+</html>

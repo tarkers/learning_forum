@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div class=" container-fluid">
+        <div name="Title" class="jumbotron text-center">
+            <h1>建立版面</h1>
+        </div>
+        <div class="  w-50 m-auto " >
+            <form method="POST" action="/BM/build" class=" text-center ">
+                <input name='<%=board_ID%>' style="display: none" value="<%=board_ID%>"/>
+                <input name='<%=password%>' style=" display:none" value="<%=password%>"/>
+                <!-- <div class=" row">
+                    <div class=" col">
+                        <p><strong>board: </strong><input type=text  size="10" name=旁邊的></p>
+                        <p><strong>type: </strong><input type=text name=旁邊的></p>
+                        <p><strong>title: </strong><input type=text name=旁邊的></p>
+                        <p><strong>introduce: </strong><input type=text name=旁邊的></p>
+                        <p><strong>name: </strong><input type=text name=旁邊的></p>
+                        <p><strong>school: </strong><input type=text name=旁邊的></p>
+                    </div>
+                    <div class=" col">
+                        <p><strong>class: </strong><input type=text name=旁邊的></p>
+                        <p><strong>password_private: </strong><input type=text name=旁邊的></p>
+                        <p><strong>password_public: </strong><input type=text name=旁邊的></p>
+                        <p><strong>tab: </strong><input type=text name=旁邊的></p>
+                        <p><strong>include: </strong><input type=text name=旁邊的></p>
+                    </div>
+                </div> -->
+                <div style=" height: 350px; overflow-y: auto; ">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">board</span>
+                        </div>
+                        <input type="text" class="form-control" name="board">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">type</span>
+                        </div>
+                        <input type="text" class="form-control" name="type">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">title</span>
+                        </div>
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >name</span>
+                        </div>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">school</span>
+                        </div>
+                        <input type="text" class="form-control" name="school">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">class</span>
+                        </div>
+                        <input type="text" class="form-control" name="class">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">password_private</span>
+                        </div>
+                        <input type="text" class="form-control" name="password_private">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">password_public</span>
+                        </div>
+                        <input type="text" class="form-control" name="password_public">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">tab</span>
+                        </div>
+                        <input type="text" class="form-control" name="tab">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">include</span>
+                        </div>
+                        <input type="text" class="form-control" name="include">
+                    </div>
+                </div>
+                <input type=submit class="btn btn-info w-100" value="建立">
+            </form>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
