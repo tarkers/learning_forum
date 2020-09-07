@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
-        <div class="text-center">
+        <div class="text-center jumbotron">
             <h1>發帖區<small><%=ID%></small></h1>
             <small>sand to <%=board_ID%></small>
         </div>
@@ -34,23 +34,24 @@
         <!-- 編輯功能區 右邊 -->
         <div class="col-sm-4 ">
             <small>插入成功後請不要破壞出現的標記式語言<br />(內容允許直接刪除)<br /></small>
-            <input type="button" value="插入大標題" /><br />
-            <input type="button" value="插入小標題" /><br />
-            <input type="button" value="插入一般文字" /><br />
-            <input type="button" value="插入圖片" /><br />
-            <input type="button" value="插入網址" /><br />
-            <input type="button" value="插入Gsuit分享連結" /><br />
-            <input type="button" value="清空內容" /><br />
-            <input type="button" value="局部刪除" /><br />
-            <input type="button" value="預覽" /><br />
+            <input type="button" value="插入大標題" style="width:100%" /><br />
+            <input type="button" value="插入小標題" style="width:100%" /><br />
+            <input type="button" value="插入一般文字" style="width:100%" /><br />
+            <input type="button" value="插入圖片" style="width:100%" /><br />
+            <input type="button" value="插入網址" style="width:100%" /><br />
+            <input type="button" value="插入Gsuit分享連結" style="width:100%" /><br />
+            <input type="button" value="清空內容" style="width:100%" /><br />
+            <input type="button" value="局部刪除" style="width:100%" /><br />
+            <input type="button" value="預覽" style="width:100%" /><br />
             <pre id="type"><%=type%></pre>
             <!-- 發文寄出 -->
+
             <form action="/DB/post_public" method="post">
                 <input type="text" name="ID" value="<%=ID%>" />
                 <input type="text" name="board_ID" value="<%=board_ID%>" />
                 <input type="text" name="title" />
                 <input type="text" name="include" />
-                <input type="submit" value="寄出" />
+                <input type="submit" value="寄出" class="btn btn-primary" style="width:100%" />
             </form>
             <form action="/DB/post_private" method="post">
                 <input type="text" name="ID" value="<%=ID%>" />
@@ -62,6 +63,8 @@
             </form>
         </div>
     </div>
+    <br />
+    <br/>
     <script>
         function init() {
             $('pre').hide();

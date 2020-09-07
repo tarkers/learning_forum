@@ -15,44 +15,40 @@
 </head>
 <body>
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
-        <div class="text-center">
+        <div class="text-center jumbotron">
             <h1><small><%=board_ID%></small></h1>
-            <small>You are <%=ID%></small><button type="button">加到我的最愛</button>
+            <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
         </div>
-
-        <br>
-        <div id="introduce" style="text-align:center"></div>
-        <br><br>
+        <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
-        <div id="find">
-            輸入篩選主題關鍵字: <input type="text" /><input type="button" value="篩選主題" /><br />
-            輸入顯示前幾則貼文: <input type="text" /><input type="button" value="屏蔽貼文" /><br />
-            輸入目標貼文的號碼: <input type="text" id="where" /><input type="button" value="指定貼文" /><br />
-            <input type="button" value="解除所有限制" />
+        <div id="find" class="bg-warning text-center">
+            輸入篩選主題關鍵字: <input type="text"  class="bg-warning"/><input type="button" value="篩選主題"  class="bg-warning"/><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning"/><input type="button" value="屏蔽貼文" class="bg-warning"/><br />
+            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning"/><input type="button" value="指定貼文"  class="bg-warning"/><br/>
+            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%"/>
         </div>
-        <br><br>
         <!-- 發文跳轉 -->
         <form action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
             <input type="text" name="type" id="get_type" />
-            <input type="submit" value="我要發文" />
+            <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%"/>
         </form>
         <br>
         <div>
             <!-- 每則貼文主體 -->
             <%for(var i = num-1;i >= 0;i--){%>
-            <div id="<%=data[i]['num']%>" class="post">
+            <div id="<%=data[i]['num']%>" name="<%=i%>" class="post bg-info">
                 <strong>帳號:</strong><%=data[i]['ID']%><br />
-                <strong>標題:</strong><span><%=data[i]['title']%></span><small>貼文編號: <%=data[i]['num']%></small><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">         貼文編號: <%=data[i]['num']%></small><br />
                 <%-data[i]['include']%><br />
                 <!-- 寄留言-->
                 <form action="/DB/discuss" method="post">
                     <input type="text" name="num" value="<%=data[i]['num']%>" />
                     <input type="text" name="ID" value="<%=ID%>" />
                     <input type="text" name="board_ID" value="<%=board_ID%>" />
-                    <label>展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" />
-                    <input class="form-control" type="text" name="include" value="" />
+                    <label class="label label-success">展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" class="btn btn-link"/>
+                    <input class="form-control" style="background-color:cornsilk" type="text" name="include" value=""/>
                 </form>
                 <!-- 回應區-->
                 <div name="reply">
@@ -60,8 +56,9 @@
                     <%=data[i][j.toString()]%><br />
                     <%}%>
                 </div>
-                <br /><br />
+                <br />
             </div>
+            <br />
             <%}%>
             <br />
         </div>
@@ -110,9 +107,11 @@
                         break;
                     case "屏蔽貼文":
                         var number = parseInt(text);
+                         number = parseInt('<%=num%>') - number;
                         $('.post').each(function () {
                             $(this).show();
-                            if (parseInt($(this).attr('id')) < '<%-num%>' - number + 1)
+                            //console.log(number);
+                            if (parseInt($(this).attr('name')) <  number)
                                 $(this).hide();
                         });
                         break;
@@ -130,6 +129,7 @@
                         });
                         break;
                 }
+                alert('篩選完成');
             });
             //加入我的最愛功能
             $('button').click(function () {
@@ -143,7 +143,7 @@
                 var text = $(this).next('input');
                 var div = $(this).closest('form').next('div');
                 var label = $(this).prev();
-                if ('我要留言' == $(this).val()) {
+                if ('我要留言' == $(this).val() && text.val().trim() != '') {
                     $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val() }, function (result) {
                         alert(result['result']);
                         if (result['result'] == 'success') {
@@ -156,6 +156,9 @@
                             alert('並沒有實際儲存請再留言一次');
                         }
                     });
+                }
+                else {
+                    alert('您的輸入區是空白喔');
                 }
             });
             //留言展開

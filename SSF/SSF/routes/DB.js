@@ -7,16 +7,21 @@ var MongoClient = mongo.MongoClient;
 var uri = "mongodb://localhost:27017/";
 
 //function block
+//mode 0:  1:密碼錯誤或帳號不存在,按上一頁再試一次 2:伺服器連線問題請,請按上一頁再試一次 3:操作不合法,請聯絡網站管理者
+function warming(res, mode) {
+    var str = ['', '密碼錯誤或帳號不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
+    res.render('warming', { warming: str[mode] });
+}
 
 //post public && post private
 
 function getPassword_private(req,res) {
     MongoClient.connect(uri , { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) {warming(res, 2);throw err;}
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
             if (result.length > 0) {
@@ -24,18 +29,22 @@ function getPassword_private(req,res) {
                 if (result[0]['password_public'] == req.body.board_password) {
                     getCount_public(req, res);
                 }
+                else
+                    warming(res, 1);
             }
+            else
+                warming(res, 1);
         });
     });
 }
 
 function getCount_public(req,res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = {};
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
             insert_public(req, res, result.length);
@@ -43,14 +52,14 @@ function getCount_public(req,res) {
     });
 }
 
-function plus_follower(req, num) {
+function plus_follower(req, res ,num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("follow").collection(req.body.board_ID);
         var insertThing = { num: (num + 1).toString() };
         insertThing[req.body.ID] = req.body.ID;
         table.insertOne(insertThing, function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
         });
@@ -59,14 +68,14 @@ function plus_follower(req, num) {
 
 function insert_public(req, res,num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var insertThing = { num: (num + 1).toString(), ID: req.body.ID, title: req.body.title, include: req.body.include, hide: 'false' };
         table.insertOne(insertThing, function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            plus_follower(req, num);
+            plus_follower(req, res ,num);
             jumpPublic(req,req.body.board_ID, req.body.ID, res);
         });
     });
@@ -74,11 +83,11 @@ function insert_public(req, res,num) {
 
 function jumpPublic(req,board_ID, ID, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(board_ID);
         var findThing = { hide: 'false' };
         table.find(findThing, { projection: { _id: 0} }).toArray(function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
             var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length };
@@ -94,7 +103,7 @@ function jumpPublic(req,board_ID, ID, res) {
 //add lover
 function add_lover(req,res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_lover");
         var filter = { ID: req.query.ID };
         var goal = {};
@@ -114,21 +123,24 @@ function add_lover(req,res) {
 //discuss
 function discuss_getNum(req, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            discuss_update(req, res, Object.keys(result[0]).length - 5 + 1);
+            if (result.length > 0)
+                discuss_update(req, res, Object.keys(result[0]).length - 5 + 1);
+            else
+                warming(res, 3);
         });
     });
 }
 
 function discuss_update(req, res, num) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var filter = { num: req.body.num };
         var goal = {};
@@ -148,27 +160,30 @@ function discuss_update(req, res, num) {
 
 function discuss_notice(req) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("follow").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
         table.find(findThing, { projection: { _id: 0,num:0 } }).toArray(function (err, result) {
-            if (err) throw err;
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            discuss_notice_add(req, result[0]);
+            if (result.length > 0)
+                discuss_notice_add(req, result[0]);
+            else
+                warming(res, 3);
         });
     });
 }
 
 function discuss_notice_add(req,data) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("follow").collection(req.body.board_ID);
         var filter = { num: req.body.num };
         var goal = {};
         goal[req.body.ID] = req.body.ID;
         table.updateOne(filter, { $set: goal }, function (err, result) {
-            if (err) { throw err;}
+            if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
             var list = Object.keys(data);
@@ -180,13 +195,13 @@ function discuss_notice_add(req,data) {
 
 function discuss_notice_send(id,key) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) throw err;
+        if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_notice");
         var filter = { ID: id };
         var goal = {};
         goal[key] = key;
         table.updateOne(filter, { $set: goal }, function (err, result) {
-            if (err) { throw err; }
+            if (err) { warming(res, 2); throw err; }
             db.close();
             console.log(id+'->' + key);
         });
