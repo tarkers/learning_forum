@@ -126,23 +126,19 @@
             });
 
             $('#confirm-btn').on('click', function () {
-                $.ajax({
-                    type: "post",
-                    url: "/MB/board_update",
-                    data: {
+                $.post("/MB/board_update",
+                    {
                         board_ID: '<%=board_ID%>',
                         password: '<%=password%>',
                         type: kind,
                         include: $('#include-input').val(),
                     },
-                    dataType: "dataType",
-                    success: function (response) {
-                        alert('已嘗試更新,請重新整理檢查成功與否');
-                    },
-                    error: function (response) {
-                        alert('已嘗試更新,請重新整理檢查成功與否');
-                    }
-                });
+                    function (data) {
+                        if (data['result'] == 'success')
+                            alert('更新成功, 重新整理後可以看到變更');
+                        else
+                            alert('更新失敗, 請過段時間再試一次');
+                    });
             });
             $('#filter-btn').on('click', function () {
                 for (var i = $('#filter-input').val(); i >= 1; i--) {
