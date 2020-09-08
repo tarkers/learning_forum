@@ -7,10 +7,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var routes = require('./routes/index');
 var users = require('./routes/users');
-var JB = require('./routes/JB');
-var DB = require('./routes/DB');
+var GBD = require('./routes/GBD');
+var MB = require('./routes/MB');
+var BM = require('./routes/BM');
 var app = express();
 
 app.engine('.html', require('ejs').__express)
@@ -25,10 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/JB', JB);
-app.use('/DB', DB);
+app.use('/', users);
+app.use('/GBD', GBD)
+app.use('/MB', MB)
+app.use('/BM', BM)
 
 //以下為最後除錯中間件 勿刪 發布時用
 //// catch 404 and forward to error handler
@@ -62,22 +62,9 @@ app.use('/DB', DB);
 //    });
 //});
 
-app.set('port', process.env.PORT || 1337);
+app.set('port', process.env.PORT || 1338);
 
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
-    console.log(process.env.PORT || 1337);
+    console.log(process.env.PORT || 1338);
 });
-
-
-
-//Adding Block
-//const postRoute = require('./routes/posts')
-//app.use('/posts',postRoute)
-//const postRoute2 = require('./routes/SAN/register')
-//app.use('/SAN/register',postRoute2)
-const CB_route = require('./routes/CB')
-app.use('/CB',CB_route)
-const SAN_route = require('./routes/SAN')
-app.use('/SAN',SAN_route)
-//End of Adding Block

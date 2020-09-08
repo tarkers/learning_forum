@@ -1,11 +1,184 @@
 ﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<!--head boostrap mode-->
 
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width,
+            initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>test</title>
+</head>
+
+<body id="main" onClick="handleClick(event)">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div id="content-div" class="col-md-4 align-self-center"
+                style="height:400px; background-color:  rgb(178, 247, 237);">
+                <div id=lover class="div-collapse collapse" data-parent="#content-div">
+                    <h3>你的最愛</h3>
+                    <%for(var key in lover){%>
+                    <%  if(key==='ID'){%>
+                    <% continue; %>
+                    <%}%>
+                    <% var l_inform=lover[key].split('_') ;%>
+                    <div class="container">
+                        <div class="row w-100 pb-1" id='<%=lover[key]%>'>
+                            <span class="col "><b>Type: </b><br><%= l_inform[0] %></span>
+                            <span class="col"><b>Board: </b><br><%= l_inform[1] %></span>
+                            <div class="col d-inline-flex justify-content-end">
+                                <input type=button value=跳轉 class="mr-2 btn btn-light"
+                                    onclick="change_Page('lover<%= ID %>','<%= l_inform[0] %>')" />
+                                <input type=button value=刪除 class="mr-2 btn btn-danger "
+                                    onclick="delete_List('<%-lover[key]%>','lover')" />
+                                <form id="lover<%= ID %>" method="POST" action="/JB/to_<%= l_inform[0] %>_board"
+                                    style="margin: 10px;">
+                                    <%  if(l_inform[0] ==='private'){%>
+                                    <input type="text" id="password_lover<%= ID %>" class="align-self-center"
+                                        style="display:none" size="8" name="password" placeholder="password" />
+                                    <input type="submit" style="display: none" />
+                                    <%}%>                                   
+                                    <input name='ID' value="<%= ID %>" style="display:none"/>
+                                    <input name='type' value="<%= l_inform[0] %>" style="display:none" />
+                                    <input name='board_ID' value="<%= l_inform[1] %>" style="display:none" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
+                <div id = notice class="div-collapse collapse" data-parent="#content-div">
+                    <h3>你的通知</h3>
+                    <%for(var key in notice){%>
+                    <%  if(key==='ID'){%>
+                    <% continue; %>
+                    <%}%>
+                    <% var n_inform=notice[key].split('_') ;%>
+                    <div class=" container">
+                        <div class="row w-100  pb-1" id='<%=notice[key]%>'>
+                            <span class="col"><b>Type: </b><br><%= n_inform[0] %></span>
+                            <span class="col"><b>Board: </b><br><%= n_inform[1] %></span>
+                            <span class="col"><b>Place: </b><br><%= n_inform[2] %></span>
+                            <div class="col d-inline-flex justify-content-end">
+                                <input type=button value=跳轉 class="mr-2 btn btn-light <%= n_inform[0] %>"
+                                    onclick="change_Page('notice<%= ID %>','<%= n_inform[0] %>')" />
+                                <input type=button value=刪除 class="mr-2 btn btn-danger "
+                                    onclick="delete_List('<%-notice[key]%>','notice')" />
+                                <form id="notice<%= ID %>" method="POST" action="/JB/to_<%= n_inform[0] %>_board">
+                                    <%  if(n_inform[0] ==='private'){%>
+                                    <input type="text" id="password_notice<%= ID %>" class="align-self-center"
+                                        style="display:none" size="8" name="password" placeholder="password" />
+                                    <input type="submit" style="display: none" />
+                                    <%}%>                                        
+                                    <input name='ID' value="<%= ID %>" style="display:none"/>
+                                    <input name='type' value='<%= n_inform[0] %>' style="display:none" />
+                                    <input name='board_ID' value='<%= n_inform[1] %>' style="display:none" />
+                                    <input name='place' value='<%= n_inform[2] %>' style="display:none" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+            <div class="col-md-4 text-center ">
+                <div name="Title" class="jumbotron " >
+                    <h2>社科體驗營</h2>
+                </div>
+                <div class="btn-group-vertical">
+                    <form method="POST" action="/CB/direct_to_3">
+                        <input type="text" name="ID" value="<%= ID %> " style="display: none;">
+                    <input type="submit" class="btn btn-primary" value="進入體驗">
+
+                    </form>
+
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#lover"
+                        value='introduction'>
+                        我的最愛
+                    </button>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#notice"
+                        value='register'>
+                        通知
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4" style="height: 400px; background-color: rgb(178, 247, 237);">
+                <div>
+                    <h3>個人信息</h3>
+                    <h4>ID : <%=information['ID']%></h4>
+                    <h4>password : <%=information['password']%></h4>
+                    <h4>name : <%=information['name']%></h4>
+                    <h4>mail : <%=information['mail']%></h4>
+                    <h4>school : <%=information['school']%></h4>
+                    <h4>gender : <%=information['gender']%></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var input_item = null;
+
+        function change_Page(form_id, board) {
+            if (board === "private") {
+                console.log('#password' + form_id);
+                $('#password_' + form_id).fadeIn(500);
+                input_item = $('#password_' + form_id);
+            } else {
+                $("#" + form_id).submit();
+            }
+            console.log(form_id, board);
+        }
+
+        function handleClick(event) {
+            if (event.target.tagName == "DIV") {
+                $('#main .div-collapse').collapse('hide');
+                console.log(event.target.tagName);
+                if (input_item != null) {
+                    input_item.fadeOut();
+                    input_item = null;
+                }
+            }
+
+        }
+
+        function delete_List(In, mode) {
+            var inform = In.split('_');
+            console.log("notice_success");
+            if (mode == "lover") {
+                $.ajax({
+                    type: "post",
+                    url: "/SAN/delete_lover",
+                    data: {
+                        ID: '<%= ID %>',
+                        board_ID: inform[0] + '_' + inform[1],
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("success");
+                    }
+                });
+            } else if (mode == "notice") {
+                $.ajax({
+                    type: "post",
+                    url: "/SAN/delete_notice",
+                    data: {
+                        ID: '<%= ID %>',
+                        board_ID: inform[0] + '_' + inform[1],
+                        place: inform[2]
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("success");
+                    }
+                });
+            }
+            $("#" + In).remove();
+        }
+    </script>
 </body>
+
 </html>

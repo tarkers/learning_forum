@@ -3,9 +3,169 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/javascripts/jquery.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <title>看板區</title>
 </head>
 <body>
-
+    <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
+        <div class="text-center jumbotron">
+            <h1><small><%=board_ID%></small></h1>
+            <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
+        </div>
+        <div id="introduce" style="text-align:center" class="bg-success"></div>
+        <!-- 篩選功能-->
+        <div id="find" class="bg-warning text-center">
+            輸入篩選主題關鍵字: <input type="text"  class="bg-warning"/><input type="button" value="篩選主題"  class="bg-warning"/><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning"/><input type="button" value="屏蔽貼文" class="bg-warning"/><br />
+            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning"/><input type="button" value="指定貼文"  class="bg-warning"/><br/>
+            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%"/>
+        </div>
+        <!-- 發文跳轉 -->
+        <form action="/JB/to_post_page" method="post">
+            <input type="text" name="ID" value="<%=ID%>" />
+            <input type="text" name="board_ID" value="<%=board_ID%>" />
+            <input type="text" name="type" id="get_type" />
+            <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%"/>
+        </form>
+        <br>
+        <div>
+            <!-- 每則貼文主體 -->
+            <%for(var i = num-1;i >= 0;i--){%>
+            <div id="<%=data[i]['num']%>" name="<%=i%>" class="post bg-info">
+                <strong>帳號:</strong><%=data[i]['ID']%><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">         貼文編號: <%=data[i]['num']%></small><br />
+                <%-data[i]['include']%><br />
+                <!-- 寄留言-->
+                <form action="/DB/discuss" method="post">
+                    <input type="text" name="num" value="<%=data[i]['num']%>" />
+                    <input type="text" name="ID" value="<%=ID%>" />
+                    <input type="text" name="board_ID" value="<%=board_ID%>" />
+                    <label class="label label-success">展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" class="btn btn-link"/>
+                    <input class="form-control" style="background-color:cornsilk" type="text" name="include" value=""/>
+                </form>
+                <!-- 回應區-->
+                <div name="reply">
+                    <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
+                    <%=data[i][j.toString()]%><br />
+                    <%}%>
+                </div>
+                <br />
+            </div>
+            <br />
+            <%}%>
+            <br />
+        </div>
+    </div>
+    <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <script>
+        function init() {
+            $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
+                $("#introduce").html(result['introduce']);
+                $('.text-center > h1').html(result['title'] + $('h1').html());
+                $("#get_type").val(result['type']);
+            });
+            $('input').hide();
+            $('.form-control').show();
+            $('input[type = "submit"]').show();
+            $('input[type = "button"]').show();
+            $('input[type = "checkbox"]').show();
+            $('#find > input').show();
+            if ($('#Hidden1').val() != 'NA') {
+                $('#where').val($('#Hidden1').val());
+                alert("您藉由提醒功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
+            }
+            $('div[name = "reply"]').hide();
+        }
+        function changeReply(THIS) {
+            if (THIS.text() == '展開留言') {
+                THIS.text('收合留言');
+                THIS.closest('form').next('div').show();
+            }
+            else {
+                THIS.text('展開留言');
+                THIS.closest('form').next('div').hide();
+            }
+        }
+        $(document).ready(function () {
+            init();
+            //篩選功能
+            $('#find > input[type = "button"]').click(function () {
+                var text = $(this).prev().val();
+                switch ($(this).val()) {
+                    case "篩選主題":
+                        $('.post').each(function () {
+                            if ($(this).find('span').text().indexOf(text) < 0)
+                                $(this).hide();
+                        });
+                        break;
+                    case "屏蔽貼文":
+                        var number = parseInt(text);
+                         number = parseInt('<%=num%>') - number;
+                        $('.post').each(function () {
+                            $(this).show();
+                            //console.log(number);
+                            if (parseInt($(this).attr('name')) <  number)
+                                $(this).hide();
+                        });
+                        break;
+                    case "指定貼文":
+                        var place = parseInt(text);
+                        $('.post').each(function () {
+                            $(this).show();
+                            if (parseInt($(this).attr('id')) != place)
+                                $(this).hide();
+                        });
+                        break;
+                    default:
+                        $('.post').each(function () {
+                            $(this).show();
+                        });
+                        break;
+                }
+                alert('篩選完成');
+            });
+            //加入我的最愛功能
+            $('button').click(function () {
+                $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID=" + '<%-board_ID%>', function (result) {
+                    alert(result['result']);
+                });
+            });
+            //加入留言功能
+            $('form > input[type = "button"]').click(function () {
+                var include = $(this).next('input').val();
+                var text = $(this).next('input');
+                var div = $(this).closest('form').next('div');
+                var label = $(this).prev();
+                if ('我要留言' == $(this).val() && text.val().trim() != '') {
+                    $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val() }, function (result) {
+                        alert(result['result']);
+                        if (result['result'] == 'success') {
+                            div.append('<%-ID%>:' + include + '<br/>');
+                            label.text('展開留言');
+                            div.show();
+                            text.val('');
+                        }
+                        else {
+                            alert('並沒有實際儲存請再留言一次');
+                        }
+                    });
+                }
+                else {
+                    alert('您的輸入區是空白喔');
+                }
+            });
+            //留言展開
+            $('label').click(function () {
+                changeReply($(this));
+            });
+        });
+    </script>
 </body>
 </html>
