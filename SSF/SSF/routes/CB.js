@@ -3,6 +3,238 @@ var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 
+const {
+    GetUrl
+} = require('./database_url');
+
+/******************
+./CB
+******************/
+router.get('/', function (req, res) {
+    MongoClient.connect(GetUrl("data"), {
+        useUnifiedTopology: true
+    }, function (err, db) {
+        if (err) throw err;
+        //console.log("index.js:connect DB!");
+        var found_database = db.db("data");
+        found_database.collection("page1").find().toArray(function (err, found_data) {
+            if (err) throw err;
+            console.log("title>>");
+            console.log(found_data[0]['title']);
+            console.log("include>>");
+            console.log(found_data[1]['include']);
+            res.render('Page1', {
+                title: found_data[0]['title'],
+                include: found_data[1]['include']
+            });
+            db.close();
+        });
+    });
+});
+//*/
+
+/******************
+./CB/direct_to_3
+******************/
+router.get('/direct_to_3', async (req, res) => {
+    MongoClient.connect(GetUrl("data"), {
+        useUnifiedTopology: true
+    }, function (err, found_connect) {
+        if (err) throw err;
+        var found_database = found_connect.db("data");
+        found_database.collection("page3").find().toArray(function (err, found_data) {
+            if (err) throw err;
+            console.log('getting data>>')
+            console.log(found_data[0]['data'])
+            res.render('Page3', {
+                data: found_data[0]['data']
+            });
+        })
+    });
+});
+
+/******************
+./CB/to_3
+******************/
+router.post('/to_3', async (req, res) => {
+    MongoClient.connect(GetUrl("data"), {
+        useUnifiedTopology: true
+    }, function (err, found_connect) {
+        if (err) throw err;
+        var found_database = found_connect.db("data");
+        found_database.collection("page3").find().toArray(function (err, found_data) {
+            if (err) throw err;
+            console.log('getting ID>>')
+            console.log(req.body.ID)
+
+            if (found_data.length < 1) {
+                console.log("Cannot find any document in data.page3...")
+                res.render('Page3', {
+                    data: "",
+                    ID: req.body.ID
+                });
+            } else {
+                console.log('getting data>>')
+                console.log(found_data[0]['data'])
+                res.render('Page3', {
+                    data: found_data[0]['data'],
+                    ID: req.body.ID
+                });
+            }
+        })
+    });
+});
+
+/******************
+./CB/direct_to_4
+******************/
+router.post('/direct_to_4', async (req, res) => {
+    try {
+        MongoClient.connect(GetUrl("data"), {
+            useUnifiedTopology: true
+        }, async (err, created_connect) => {
+            if (err) throw err;
+            var found_database = created_connect.db("data");
+            var information = {
+                data: "",
+                image: "",
+                title: "",
+                nick_name: ""
+            };
+
+            found_database.collection("page4", function (err, found_collection) {
+                if (err) throw err;
+                found_collection.findOne({
+                    type: 'data'
+                }, function (err, found_data) {
+                    if (err) throw err;
+                    information.data = found_data['1'];
+                    found_collection.findOne({
+                        type: 'image'
+                    }, function (err, found_data) {
+                        if (err) throw err;
+                        information.image = found_data['1'];
+                        found_collection.findOne({
+                            type: 'title'
+                        }, function (err, found_data) {
+                            if (err) throw err;
+                            information.title = found_data['1'];
+                            found_collection.findOne({
+                                type: 'nick_name'
+                            }, function (err, found_data) {
+                                information.nick_name = found_data['1'];
+
+                                console.log('getting ID>>%s', req.body.ID)
+                                console.log('data>>\n' + information.data)
+                                console.log('image>>\n' + information.image)
+                                console.log('title>>\n' + information.title)
+                                console.log('nick_name>>\n' + information.nick_name)
+
+                                res.render('Page4', {
+                                    data: information.data,
+                                    image: information.image,
+                                    title: information.title,
+                                    nick_name: information.nick_name,
+                                    ID: req.body.ID
+                                });
+                            });
+                        });
+                    });
+                });
+
+
+            });
+        });
+    } catch (err) {
+        res.json({
+            message: err
+        })
+    }
+});
+
+/************************************************
+./CB/department/(abbreviation od department)
+************************************************/
+router.post('/department/:postId', async (req, res) => {
+    try {
+        var department_name = req.params.postId.toString()
+        var department_board_name = department_name + "_board";
+        console.log("department name>>" + department_name)
+        console.log("board name>>" + department_board_name)
+
+        if (department_name == 'YT') {
+            res.render('Page5', {
+                ID: req.body.ID
+            })
+        } else {
+            MongoClient.connect(GetUrl("data"), {
+                useUnifiedTopology: true,
+                useNewUrlParser: true
+            }, async (err, db) => {
+                if (err) throw err;
+
+                var information = {
+                    introduce: "",
+                    keyword: "",
+                    tab: "",
+                };
+                var found_database = db.db("data");
+                found_database.collection(department_name).findOne({
+                    type: "department_introduce"
+                }, async (err, found_data) => {
+                    if (err) throw err;
+                    information.introduce = (found_data == null) ? "" : found_data['text'];
+
+                    found_database.collection(department_name).findOne({
+                        type: "department_keywords"
+                    }, async (err, found_data) => {
+                        if (err) throw err;
+                        information.keyword = (found_data == null) ? "" : found_data['1'];
+
+                        found_database.collection(department_name).findOne({
+                            type: "department_tabs"
+                        }, async (err, found_data) => {
+                            if (err) throw err;
+                            information.tab = (found_data == null) ? "" : found_data['1'];
+
+                            found_database.collection(department_board_name).find().toArray(async (err, found_data) => {
+                                if (err) throw err;
+
+                                db.close();
+                                console.log(information)
+                                console.log('data>>')
+                                console.log(found_data)
+
+                                res.render('Page6', {
+                                    ID: req.body.ID,
+                                    introduce: information.introduce,
+                                    keywords: information.keyword,
+                                    tabs: information.tabs,
+                                    data: found_data
+                                });
+                            })
+
+                        })
+                    })
+
+
+
+                })
+            })
+
+        }
+    } catch (err) {
+        res.json({
+            message: err
+        })
+    }
+});
+
+/********************
+ * Mongoose Version
+ *******************/
+/*
+
 const mongoose = require("mongoose");
 require("dotenv/config")
 
@@ -27,30 +259,6 @@ g_database.on('close', () => {
     console.log('Mongoose close');
 })
 
-/*
-mongoose.connect(process.env.DB_CONNECTION, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
-}, () => {})
-//*/
-/*
-mongoose.createConnection("mongodb+srv://root:0000@cluster0.tbtdc.gcp.mongodb.net/people?retryWrites=true&w=majority", {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
-}, () => {})
-//*/
-
-function GetUrl(database_name) {
-    return "mongodb+srv://root:0000@cluster0.tbtdc.gcp.mongodb.net/" + database_name + "?retryWrites=true&w=majority";
-}
-
-//const page1_model = require('../models/data/page1')
-//const page3_model = require('../models/data/page3')
-
-
-/******************
-./CB
-******************/
 router.get('/', async (req, res) => {
     try {
         mongoose.connect(GetUrl("data"), {
@@ -73,31 +281,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-/*
-router.get('/', function (req, res) {
-        MongoClient.connect(process.env.DB_CONNECTION, {
-            useUnifiedTopology: true
-        }, function (err, db) {
-            if (err) throw err;
-            //console.log("index.js:connect DB!");
-            var found_database = db.db("db1");
-            found_database.collection("page1").find().toArray(function (err, found_data) {
-                if (err) throw err;
-                res.render('Page1', {
-                    title: found_data[0]['title'],
-                    include: found_data[1]['include'],
-                    num: 1
-                });
-                db.close();
-            });
-        })
-    });
-//*/
 
-/******************
-./CB/direct_to_3
-******************/
-//*
 router.get('/direct_to_3', async (req, res) => {
     try {
         await mongoose.connect(GetUrl("data"), {
@@ -122,9 +306,6 @@ router.get('/direct_to_3', async (req, res) => {
     }
 });
 
-/******************
-./CB/to_3
-******************/
 router.post('/to_3', async (req, res) => {
     try {
         await mongoose.connect(GetUrl("data"), {
@@ -165,9 +346,6 @@ router.post('/to_3', async (req, res) => {
     }
 });
 
-/******************
-./CB/direct_to_4
-******************/
 router.post('/direct_to_4', async (req, res) => {
     try {
         await mongoose.connect(GetUrl("data"), {
@@ -222,84 +400,8 @@ router.post('/direct_to_4', async (req, res) => {
         })
     }
 });
+*/
 
-/************************************************
-./CB/department/(abbreviation od department)
-************************************************/
-router.post('/department/:postId', async (req, res) => {
-    try {
-        var department_name = req.params.postId.toString()
-        var department_board_name=department_name+"_board";
-        console.log("department name>>" + department_name)
-        console.log("board name>>" + department_board_name)
-
-        if (department_name == 'YT') {
-            res.render('Page5', {
-                ID: req.body.ID
-            })
-        } else {
-            MongoClient.connect(GetUrl("data"), {
-                useUnifiedTopology: true,
-                useNewUrlParser: true
-            }, async (err, db) => {
-                if (err) throw err;
-
-                var information = {
-                    introduce: "",
-                    keyword: "",
-                    tab: "",
-                };
-                var found_database = db.db("data");
-                found_database.collection(department_name).findOne({
-                    type: "department_introduce"
-                }, async (err, found_data) => {
-                    if (err) throw err;
-                    information.introduce = (found_data == null) ? "" : found_data['text'];
-
-                    found_database.collection(department_name).findOne({
-                        type: "department_keywords"
-                    }, async (err, found_data) => {
-                        if (err) throw err;
-                        information.keyword = (found_data == null) ? "" : found_data['1'];
-
-                        found_database.collection(department_name).findOne({
-                            type: "department_tabs"
-                        }, async (err, found_data) => {
-                            if (err) throw err;
-                            information.tab = (found_data == null) ? "" : found_data['1'];
-
-                            found_database.collection(department_board_name).find().toArray(async(err,found_data)=>{
-                                if (err) throw err;
-
-                                db.close();
-                                console.log(information)
-                                console.log('data>>')
-                                console.log(found_data)
-    
-                                res.render('Page6', {
-                                    ID: req.body.ID,
-                                    introduce: information.introduce,
-                                    keywords: information.keyword,
-                                    tabs: information.tabs,
-                                    data:found_data
-                                });
-                            })
-
-                        })
-                    })
-
-
-
-                })
-            })
-
-        }
-    } catch (err) {
-        res.json({
-            message: err
-        })
-    }
-});
 
 /***********************
 function for developer
