@@ -17,7 +17,8 @@
     <div class=" container-fluid">
         <div class="row" style="height: 600px;">
             <div class="col-md-8 ">
-                <p class=" text-center"><%=DE%></p>
+                <h1 class=" text-center"><%=DE%></h1>
+                <!--<div class=" text-center"><%-introduce%></div>-->
                 <div>
                     <div class=" text-center">
                         <p class=" text-center">篩選設定</p>
@@ -28,9 +29,10 @@
                             </button>
                             <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <%for(var key in keywords){%>
-                                <a class="dropdown-item" id='keywords<%=key%>' onclick=unlock_List()><%=keywords[key]%></a>
+                                <a class="dropdown-item" id='keywords<%=keywords[key]%>' onclick=unlock_List()><%=keywords[key]%></a>
+                                <!--<a class="dropdown-item" id='keywords<%=key%>' onclick=unlock_List()><%=keywords[key]%></a>-->
                                 <%}%>
-                                </span>
+                            </span>
                                 <span> &nbsp; &nbsp;<input id='self-search' type='text' placeholder="自訂關鍵字搜尋:" onclick=unlock_List()> </span>
                                 <br> 
                         </div>                     
@@ -81,7 +83,11 @@
 
     <script>
         var lock=false;
-        var item=null;
+        var item = null;
+
+        //console.log('<%=tabs%>');
+
+
         function unlock_List(){
             lock=false; 
             if(item!=null){

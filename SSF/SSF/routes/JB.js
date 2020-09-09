@@ -13,7 +13,7 @@ function warming(res, mode) {
 
 //to public & private board
 
-function test_type(req, res ,type) {
+function test_type(req, res, type) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
@@ -52,7 +52,7 @@ function jumpboard(req, res) {
                 pkg['place'] = req.body.place;
             else
                 pkg['place'] = 'NA';
-            res.render('Page8', pkg );
+            res.render('Page8', pkg);
         });
     });
 }
@@ -79,12 +79,12 @@ function get_board_information(req, res) {
 
 router.post('/to_public_board', function (req, res) {
     //console.log(req.body);
-    test_type(req, res,'public');
+    test_type(req, res, 'public');
 });
 
 router.post('/to_private_board', function (req, res) {
     //console.log(req.body);
-    test_type(req, res,'private');
+    test_type(req, res, 'private');
 });
 
 router.get('/get_board_introduce', function (req, res) {
@@ -93,7 +93,7 @@ router.get('/get_board_introduce', function (req, res) {
 });
 
 router.post('/to_post_page', function (req, res) {
-    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID ,type: req.body.type});
+    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type });
     //res.render('Page9', { ID: 'leon1234858', board_ID: 'private_0002', type: 'private' });
 });
 

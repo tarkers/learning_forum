@@ -16,16 +16,16 @@
         <div class="row justify-content-center align-items-center">
             <img class="col-md-6 Thumbnail" src="http://localhost:1337/images/ttt.jpg" alt="Your image" width="350">
             <div class="col card" style="height: 500px;">
-                <div class="card-header bg-danger"><%=header%></div>
+                <div class="card-header bg-danger">主題</div>
                 <div class="card-body">
                     <%for(var i=0;i<data.length;i++){%>
                         <%if(i==0){%>
                             <div id='<%=i%>' style="display:block">
-                                <pre><%-data[i]%></pre>
+                                <pre><%-data[i]['data']%></pre>
                             </div>
                         <%}else{%>
                             <div id='<%=i%>' style="display:none">
-                                <pre><%-data[i]%></pre>   
+                                <pre><%-data[i]['data']%></pre>   
                             </div>
                         <%}%>
                     <%}%>
@@ -51,7 +51,7 @@
             i++; 
             if (i == '<%-data.length%>') {   //test the code
                 $("form").attr("method", "post")
-                .attr("action", "/CB/direct_to_4")
+                .attr("action", "/CB/to_4")
                 .appendTo('form');
                 $('form').submit();
             }      
