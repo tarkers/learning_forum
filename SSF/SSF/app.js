@@ -8,11 +8,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var JB = require('./routes/JB');
 var DB = require('./routes/DB');
 var app = express();
-
+const CB_route = require('./routes/CB');
+const SAN_route = require('./routes/SAN');
 app.engine('.html', require('ejs').__express)
 app.set('views', path.join(__dirname, 'views')); //注意path要require一下
 app.set('view engine', 'html')
@@ -26,7 +26,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/CB', CB_route)
+app.use('/SAN', SAN_route)
 app.use('/JB', JB);
 app.use('/DB', DB);
 
@@ -76,8 +77,5 @@ var server = app.listen(app.get('port'), function () {
 //app.use('/posts',postRoute)
 //const postRoute2 = require('./routes/SAN/register')
 //app.use('/SAN/register',postRoute2)
-const CB_route = require('./routes/CB')
-app.use('/CB',CB_route)
-const SAN_route = require('./routes/SAN')
-app.use('/SAN',SAN_route)
+
 //End of Adding Block
