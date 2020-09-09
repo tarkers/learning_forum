@@ -110,7 +110,7 @@ function update_managerInformation(req, res) {
         var goal = {
             title: req.body.title, introduce: req.body.introduce,
             name: req.body.name, school: req.body.school,
-            class: req.body.class, password_private: req.body.password_private,
+            password_private: req.body.password_private,
             password_public: req.body.password_public,
             tab: req.body.tab, include: req.body.include
         };
