@@ -41,9 +41,10 @@
                 <br>
                 
                 <div class="btn-tab">
+                    <button type="button" id='tabs0' class="btn btn-primary " onclick=unlock_List()>全部</button>
                     <%for(var key in tabs){%>
-                        <button type="button" id='tabs<%=key%>' class="btn btn-primary " onclick=unlock_List()><%=tabs[key]%></button>
-                    <%}%>                   
+                    <button type="button" id='tabs<%=key%>' class="btn btn-primary " onclick=unlock_List()><%=tabs[key]%></button>
+                    <%}%>
                 </div> 
                 <br>
                 <div class="list-group flex-fill" id="list-tab" role="tablist" style=" height:400px; overflow-y:auto">               
@@ -72,7 +73,7 @@
                     <%for(var i=0;i<boards.length;i++){%>
                         <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
                             aria-labelledby='list-<%=boards[i]['board_ID']%>'>
-                            <%=boards[i]['include']%>
+                            <%-boards[i]['include']%>
                         </div>
                     <%}%>
                     <br>
