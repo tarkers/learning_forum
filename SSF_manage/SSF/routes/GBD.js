@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
-var uri = "mongodb://localhost:27017/";
+const { GetUrl } = require('./database_url');
+var uri = GetUrl('null');
 var core_ID = 'admin';
 var core_password = '0000';
 
