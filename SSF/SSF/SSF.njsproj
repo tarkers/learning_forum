@@ -42,7 +42,6 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="routes\SAN.js" />
-    <Content Include="routes\users.js" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
