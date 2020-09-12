@@ -209,6 +209,109 @@ function discuss_notice_send(id, key) {
         });
     });
 }
+//week3 new function
+//ReWrite
+function to_rewrite(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("people").collection("personal_information");
+        var findThing = { ID: req.body.ID };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            if (result.length > 0) {
+                if (result[0]['password'] == req.body.password) {
+                    res.render('Page10', {
+                        board_ID: req.body.board_ID,
+                        ID: req.body.ID, password: req.body.password,
+                        num: req.body.num, include_origin: req.body.include
+                    })
+                }
+                else
+                    warming(res, 1);
+            }
+            else
+                warming(res, 1);
+        });
+    });
+}
+
+function rewrite_check_password(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("people").collection("personal_information");
+        var findThing = { ID: req.body.ID };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            if (result.length > 0) {
+                if (result[0]['password'] == req.body.password) {
+                    rewrite_update(req, res);
+                }
+                else
+                    warming(res, 1);
+            }
+            else
+                warming(res, 1);
+        });
+    });
+}
+
+function rewrite_update(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("board").collection(req.body.board_ID);
+        var filter = { num: req.body.num };
+        var goal = {};
+        goal['include'] = req.body.include;
+        table.updateOne(filter, { $set: goal }, function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            rewrite_return_board(req, res);
+        });
+    });
+}
+
+function rewrite_return_board(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("board").collection(req.body.board_ID);
+        var findThing = { hide: 'false' };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            var pkg = {
+                board_ID: req.body.board_ID, ID: req.body.ID,
+                data: result, num: result.length,
+                place: req.body.num
+            };
+            res.render('Page8', pkg);
+        });
+    });
+}
+
+//refresh
+
+function discuss_refresh(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("board").collection(req.body.board_ID);
+        var findThing = { num: req.body.num };
+        table.find(findThing, { projection: { _id: 0,num:0,ID:0,title:0,include:0,hide:0 } }).toArray(function (err, result) {
+            if (err) {
+                res.json({ result: 'error' ,data:'NA'});
+                throw err;
+            }
+            db.close();
+            //console.log(result);
+            res.json({ result: 'success', data: result[0] });
+        });
+    });
+}
 
 //router block
 router.post('/post_public', function (req, res) {
@@ -234,6 +337,21 @@ router.get('/add_lover', function (req, res) {
 router.post('/discuss', function (req, res) {
     //console.log(req.body);
     discuss_getNum(req, res);
+});
+
+router.post('/to_ReWrite', function (req, res) {
+    //console.log(req.body);
+    to_rewrite(req, res);
+});
+
+router.post('/ReWrite', function (req, res) {
+    //console.log(req.body);
+    rewrite_check_password(req, res);
+});
+
+router.post('/discuss_refresh', function (req, res) {
+    //console.log(req.body);
+    discuss_refresh(req, res);
 });
 
 module.exports = router;
