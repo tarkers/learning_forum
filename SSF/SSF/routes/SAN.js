@@ -287,6 +287,55 @@ router.post('/delete_notice', async (req, router_result) => {
         if (err) { warming(router_result, 2); throw err; }
     }
 })
+
+/******************
+./SAN/ChangeMe
+******************/
+router.post('/ChangeMe', async (req, res) => {
+    if (req.body.type != "ID") {
+        try {
+            MongoClient.connect(GetUrl("people"), {
+                useUnifiedTopology: true
+            }, function (err, found_connect) {
+                if (err) { warming(res, 2); throw err; }
+                var found_database = found_connect.db("people");
+                found_database.collection("personal_information").findOne({
+                    ID: req.body.ID
+                }, function (err, found_personal_information) {
+                    if (err) { warming(res, 2); throw err; }
+                    //console.log("Input ID>>" + req.body.ID);
+                    //console.log("Input password>>" + req.body.password);
+                    if (found_personal_information == null) { //No user in database
+                        //console.log("No user in database");
+                        warming(res, 3);
+                    } else { //Found user in database
+                        //console.log('ID information>>');
+                        //console.log(found_personal_information);
+                        var goal = {};
+                        goal[req.body.type] = req.body.include;
+                        if (found_personal_information['password'] == req.body.password) { //Right password
+                            found_database.collection("personal_information").updateOne({ ID: req.body.ID }, {
+                                $set: goal
+                            }, function (err, ret) {
+                                if (err) { res.json({ result: "error" }); throw err; }
+                                else res.json({ result: "success" });
+                            })
+                        } else { //Wrong password
+                            //console.log("Wrong password")
+                            res.json({ result: "error" });
+                        }
+                    }
+                })
+            });
+        } catch (err) {
+            if (err) { warming(res, 2); throw err; }
+        }
+    }
+    else
+        warming(res, 3);
+})
+
+
 module.exports = router;
 ///*
 //const mongoose = require("mongoose");

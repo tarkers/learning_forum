@@ -49,8 +49,30 @@ function ReJSON(req, res, other) {
         });
     });
 }
+//week3 new function
+function GetAllCollection(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db(req.body.DB).collection(req.body.collection);
+        var findThing = {};
+        table.find(findThing).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            res.json({ data: result });
+        });
+    });
+}
 
-
+function ChangeAllCollection(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db(req.body.DB).collection(req.body.collection);
+        var saveThing = req.body.data;
+        table.save(saveThing, function (err, result) {
+            if (err) { res.json({ result:"error" }); }
+            res.json({ result:"success" });
+        });
+    });
+}
 //route
 //個人前往個人資料下載頁面
 router.post('/to_personal_data', function (req, res) {
@@ -73,6 +95,20 @@ router.post('/download', function (req, res) {
 router.post('/core_download', function (req, res) {
     if (req.body.board_ID == core_ID && req.body.password == core_password)
         ReJSON(req, res, 'null');
+    else
+        warming(res, 1);
+});
+//(AJAX)得到一個表格的所有東西(JSON List to CSV)
+router.post('/call_all_document', function (req, res) {
+    if (req.body.board_ID == core_ID && req.body.password == core_password)
+        GetAllCollection(req, res);
+    else
+        warming(res, 1);
+});
+//(AJAX)把一堆東西存入一個表格(CSV to JSON List)
+router.post('/change_all_document', function (req, res) {
+    if (req.body.board_ID == core_ID && req.body.password == core_password)
+        ChangeAllCollection(req, res);
     else
         warming(res, 1);
 });
