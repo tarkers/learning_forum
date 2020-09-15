@@ -14,51 +14,31 @@
 
 <body>
     <div class="jumbotron text-center">
-        <h1>選擇你想要的科系</h1>
+            <h1> <img src="https://i.imgur.com/XMG7Iq1.png"  style="width: 100px;"/>選擇你想要的科系</h1>   
     </div>
     <div class="container">
-        <div class="row -group ">
+        <div class="d-flex -group ">
             <%for(var i=1;i<=Object.keys(data).length;i++){%>
                 <%if(i==Object.keys(data).length){%>
-                <div class="col-4" style="width:250px; border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
+                <div  class=" w-25" style="border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
                      onmouseover="description('<%-i%>')">
-                    <figure class="text-center">
-                        <img src="<%=image[i]%>" style="width:45%">
-                        <figcaption><%=nick_name[i]%></figcaption>
+                    <figure class="text-center p-2">
+                        <img src="<%=image[i]%>" class=" img-fluid" style="height: 150px;">
+                        <figcaption><strong><%=nick_name[i]%></strong></figcaption>
                     </figure>
                 </div>
                 <%}else{%>
-                <div class="col-2" style="width:200px; border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
+                <div  class=" w-25" style=" border:none" onclick="department('<%=title[i]%>','<%=nick_name[i]%>')"
                      onmouseover="description('<%-i%>')">
-                    <figure class="text-center">
-                        <img src="<%=image[i]%>" style="width:100%">
-                        <figcaption><%=nick_name[i]%></figcaption>
+                    <figure class="text-center p-2">
+                        <img src="<%=image[i]%>" class=" img-fluid" style="height: 150px;">
+                        <figcaption><strong><%=nick_name[i]%></strong></figcaption>
                     </figure>
                 </div>
                 <%}%>
                 <%}%>
 
-                <!-- <div class=" col-2 " style="width:200px; border:none" onclick="department('ECON')"
-                    onmouseover="description(1)" >
-                    <figure class="text-center">
-                        <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
-                        <figcaption>經濟系</figcaption>
-                    </figure>
-                </div>
-                <div class=" col-2" style="width:200px; border:none;" onclick="department('PSY')"
-                    onmouseover="description(2)">
-                    <figure class="text-center">
-                        <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
-                        <figcaption>心理系</figcaption>
-                    </figure>
-                </div>
-                <div class=" col-2" style="width:200px; border:none" onclick="department('LAW')"
-                    onmouseover="description(3)">
-                    <figure class="text-center">
-                        <img  src="http://localhost:1337/images/ttt.jpg" style="width:100%">
-                        <figcaption>法律系</figcaption>
-                    </figure>
-                </div> -->
+             
 
         </div>
         <form style="display: none;" method="POST">
@@ -66,10 +46,10 @@
             <input type='text' id='nick_name' name='nick_name'>
             <input submit>
         </form>
-        <div class="row" style="background-color: bisque;">
+        <div class="row" style="background-color: bisque;" style="word-wrap: break-word;">
             <%for(var i=1;i<=Object.keys(data).length;i++){%>
             <div id='<%=i%>' style="display: none;">
-                <pre><%-data[i]%></pre>
+                <%-data[i]%>
             </div>
             <%}%>
         </div>

@@ -14,7 +14,6 @@
 </head>
 
 <body id="main" onClick="handleClick(event)">
-
     <div class="container-fluid">
         <div class="row">
             <div id="content-div" class="col-md-4 align-self-center"
@@ -28,23 +27,28 @@
                     <% var l_inform=lover[key].split('_') ;%>
                     <div class="container">
                         <div class="row w-100 pb-1" id='<%=lover[key]%>'>
-                            <span class="col "><b>Type: </b><br><%= l_inform[0] %></span>
-                            <span class="col"><b>Board: </b><br><%= l_inform[0] + '_' + l_inform[1]%></span>
-                            <div class="col d-inline-flex justify-content-end">
-                                <input type=button value=跳轉 class="mr-2 btn btn-light"
-                                       onclick="change_Page('lover<%= l_inform[0] + "_" + l_inform[1]%>','<%= l_inform[0] %>')" />
-                                <input type=button value=刪除 class="mr-2 btn btn-danger "
-                                       onclick="delete_List('<%-lover[key]%>','lover')" />
-                                <form id="lover<%= l_inform[0] + '_' + l_inform[1]%>" method="POST" action="/JB/to_<%= l_inform[0] %>_board"
-                                      style="margin: 10px;">
+                            <%  if(l_inform[0]==='private'){%>
+                                <span class="col-3 " ><b>Type: </b><br>私密</span>
+                                <%}else if(l_inform[0]==='public'){%>
+                                <span class="col-3 " ><b>Type: </b><br>公開</span>
+                           <%}%>
+                            <span class="col-4"><b>Board: </b><br><%= l_inform[0] + '_' + l_inform[1]%></span>
+                            <div class="col-5 d-inline-flex ">
+                                <input type=button value=直接進入版面 class="ml-2 btn btn-light"
+                                    onclick="change_Page('lover<%= l_inform[0]%>_<%=l_inform[1]%>','<%= l_inform[0] %>')" />
+                                <input type=button value=刪除 class="ml-2 btn btn-danger "
+                                    onclick="delete_List('<%-lover[key]%>','lover')" />
+                                <form id="lover<%= l_inform[0]%>_<%=l_inform[1]%>" method="POST"
+                                    action="/JB/to_<%= l_inform[0] %>_board" style="margin: 10px; display: none;">
                                     <%  if(l_inform[0] ==='private'){%>
-                                    <input type="password" id="password_lover<%= l_inform[0] + '_' + l_inform[1]%>" class="align-self-center"
-                                           style="display:none" size="8" name="board_password" placeholder="password" />
-                                    <input type="submit" style="display: none"  value="確認"/>
+                                    <input type="password" id="password_lover<%= l_inform[0] + '_' + l_inform[1]%>"
+                                        class="align-self-center" size="8" name="board_password"
+                                        placeholder="password" />
+                                    <input type="submit"  value="確認" />
                                     <%}%>
-                                    <input name='ID' value="<%= ID %>" style="display:none" />
-                                    <input name='type' value="<%= l_inform[0] %>" style="display:none" />
-                                    <input name='board_ID' value="<%= l_inform[0] + '_' + l_inform[1]%>" style="display:none" />
+                                    <input name='ID' value="<%= ID %>"  />
+                                    <input name='type' value="<%= l_inform[0] %>"  />
+                                    <input name='board_ID' value="<%= l_inform[0] + '_' + l_inform[1]%>"/>
                                 </form>
                             </div>
                         </div>
@@ -60,25 +64,31 @@
                     <% var n_inform=notice[key].split('_') ;%>
                     <div class=" container">
                         <div class="row w-100  pb-1" id='<%=notice[key]%>'>
-                            
-                            <span class="col"><b>Type: </b><br><%= n_inform[0] %></span>
-                            <span class="col"><b>Board: </b><br><%= n_inform[0] + '_' + n_inform[1]%></span>
-                            <span class="col"><b>Place: </b><br><%= n_inform[2] %></span>
-                            <div class="col d-inline-flex justify-content-end">
-                                <input type=button value=跳轉 class="mr-2 btn btn-light <%= n_inform[0] %>"
-                                       onclick="change_Page('notice<%= n_inform[0] + "_" + n_inform[1]%>','<%= n_inform[0] %>')" />
-                                <input type=button value=刪除 class="mr-2 btn btn-danger "
-                                       onclick="delete_List('<%-notice[key]%>','notice')" />
-                                <form id="notice<%= n_inform[0] + '_' + n_inform[1]%>" method="POST" action="/JB/to_<%= n_inform[0] %>_board">
+                            <%  if(n_inform[0]==='private'){%>
+                                <span class="col-2"><b>Type: </b><br>私密</span>
+                                <%}else if(n_inform[0]==='public'){%>
+                                <span class="col-2"><b>Type: </b><br>公開</span>
+                           <%}%>
+                            <span class="col-3"><b>Board: </b><br><%= n_inform[0] + '_' + n_inform[1]%></span>
+                            <span class="col-2"><b>Place: </b><br><%= n_inform[2] %></span>
+                            <div class="col-5 d-inline-flex ">
+                                <input type=button value=直接進入版面 class="ml-2 btn btn-light <%= n_inform[0] %>"
+                                    onclick="change_Page('notice<%= n_inform[0]%>_<%=n_inform[1]%>','<%= n_inform[0] %>')" />
+                                <input type=button value=刪除 class="ml-2 btn btn-danger "
+                                    onclick="delete_List('<%-notice[key]%>','notice')" />
+                                <form id="notice<%= n_inform[0] + '_' + n_inform[1]%>" method="POST"
+                                    action="/JB/to_<%= n_inform[0] %>_board" style="display:none">
                                     <%  if(n_inform[0] ==='private'){%>
-                                    <input type="password" id="password_notice<%= n_inform[0] + '_' + n_inform[1]%>" class="align-self-center"
-                                           style="display:none" size="8" name="board_password" placeholder="password" />
-                                    <input type="submit" style="display: none"  value="確認"/>
+                                    <input type="password" id="password_notice<%= n_inform[0] + '_' + n_inform[1]%>"
+                                        class="align-self-center"  size="8" name="board_password"
+                                        placeholder="password" />
+                                    <input type="submit"  value="確認" />
                                     <%}%>
-                                    <input name='ID' value="<%= ID %>" style="display:none" />
-                                    <input name='type' value='<%= n_inform[0] %>' style="display:none" />
-                                    <input name='board_ID' value='<%= n_inform[0] + "_" + n_inform[1]%>' style="display:none" />
-                                    <input name='place' value='<%= n_inform[2] %>' style="display:none" />
+                                    <input name='ID' value="<%= ID %>" />
+                                    <input name='type' value='<%= n_inform[0] %>'  />
+                                    <input name='board_ID' value='<%= n_inform[0] + "_" + n_inform[1]%>'
+                                         />
+                                    <input name='place' value='<%= n_inform[2] %>'  />
                                 </form>
                             </div>
                         </div>
@@ -88,10 +98,10 @@
             </div>
             <div class="col-md-4 text-center ">
                 <div name="Title" class="jumbotron " >
-                    <h2>高中教師社會科學增能網站</h2>
+                    <h2>高中教師社會科學增能平台</h2>
                 </div>
                 <div class="btn-group-vertical">
-                    <form method="POST" action="/CB/to_3">
+                    <form method="POST" action="/CB/to_4">
                         <input type="text" name="ID" value="<%= ID %>" style="display: none;">
                     <input type="submit" class="btn btn-primary" value="進入課程">
 
@@ -119,10 +129,36 @@
                 </div>
             </div>
         </div>
+        <div id="demo" class="carousel slide" data-ride="carousel">
+
+            <!-- Indicators -->
+            <ul class="carousel-indicators">
+              <li data-target="#demo" data-slide-to="0" class="active"></li>
+              <li data-target="#demo" data-slide-to="1"></li>
+              <li data-target="#demo" data-slide-to="2"></li>
+            </ul>
+          <br>
+
+         <div class="gallery-div d-flex justify-content-center pt-2">
+             <div style="height: 260px">
+                <img src="https://i.imgur.com/TWgg6QP.jpg" class=" thumbnail h-100" >
+             </div>
+             <div style="height: 260px">
+                <img src="https://i.imgur.com/NK2K8ug.jpg" class=" thumbnail h-100" >
+             </div>
+             <div  style="height: 260px">
+                <img src="https://i.imgur.com/wPl2KuF.jpg" class=" thumbnail h-100" >
+             </div>
+             <div  style="height: 260px">
+                <img src="https://i.imgur.com/yF34ufY.jpg" class=" thumbnail h-100" >
+             </div>
+             <div  style="height: 260px">
+                <img src="https://i.imgur.com/5uGiD7A.jpg" class=" thumbnail h-100" >
+             </div>
+         </div>
     </div>
     <script>
         var input_item = null;
-
         function change_Page(form_id, board) {
             if (board === "private") {
                 console.log('#password' + form_id);
@@ -146,9 +182,11 @@
             }
 
         }
-
         function delete_List(In, mode) {
-            var inform = In.split('_');
+            var yes = confirm('你確定要刪除嗎？');
+
+            if (yes) {
+                var inform = In.split('_');
             console.log("notice_success");
             if (mode == "lover") {
                 $.ajax({
@@ -179,6 +217,8 @@
                 });
             }
             $("#" + In).remove();
+                alert('已刪除');
+            }    
         }
     </script>
 </body>
