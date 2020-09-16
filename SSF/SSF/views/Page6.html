@@ -31,10 +31,8 @@
                             <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <%for(var key in keywords){%>
                                 <a class="dropdown-item" id='keywords<%=keywords[key]%>' onclick=unlock_List()><%=keywords[key]%></a>
-                                <!--<a class="dropdown-item" id='keywords<%=key%>' onclick=unlock_List()><%=keywords[key]%></a>-->
                                 <%}%>
                             </span>
-                            <!--<span> &nbsp; &nbsp;<input id='self-search' type='text' placeholder="關鍵字搜尋:" onclick=unlock_List()> </span>-->
                             <br>
                         </div>                     
                     </div>
@@ -69,8 +67,9 @@
                 </div>
                 
             </div>
-            <div class="col-md-4 h-100" style="background-color:lavenderblush;">
+            <div class="col-md-4 h-100 " style="background-color:lavenderblush;">
                 <div id="first_introduce" ><%-introduce%></div>
+             
                 <div class=" tab-content" id="nav-tabContent">
                     <%for(var i=0;i<boards.length;i++){%>
                         <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
@@ -82,13 +81,12 @@
                 </div>
             </div>        
         </div>
-    </div>
-
+      </div>
     <script>
         var lock=false;
         var item = null;
-
-        //console.log('<%=tabs%>');
+        var nowtopic="全部";
+        
         switch ('<%=DE%>') {
             case 'PSY':
                 $('#department_name').text('心理系');
@@ -109,6 +107,7 @@
 
         function unlock_List(){
             lock=false; 
+            $('.dropdown-toggle').text('常見關鍵字搜尋');
             if(item!=null){
                 $(item).removeClass('active');
                 $('#panel-'+item.attr('id').substring(5)).removeClass('show active');
@@ -123,7 +122,6 @@
           });
           
         $('.list-group-item').mouseover(function(){  
-            console.log(lock);
             $("#first_introduce").hide();
             if(lock==false){
                 if(item!=null){
@@ -137,7 +135,10 @@
         });
         $('.btn-tab button').click(function(){ 
             $(".dropdown-toggle").text("常見關鍵字搜尋");   
-            if($(this).text()==="全部"){
+            $('.btn-tab button').removeClass(" btn-light");
+            $(this).addClass(" btn-light");   
+            nowtopic=$(this).text();
+            if($(this).text()==="全部"){   
                 $('.list-group-item').attr('style','display:block');
             }
             else{
@@ -149,9 +150,9 @@
         });
 
         $("#self-search").on('keyup', function (e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-               select_Topic('text-title',$(this).val());
-            }
+            // if (e.key === 'Enter' || e.keyCode === 13) {  
+            // }
+            select_Topic('text-title',$(this).val());
         });
 
         $("input[type = 'submit']").click(function () {           
@@ -159,14 +160,26 @@
           });
 
         function select_Topic(mode,kind){
+            kind=kind.toLowerCase();
             var tab_list=document.getElementsByClassName("list-group-item");
             for(var i=0;i<tab_list.length;++i){
-                if((tab_list[i].getAttribute(mode)).toString().includes(kind) ){
-                    tab_list[i].setAttribute('style','display:block');
+                let textTitle=tab_list[i].getAttribute("text-title").toString().toLowerCase();
+                let textTab=tab_list[i].getAttribute("text-tab").toString().toLowerCase();
+                //search tab
+                if(mode=="text-tab"){
+                    if(textTab.includes(kind)){
+                        tab_list[i].setAttribute('style','display:block');
+                    } else{
+                        tab_list[i].setAttribute('style','display:none');   
+                    }
+                }else if(mode=="text-title"){
+                    if(((textTab==nowtopic)||nowtopic=="全部") && textTitle.includes(kind)){
+                        tab_list[i].setAttribute('style','display:block');
+                    }  else{
+                        tab_list[i].setAttribute('style','display:none');
+                    }          
                 }
-                else{
-                    tab_list[i].setAttribute('style','display:none');
-                }
+                
             }
         }
 

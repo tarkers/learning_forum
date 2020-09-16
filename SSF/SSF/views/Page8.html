@@ -16,14 +16,19 @@
 <body>
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
         <div class="text-center jumbotron">
-            <h1><small><%=board_ID%></small></h1>
+            <% if(board_ID.includes("public")){ %> 
+                <% var ch_board_ID =board_ID.replace('public','公開版'); %> 
+                <% } else if(board_ID.includes("private")){ %> 
+                    <%   var ch_board_ID=  board_ID.replace('private','私密版'); %> 
+                    <%  } %> 
+            <h1><small><%=ch_board_ID%></small></h1>
             <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
         </div>
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
             輸入篩選主題關鍵字: <input type="text"  class="bg-warning"/><input type="button" value="篩選主題"  class="bg-warning"/><br />
-            輸入顯示前幾則貼文: <input type="text" class="bg-warning"/><input type="button" value="屏蔽貼文" class="bg-warning"/><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning"/><input type="button" value="隱藏貼文" class="bg-warning"/><br />
             輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning"/><input type="button" value="指定貼文"  class="bg-warning"/><br/>
             <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%"/>
         </div>
@@ -105,7 +110,7 @@
                                 $(this).hide();
                         });
                         break;
-                    case "屏蔽貼文":
+                    case "隱藏貼文":
                         var number = parseInt(text);
                          number = parseInt('<%=num%>') - number;
                         $('.post').each(function () {
