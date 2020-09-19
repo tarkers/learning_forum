@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -21,6 +21,7 @@
         <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
     </div>
     <script>
+        var $link = $(".btn-link");
         var items = null;
         $('.btn-info').on('click', function () {
             var id = $('input:first').val();
@@ -35,20 +36,20 @@
                 success: function (response) {
                     console.log("success");
                     items = response.data;
-                   //transfer csv file
-                    const replacer = (key, value) => value === null ? '' : value;
-                    const header = Object.keys(items[0]);
-                    let csv = items.map(row => header.map(fieldName => JSON.stringify(row[
-                            fieldName], replacer))
-                        .join(','));
-                    csv.unshift(header.join(','));
-                    csv = csv.join('\r\n');
-                    // console.log(csv);
-                    var data = new Blob([csv]);
-                    $('.btn-link').attr('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
-                    csv));
-                    $('.btn-link').attr('download','版面編號:'+id+'.csv');
-                    $('.btn-link').show();
+                    //transfer csv file
+                    var csv = '';
+                    for (var i in items) {
+                        for (var j in items[i]) {
+                            csv += '"' + j + '":"' + JSON.stringify(items[i][j]).replace(/\"/g, "'") + '"' + ',';
+                        }
+                        csv += '\r\n';
+                    }
+                    //console.log(csv);
+                    var blob = new Blob([csv],
+                        { type: "application/octect-stream" });
+                    var blobUrl = URL.createObjectURL(blob);
+                    var fileName = "youtdata.txt";
+                    $link.attr({ href: blobUrl, download: fileName }).show();
                 },
                 error: function (response) {
                     alert("fail");
