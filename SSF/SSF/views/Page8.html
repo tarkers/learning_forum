@@ -39,10 +39,10 @@
             <!-- 每則貼文主體 -->
             <%for(var i = num-1;i >= 0;i--){%>
             <div id="<%=data[i]['num']%>" name="<%=i%>" class="post bg-info">
-                <strong>帳號:</strong><%=data[i]['ID']%><br />
-                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">      貼文編號: <%=data[i]['num']%></small><br />
+                <strong>帳號:</strong><span><%=data[i]['ID']%></span><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">      貼文編號: <%=data[i]['num']%></small>  <a name="<%=data[i]['ID']%>" style="font-size:50%">編輯本篇貼文</a> <br />
                 <small style="font-size:50%" class="simple_include"><%if(data[i]['include'].length > 30){%><%=data[i]['include'].substr(0,30)%><%}else{%><%=data[i]['include'].substr(0)%><%}%>.....按展開內容看全部</small>
-                <div class="include"> <%-data[i]['include']%> </div> <br />
+                <div class="include"><%-data[i]['include']%></div> <br />
                 <input class="btn-lg bg-warning" type="button" value="展開內容" />
                 <!-- 寄留言-->
                 <form action="/DB/discuss" method="post">
@@ -66,6 +66,13 @@
         </div>
     </div>
     <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <form id="to_rewrite" style="display:none" action="/DB/to_ReWrite" method="post">
+        <input type="text" name="ID" value="<%=ID%>"/>
+        <input type="text" name="password"/>
+        <input type="text" name="board_ID" value="<%=board_ID%>"/>
+        <input type="text" name="num"/>
+        <input type="text" name="include"/>
+    </form>
     <script>
         function init() {
             $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
@@ -81,30 +88,45 @@
             $('#find > input').show();
             if ($('#Hidden1').val() != 'NA') {
                 $('#where').val($('#Hidden1').val());
-                alert("您藉由提醒功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
+                alert("您由相關功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
             }
             $('div[name = "reply"]').hide();
             $('.include').hide();
             $('.simple_include').show();
         }
-        function changeReply(THIS) {
+        function changeReply(THIS,num) {
             if (THIS.text() == '展開留言') {
                 THIS.text('收合留言');
                 THIS.closest('form').next('div').show();
             }
             else {
-                THIS.text('展開留言');
-                THIS.closest('form').next('div').hide();
+                //THIS.text('展開留言');
+                //THIS.closest('form').next('div').hide();
+                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num}, function (result) {
+                    if (result['result'] == 'success') {
+                        var div = THIS.closest('form').next('div');
+                        div.html('');
+                        for (var i in result['data'])
+                            div.append(result['data'][i] + '<br/>');
+                        THIS.text('展開留言');
+                        THIS.closest('form').next('div').hide();
+                    }
+                    else {
+                        alert('更新失敗,伺服器有問題或您已斷線');
+                        THIS.text('展開留言');
+                        THIS.closest('form').next('div').hide();
+                    }
+                });
             }
         }
         $(document).ready(function () {
             init();
-            //內容
+            //內容縮排
             $('input').click(function () {
                 if ($(this).val() == "縮起內容") {
                     $(this).val("展開內容").prev().prev().hide().prev().show();
                 }
-                else {
+                else if ($(this).val() == "展開內容") {
                     $(this).val("縮起內容").prev().prev().show().prev().hide();
                 }
             });
@@ -161,8 +183,7 @@
                         alert(result['result']);
                         if (result['result'] == 'success') {
                             div.append('<%-ID%>:' + include + '<br/>');
-                            label.text('展開留言');
-                            div.show();
+                            //label.click();
                             text.val('');
                         }
                         else {
@@ -176,7 +197,39 @@
             });
             //留言展開
             $('label').click(function () {
-                changeReply($(this));
+                changeReply($(this), $(this).next('input').attr('name'));
+            });
+            //貼文編輯
+            $('a').click(function () {
+                if ('<%=ID%>' == $(this).attr('name')) {
+                    var password = prompt("請輸入你的個人密碼");
+                    var parent = $(this).parent();
+                    var num = parent.attr('id');
+                    var include = parent.find('.include').html();
+                    if (password != null) {
+                        $('#to_rewrite').find('input').each(function () {
+                            var name = $(this).attr('name');
+                            switch (name) {
+                                case 'password':
+                                    $(this).val(password);
+                                    break;
+                                case 'num':
+                                    $(this).val(num);
+                                    break;
+                                case 'include':
+                                    $(this).val(include);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
+                        $('#to_rewrite').submit();
+                    }
+                    else
+                        alert('請填入你的個人密碼');
+                }
+                else
+                    alert('只有本人可以編輯貼文');
             });
         });
     </script>
