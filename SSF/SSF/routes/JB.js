@@ -94,6 +94,7 @@ router.get('/get_board_introduce', function (req, res) {
 });
 
 router.post('/to_post_page', function (req, res) {
+    console.log(req.body);
     res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type });
     //res.render('Page9', { ID: 'leon1234858', board_ID: 'private_0002', type: 'private' });
 });
