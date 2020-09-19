@@ -4,36 +4,39 @@
 
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <!--google-font-->
+    <link href="https://fonts.googleapis.com/css2?family=Grandstander:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <title></title>
 </head>
 
-<body id="main">
+<body id="main" style="font-family: 'Grandstander', cursive;">
     <div class="container-fluid">
         <div class="row ">
             <!--image-->
-            <div class="col-md-4  p-0 mt-5">
-                <img class=" Thumbnail" src="https://i.imgur.com/iaJHp4H.jpg" alt="department-image"
+            <div class="col-md-4  p-0 mt-2">
+                <img class=" Thumbnail" src="https://i.imgur.com/nBsk21U.jpg" alt="department-image"
                     style="width:100%; ">
             </div>
 
-            <div class="col-md-4 ">
+            <div class="col-md-4 p-0 m-0">
                 <div name="Title" class=" jumbotron text-center">
                     <h2>高中教師社會科學增能平台</h2>
                 </div>
-                <div class=" btn-group-vertical d-flex align-items-center">
+                <div class=" btn-group-vertical d-flex align-items-center mt-5">
                     <div>
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#log-in-form"
-                            value='log-in'>
+                        <button type="button" class="btn btn-outline-info btn-lg mb-1" data-toggle="collapse"
+                            data-target="#log-in-form" value='log-in'>
                             登入
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#register-form"
-                            value='register'>
+                        <button type="button" class="btn btn-outline-info btn-lg" data-toggle="collapse"
+                            data-target="#register-form" value='register'>
                             註冊
                         </button>
                     </div>
@@ -44,28 +47,35 @@
                 <div id="content-div" class="pt-4  h-25">
                     <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
                         <form method="post" action="/SAN/sign_in" class="carousel-item-right">
-                            <input type="text" name='ID' placeholder="ID" />
-                            <input type="password" name='password' placeholder="password" />
-                            <br>
-                            <input type="submit" class=" btn btn-primary mt-2" />
+                            <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
+                                <input type="text" name='ID' placeholder="ID" />
+                                <input type="password" name='password' placeholder="密碼" />
+                                <br>
+                            </div>
+
+                            <input type="submit" class=" btn btn-secondary mt-2" />
                         </form>
                     </div>
 
                     <div id="register-form" class="div-collapse collapse text-center" data-parent="#content-div">
                         <form method="post" action="/SAN/register" class="carousel-item-right">
-                            <input type="text" name='ID' placeholder="ID" required />
-                            <input type="text" name='password' placeholder="password" required />
-                            <input type="text" name='name' placeholder="name" required />
-                            <input type="email" name='mail' placeholder="mail" required />
-                            <input type="text" name='school' placeholder="school" required />
-                            <input type="text" name='gender' placeholder="gender" required />
-                            <br>
-                            <input type="submit" class=" btn btn-primary  mt-2" />
+                            <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
+                                <input type="text" name='ID' placeholder="ID" required />
+                                <input type="text" name='password' placeholder="密碼" required />
+                                <input type="text" name='name' placeholder="名字" required />
+                                <input type="email" name='mail' placeholder="E-mail" required />
+                                <input type="text" name='school' placeholder="學校" required />
+                                <input type="text" name='gender' placeholder="性別" required />
+                                <br>
+                            </div>
+
+                            <input type="submit" class=" btn btn-secondary  mt-2" />
                         </form>
                     </div>
                 </div>
                 <p>
-                    <h5 class="text-center">政治系●法律系●教育所●經濟系●心理系
+                    <h5 class="text-center">
+                        政治系●法律系●教育所●經濟系●心理系
                         <br>
                         【自發】X【互動】X【共好】</h5>
 
