@@ -1,4 +1,5 @@
-﻿﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!--head boostrap mode-->
@@ -9,7 +10,7 @@
     <!--google-font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -47,14 +48,16 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-secondary btn w-100 mb-1" data-toggle="collapse"
-                        data-target="#inform" value='change'>
+                            data-target="#inform" value='change'>
                         更改資訊 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div id=inform class="div-collapse collapse input-group mt-2">
                     <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">類別</button>
+                                aria-haspopup="true" aria-expanded="false">
+                            類別
+                        </button>
                         <div class="dropdown-menu">
                             <button class="dropdown-item" value="name">姓名</button>
                             <button class="dropdown-item" value="password">密碼</button>
@@ -64,12 +67,12 @@
                         </div>
                     </div>
                     <input id="change-input" type="text" class="form-control"
-                        aria-label="Text input with dropdown button">
+                           aria-label="Text input with dropdown button">
                     <div class="input-group-append">
                         <!-- 更改信息區域 -->
                         <form id="change-form" method="POST" action="/SAN/ChangeMe" style="display: none;">
-                            <input name="ID" value="<%=information['ID']%> " />
-                            <input name="password" value="<%=information['password']%> " />
+                            <input name="ID" value="<%=information['ID']%>" />
+                            <input name="password" value="<%=information['password']%>" />
                             <input name="type" />
                             <input name="include" />
                         </form>
@@ -86,13 +89,13 @@
                     </form>
                     <div>
                         <button type="button" class="btn btn-outline-info btn-lg mb-1" data-toggle="collapse"
-                            data-target="#lover" value='introduction'>
+                                data-target="#lover" value='introduction'>
                             我的最愛
                         </button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-outline-info btn-lg w-100 mb-1" data-toggle="collapse"
-                            data-target="#notice" value='register'>
+                                data-target="#notice" value='register'>
                             通知
                         </button>
                     </div>
@@ -108,7 +111,7 @@
                     <hr>
                     <%for(var key in lover){%>
                     <% var l_inform=lover[key].split('_') ;%>
-                    <div class="container">
+                    <div id="<%-lover[key]%>" class="container">
                         <div class="row w-100 pb-1">
                             <!-- english to chinese -->
                             <%  if(l_inform[0]==='private'){%>
@@ -121,11 +124,11 @@
 
                             <div class="col-5 d-inline-flex ">
                                 <input type=button value=直接進入版面 class="ml-2 btn btn-outline-secondary"
-                                    onclick="change_Page('lover<%=lover[key]%>','<%= l_inform[0] %>')" />
+                                       onclick="change_Page('lover<%=lover[key]%>','<%= l_inform[0] %>')" />
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
-                                    onclick="delete_List('<%-lover[key]%>','lover')" />
+                                       onclick="delete_List('<%-lover[key]%>', 'lover')" />
                                 <form id="lover<%=lover[key]%>" method="POST" action="/JB/to_<%= l_inform[0] %>_board"
-                                    style="margin: 10px; display: none;">
+                                      style="margin: 10px; display: none;">
                                     <%  if(l_inform[0] ==='private'){%>
                                     <input type="password" id="pw-lover<%=lover[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -141,13 +144,13 @@
                     <%}%>
                 </div>
                 <!-- inform -->
-                <div id = notice class="div-collapse collapse " data-parent="#content-div" >
+                <div id=notice class="div-collapse collapse " data-parent="#content-div">
                     <h3>我的通知</h3>
                     <hr>
                     <%for(var key in notice){%>
                     <% var n_inform=notice[key].split('_') ;%>
 
-                    <div class=" container">
+                    <div id="<%-notice[key]%>" class=" container">
                         <div class="row w-100  pb-1">
                             <!-- english to chinese -->
                             <%  if(n_inform[0]==='private'){%>
@@ -159,13 +162,13 @@
                             <span class="col-2"><b>Place: </b><br><%= n_inform[2] %></span>
                             <div class="col-5 d-inline-flex ">
                                 <input type=button value=直接進入版面
-                                    class="ml-2 btn btn-outline-secondary <%= n_inform[0] %>"
-                                    onclick="change_Page('notice<%=notice[key]%>','<%= n_inform[0] %>')" />
+                                       class="ml-2 btn btn-outline-secondary <%= n_inform[0] %>"
+                                       onclick="change_Page('notice<%=notice[key]%>','<%= n_inform[0] %>')" />
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
-                                    onclick="delete_List('<%-notice[key]%>','notice')" />
+                                       onclick="delete_List('<%-notice[key]%>','notice')" />
 
                                 <form id="notice<%=notice[key]%>" method="POST" action="/JB/to_<%=n_inform[0]%>_board"
-                                    style="display:none">
+                                      style="display:none">
                                     <%  if(n_inform[0] ==='private'){%>
                                     <input type="password" id="pw-notice<%=notice[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -181,9 +184,9 @@
                     <hr>
                     <%}%>
                 </div>
-            </div>         
+            </div>
         </div>
-        <div id="demo" class="carousel slide" >
+        <div id="demo" class="carousel slide">
             <!-- Indicators
             <ul class="carousel-indicators">
                 <li data-target="#demo" data-slide-to="0" class="active"></li>
@@ -192,7 +195,7 @@
             </ul>
             <br> -->
 
-            
+
         </div>
         <div class="container-fluid d-flex justify-content-center mt-3 ">
             <div style="height: 260px">
@@ -212,114 +215,128 @@
             </div>
         </div>
         <!-- 輸入密碼 -->
-        <div class="modal fade" id="pw-modal" >
+        <div class="modal fade" id="pw-modal">
             <div class="modal-dialog modal-sm">
-                <div class="modal-content" >
+                <div class="modal-content">
                     <!-- Modal body -->
-                    <div  class="modal-body ">
-                        <input  type="password"  class="form-control mt-1" placeholder="請輸入版的密碼" />
-                        <button id="pw-btn"  type="button" class="btn btn-secondary mt-2 float-right"
-                        data-dismiss="modal" >Enter</button>
+                    <div class="modal-body ">
+                        <input type="password" class="form-control mt-1" placeholder="請輸入版的密碼" />
+                        <button id="pw-btn" type="button" class="btn btn-secondary mt-2 float-right"
+                                data-dismiss="modal">
+                            Enter
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        <footer >
-
-        </footer>
+    <footer>
+    </footer>
     <script>
-    var board_id = "";
-    var input_item;
+        var board_id = "";
+        var input_item;
 
-    $('.dropdown-item').on('click',function(){
-        console.log($(this).val());
-        $(this).parent().siblings('button').text($(this).text());
-        $('#change-form').children('input[name="type"]').val($(this).val());
-        console.log($('#change-form').children('input[name="type"]').val());
-    });
-    $('#change-form').siblings('button').on('click',function(){
-        if($('#change-form').children('input[name="type"]').val()==""){
-            alert("請選擇類別");
-           
-        }else if($('#change-input').val().split(" ").join("")==""){
-            alert("輸入不得為空");
-        }else{
-            $('#change-form').children('input[name="include"]').val($('#change-input').val());
-            $('#change-form').submit();
-            // location.reload();
-        } 
-    });
+        $('.dropdown-item').on('click', function () {
+            console.log($(this).val());
+            $(this).parent().siblings('button').text($(this).text());
+            $('#change-form').children('input[name="type"]').val($(this).val());
+            console.log($('#change-form').children('input[name="type"]').val());
+        });
+        $('#change-form').siblings('button').on('click', function () {
+            if ($('#change-form').children('input[name="type"]').val() == "") {
+                alert("請選擇類別");
+            } else if ($('#change-input').val().split(" ").join("") == "") {
+                alert("輸入不得為空");
+            } else {
+                $('#change-form').children('input[name="include"]').val($('#change-input').val());
+                //$('#change-form').submit();
+                if ($('#change-form > input[name="type"]').val() == 'password')
+                    alert('您將您的密碼變更為:' + $('#change-form > input[name="include"]').val() + "  ,若變更成功會進行自動登出, 請再次重新登入");
+                $.post('../SAN/ChangeMe', {
+                    ID: $('#change-form > input[name="ID"]').val(),
+                    password: $('#change-form > input[name="password"]').val(),
+                    type: $('#change-form > input[name="type"]').val(),
+                    include: $('#change-form > input[name="include"]').val()
+                }, function (result) {
+                    if (result['result'] == 'success') {
+                        alert('更新成功');
+                        location.reload();
+                    }
+                    else
+                        alert('更新失敗, 過段時間再試一次');
+                });
+            }
+        });
 
-    //private board enter password
-    $('#pw-btn').on('click',function(){
-        let password = $(this).siblings('input[type="password"]').val();
-        $('#pw-' + board_id).val(password);
-        $('#' + board_id).submit();
-    });
+        //private board enter password
+        $('#pw-btn').on('click', function () {
+            let password = $(this).siblings('input[type="password"]').val();
+            $('#pw-' + board_id).val(password);
+            $('#' + board_id).submit();
+        });
 
-    function handleClick(event) {
-        if (event.target.tagName == "DIV") {
-            $('#main .div-collapse').collapse('hide');
-            console.log(event.target.tagName);
-            if (input_item != null) {
-                input_item.fadeOut();
-                input_item = null;
+        function handleClick(event) {
+            if (event.target.tagName == "DIV") {
+                $('#main .div-collapse').collapse('hide');
+                console.log(event.target.tagName);
+                if (input_item != null) {
+                    input_item.fadeOut();
+                    input_item = null;
+                }
+            }
+
+        }
+        function change_Page(form_id, board) {
+            if (board === "private") {
+                console.log(form_id, board);
+                $('#pw-modal').modal('show');
+                board_id = form_id;
+                console.log(board_id);
+            } else {
+                $('#' + form_id).submit();
             }
         }
 
-    }
-    function change_Page(form_id, board) {
-        if (board === "private") {
-            console.log(form_id, board);
-            $('#pw-modal').modal('show');
-            board_id = form_id;
-            console.log(board_id);
-        } else {
-            $('#' + form_id).submit();
-        }
-    }
-
         //delete function
         function delete_List(In, mode) {
-        var yes = confirm('你確定要刪除嗎？');
+            var yes = confirm('你確定要刪除嗎？');
 
-        if (yes) {
-            var inform = In.split('_');
-            console.log("notice_success");
-            if (mode == "lover") {
-                $.ajax({
-                    type: "post",
-                    url: "/SAN/delete_lover",
-                    data: {
-                        ID: '<%= ID %>',
-                    board_ID: inform[0] + '_' + inform[1],
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                    console.log("success");
-                    }
-                    });
-                    } else if (mode == "notice") {
+            if (yes) {
+                var inform = In.split('_');
+                console.log("notice_success");
+                if (mode == "lover") {
                     $.ajax({
-                    type: "post",
-                    url: "/SAN/delete_notice",
-                    data: {
-                    ID: '<%= ID %>',
-                    board_ID: inform[0] + '_' + inform[1],
-                    place: inform[2]
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                    console.log("success");
-                    }
+                        type: "post",
+                        url: "/SAN/delete_lover",
+                        data: {
+                            ID: '<%= ID %>',
+                            board_ID: inform[0] + '_' + inform[1],
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            console.log("success");
+                        }
                     });
-                    }
-                    $("#" + In).remove();
-                    alert('已刪除');
-                    }
-                    }
-                    </script>
+                } else if (mode == "notice") {
+                    $.ajax({
+                        type: "post",
+                        url: "/SAN/delete_notice",
+                        data: {
+                            ID: '<%= ID %>',
+                            board_ID: inform[0] + '_' + inform[1],
+                            place: inform[2]
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            console.log("success");
+                        }
+                    });
+                }
+                $('#' + In).remove();
+                alert('已刪除');
+            }
+        }
+    </script>
 </body>
 
 </html>

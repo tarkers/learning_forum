@@ -292,6 +292,7 @@ router.post('/delete_notice', async (req, router_result) => {
 ./SAN/ChangeMe
 ******************/
 router.post('/ChangeMe', async (req, res) => {
+    //console.log(req.body);
     if (req.body.type != "ID") {
         try {
             MongoClient.connect(GetUrl("people"), {
