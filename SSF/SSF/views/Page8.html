@@ -16,25 +16,23 @@
 <body>
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
         <div class="text-center jumbotron">
-
-
-                    <h1><small><%=board_ID%></small></h1>
+            <h1><small><%=board_ID%></small></h1>
             <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
         </div>
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
-            輸入篩選主題關鍵字: <input type="text"  class="bg-warning"/><input type="button" value="篩選主題"  class="bg-warning"/><br />
-            輸入顯示前幾則貼文: <input type="text" class="bg-warning"/><input type="button" value="隱藏貼文" class="bg-warning"/><br />
-            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning"/><input type="button" value="指定貼文"  class="bg-warning"/><br/>
-            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%"/>
+            輸入篩選主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning" /><br />
+            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input type="button" value="指定貼文" class="bg-warning" /><br />
+            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
         </div>
         <!-- 發文跳轉 -->
         <form action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
             <input type="text" name="type" id="get_type" />
-            <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%"/>
+            <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%" />
         </form>
         <br>
         <div>
@@ -42,15 +40,17 @@
             <%for(var i = num-1;i >= 0;i--){%>
             <div id="<%=data[i]['num']%>" name="<%=i%>" class="post bg-info">
                 <strong>帳號:</strong><%=data[i]['ID']%><br />
-                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">         貼文編號: <%=data[i]['num']%></small><br />
-                <%-data[i]['include']%><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">      貼文編號: <%=data[i]['num']%></small><br />
+                <small style="font-size:50%" class="simple_include"><%if(data[i]['include'].length > 30){%><%=data[i]['include'].substr(0,30)%><%}else{%><%=data[i]['include'].substr(0)%><%}%>.....按展開內容看全部</small>
+                <div class="include"> <%-data[i]['include']%> </div> <br />
+                <input class="btn-lg bg-warning" type="button" value="展開內容" />
                 <!-- 寄留言-->
                 <form action="/DB/discuss" method="post">
                     <input type="text" name="num" value="<%=data[i]['num']%>" />
                     <input type="text" name="ID" value="<%=ID%>" />
                     <input type="text" name="board_ID" value="<%=board_ID%>" />
-                    <label class="label label-success">展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" class="btn btn-link"/>
-                    <input class="form-control" style="background-color:cornsilk" type="text" name="include" value=""/>
+                    <label class="label label-success">展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" class="btn btn-link" />
+                    <input class="form-control" style="background-color:cornsilk" type="text" name="include" value="" />
                 </form>
                 <!-- 回應區-->
                 <div name="reply">
@@ -84,6 +84,8 @@
                 alert("您藉由提醒功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
             }
             $('div[name = "reply"]').hide();
+            $('.include').hide();
+            $('.simple_include').show();
         }
         function changeReply(THIS) {
             if (THIS.text() == '展開留言') {
@@ -97,6 +99,15 @@
         }
         $(document).ready(function () {
             init();
+            //內容
+            $('input').click(function () {
+                if ($(this).val() == "縮起內容") {
+                    $(this).val("展開內容").prev().prev().hide().prev().show();
+                }
+                else {
+                    $(this).val("縮起內容").prev().prev().show().prev().hide();
+                }
+            });
             //篩選功能
             $('#find > input[type = "button"]').click(function () {
                 var text = $(this).prev().val();
@@ -109,11 +120,11 @@
                         break;
                     case "隱藏貼文":
                         var number = parseInt(text);
-                         number = parseInt('<%=num%>') - number;
+                        number = parseInt('<%=num%>') - number;
                         $('.post').each(function () {
                             $(this).show();
                             //console.log(number);
-                            if (parseInt($(this).attr('name')) <  number)
+                            if (parseInt($(this).attr('name')) < number)
                                 $(this).hide();
                         });
                         break;
