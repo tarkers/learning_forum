@@ -54,6 +54,9 @@
     <Content Include="views\Page1.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\Page10.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\Page2.html">
       <SubType>Code</SubType>
     </Content>
