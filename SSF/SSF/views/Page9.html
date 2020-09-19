@@ -215,7 +215,7 @@
 		<input type="password" placeholder="發文密碼" name="board_password"><br />
 		<input type="submit" />
 	</form>
-
+    <input id="Hidden1" type="hidden" value="<%=type%>"/>
 </body>
 <footer>
 	<div class="text-center pb-2">
@@ -225,8 +225,7 @@
 </footer>
 <!-- send information -->
 <script>
-	var board_type = '<%=type%>';
-	board_type = 'public';
+    var board_type = $('#Hidden1').val();
 	$('#send-label').on('click', function () {
 		if($('#title-div >input').val().split(" ").join("")==""){
 			location.href = "#title-div"; 
@@ -246,7 +245,6 @@
 				return;
 			}
 		}
-
 		$('#' + board_type + '-form').submit();
 	});
 </script>
