@@ -106,9 +106,10 @@
 						<button class="dropdown-item heading" value="rgb(170, 170, 170)"
 							style="font-weight: bold; color: rgb(102, 102, 102);">gray</button>
 						<button class="dropdown-item heading" value="rgb(76, 78, 78)"
-							style="font-weight: bold; color: rgb(76, 78, 78);">dark</button>
-						<button class="dropdown-item heading" value=" rgb(255, 255, 255)"
-							style="font-weight: bold; color: rgb(211, 211, 211);">white</button>
+                            style="font-weight: bold; color: rgb(76, 78, 78);">dark</button>
+                            <div class="dropdown-divider"></div>
+						<button class="dropdown-item heading" value=''
+							style="font-weight: bold; color: rgb(46, 46, 46);">無背景上色</button>
 					</div>
 				</span>
 				<span id="font-group" class=" ml-2">
@@ -252,7 +253,13 @@
 <script>
 	$('.color-menu > button').on('click', function () {
 		if ($(this).parent().hasClass('back')) {
-			docCommand('backColor', $(this).val());
+            if($(this).val()===""){
+                let node =window.getSelection().anchorNode.parentNode;
+                $(node).css("background-color", ""); 
+            }
+            else{
+                docCommand('backColor', $(this).val());
+            }		
 		} else {
 			docCommand('foreColor', $(this).val());
 		}
