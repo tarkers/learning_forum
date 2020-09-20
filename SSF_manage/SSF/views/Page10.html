@@ -4,18 +4,27 @@
 
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <!-- google link -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title></title>
 </head>
+<style>
+    .input-group-text {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
 
-<body>
+<body style="font-family: 'Roboto Slab', cursive;">
     <div name="Title" class="jumbotron text-center">
         <h1>管理者資料管理</h1>
     </div>
-    <div class="  w-50 m-auto text-center">
+    <div class="  w-50 m-auto ">
         <input name="board_ID" style="display: none" value="<%=board_ID%>" />
         <input name="password" style=" display:none" value="<%=password%>" />
         <!-- <div class=" row">
@@ -35,81 +44,140 @@
                     <p><strong>include: </strong><input type=text name=旁邊的></p>
                 </div>
             </div> -->
-        <div style=" height: 350px; overflow-y: auto; ">
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">board</span>
+        <form id="input-form" class="was-validated" style=" height: 460px; overflow-y: auto; ">
+            <div class="input-group mb-2  pr-2 ">
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">名字</span>
+                    </div>
+                    <input type="text" class="form-control " name="name" required>
                 </div>
-                <input type="text" class="form-control" name="board">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">type</span>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">學校</span>
+                    </div>
+                    <input type="text" class="form-control" name="school" required>
                 </div>
-                <input type="text" class="form-control" name="type">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">introduce</span>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">教室</span>
+                    </div>
+                    <input type="text" class="form-control" name="class" required>
                 </div>
-                <input type="text" class="form-control" name="introduce">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">title</span>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">類型</span>
+                    </div>
+                    <select name="type" class="custom-select  form-control" required>
+                        <option selected value="public">公開</option>
+                        <option value="private">私密</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" name="type"> -->
                 </div>
-                <input type="text" class="form-control" name="title">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">name</span>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">看板</span>
+                    </div>
+                    <input type="number" min="1" class="form-control" name="board"
+                        oninput="$(this).val($(this).val().replace(/[^\d]/g,''))" placeholder="輸入數字" required>
                 </div>
-                <input type="text" class="form-control" name="name">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">school</span>
-                </div>
-                <input type="text" class="form-control" name="school">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">class</span>
-                </div>
-                <input type="text" class="form-control" name="class">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">password_private</span>
-                </div>
-                <input type="text" class="form-control" name="password_private">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">password_public</span>
-                </div>
-                <input type="text" class="form-control" name="password_public">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">tab</span>
-                </div>
-                <input type="text" class="form-control" name="tab">
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">include</span>
-                </div>
-                <input type="text" class="form-control" name="include">
-            </div>
-        </div>
-        <div class=" d-flex d-inline-block">
-            <button id="change" class="btn btn-danger w-100 m-1">Change</button>
-            <button id="information" class="btn btn-info w-100 m-1">Information</button>
-        </div>
 
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">主題</span>
+                    </div>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">介紹</span>
+                    </div>
+                    <input type="text" class="form-control" name="introduce" required>
+                </div>
+
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">標籤</span>
+                    </div>
+                    <input type="text" class="form-control" name="tab" required>
+                </div>
+                <div class="input-group mb-2  pr-2">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">私人密碼</span>
+                    </div>
+                    <input type="password" class="form-control" name="password_private" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text eyes" style="cursor: pointer;"><i class="fa fa-eye-slash"
+                                aria-hidden="true"></i></span>
+                    </div>
+                    <div class="invalid-feedback">
+                        <!-- 測試代碼 -->
+                        <small>ˇ大小寫皆可</small>
+                    </div>
+                </div>
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">公開密碼</span>
+                    </div>
+                    <input type="password" class="form-control" name="password_public" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text eyes" style="cursor: pointer;"><i class="fa fa-eye-slash"
+                                aria-hidden="true"></i></span>
+                    </div>
+                    <div class="invalid-feedback">
+                        <!-- 測試代碼 -->
+                        <small>ˇ大小寫皆可</small>
+                    </div>
+
+                </div>
+
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">文字</span>
+                    </div>
+                    <textarea type="text" class="form-control is-invalid" name="include" style="resize: none;" rows="10"
+                        cols="25" required></textarea>
+                </div>
+            </div>
+
+        </form>
+        <div class=" d-flex d-inline-block">
+            <button id="change" class="btn btn-danger w-100 m-1">更換資訊</button>
+            <button id="information" class="btn btn-info w-100 m-1">獲得資訊</button>
+        </div>
+        <!-- <button id="test">測試代碼</button> -->
     </div>
     <script>
+        //*********************test code*********************************//
+        // $('#test').on('click', function () {
+        //     console.log($("input[name='board']:first").val()); //測試data
+        //     console.log($("select[name='type']:first").val());
+        //     console.log($("input[name='title']:first").val());
+        //     console.log($("input[name='introduce']:first").val());
+        //     console.log($("input[name='name']:first").val());
+        //     console.log($("input[name='school']:first").val());
+        //     console.log($("input[name='class']:first").val());
+        //     console.log($("input[name='password_private']:first").val());
+        //     console.log($("input[name='password_public']:first").val());
+        //     console.log($("input[name='tab']:first").val());
+        //     console.log($("textarea[name='include']:first").val());
+        //     console.log($("select[name='type']:first").val() + '_' + $("input[name='board']:first").val());
+        // });
+        //密碼可視設定
+        $('.eyes').on('click', function () {
+            console.log(11254);
+            if ($(this).parent().siblings('input').attr("type") == "text") {
+                $(this).parent().siblings('input').attr('type', 'password');
+                $(this).children('i').addClass("fa-eye-slash");
+                $(this).children('i').removeClass("fa-eye");
+            } else if ($(this).parent().siblings('input').attr("type") == "password") {
+                $(this).parent().siblings('input').attr('type', 'text');
+                $(this).children('i').removeClass("fa-eye-slash");
+                $(this).children('i').addClass("fa-eye");
+            }
+        });
+
         $(document).ready(function () {
             $('#information').click();
             if ('<%=board%>' == '不是建立看板後跳來,不提供預設看板號')
@@ -119,7 +187,7 @@
 
             $('#information').on('click', function () {
                 //console.log('111');
-                if ('<%=board%>' != '不是建立看板後跳來,不提供預設看板號') {   //original give board_id
+                if ('<%=board%>' != '不是建立看板後跳來,不提供預設看板號') { //original give board_id
                     $.ajax({
                         type: "post",
                         url: "/BM/get_information",
@@ -138,17 +206,20 @@
                                 //console.log(data);
                                 //$("input[name='board_ID']:first").val(data['board_ID']);
                                 //$("input[name='password']:first").val(data['password']);
-                                $("input[name='board']:first").val(data['board_ID']);
-                                $("input[name='type']:first").val(data['type']);
+                                $("input[name='board']:first").val(data['board_ID'].split(
+                                    '_')[1]); //測試data
+                                $("select[name='type']:first").val(data['type']);
                                 $("input[name='title']:first").val(data['title']);
                                 $("input[name='introduce']:first").val(data['introduce']);
                                 $("input[name='name']:first").val(data['name']);
                                 $("input[name='school']:first").val(data['school']);
                                 $("input[name='class']:first").val(data['class']);
-                                $("input[name='password_private']:first").val(data['password_private']);
-                                $("input[name='password_public']:first").val(data['password_public']);
+                                $("input[name='password_private']:first").val(data[
+                                    'password_private']);
+                                $("input[name='password_public']:first").val(data[
+                                    'password_public']);
                                 $("input[name='tab']:first").val(data['tab']);
-                                $("input[name='include']:first").val(data['include']);
+                                $("textarea[name='include']:first").val(data['include']);
                             }
                         },
                         error: function (response) {
@@ -177,17 +248,22 @@
                                     //console.log(data);
                                     //$("input[name='board_ID']:first").val(data['board_ID']);
                                     //$("input[name='password']:first").val(data['password']);
-                                    $("input[name='board']:first").val(data['board_ID']);
-                                    $("input[name='type']:first").val(data['type']);
+                                    $("input[name='board']:first").val(data['board_ID']
+                                        .split('_')[1]);
+                                    $("select[name='type']:first").val(data['type']);
                                     $("input[name='title']:first").val(data['title']);
-                                    $("input[name='introduce']:first").val(data['introduce']);
+                                    $("input[name='introduce']:first").val(data[
+                                        'introduce']);
                                     $("input[name='name']:first").val(data['name']);
                                     $("input[name='school']:first").val(data['school']);
                                     $("input[name='class']:first").val(data['class']);
-                                    $("input[name='password_private']:first").val(data['password_private']);
-                                    $("input[name='password_public']:first").val(data['password_public']);
+                                    $("input[name='password_private']:first").val(data[
+                                        'password_private']);
+                                    $("input[name='password_public']:first").val(data[
+                                        'password_public']);
                                     $("input[name='tab']:first").val(data['tab']);
-                                    $("input[name='include']:first").val(data['include']);
+                                    $("textarea[name='include']:first").val(data[
+                                        'include']);
                                 }
                             },
                             error: function (response) {
@@ -198,25 +274,42 @@
                 }
             });
             $('#change').on('click', function () {
-                $.post("/BM/update", {
-                    'board_ID': $("input[name='board_ID']:first").val(),
-                    'password': $("input[name='password']:first").val(),
-                    'board': $("input[name='board']:first").val(),
-                    'type': $("input[name='type']:first").val(),
-                    'title': $("input[name='title']:first").val(),
-                    'introduce': $("input[name='introduce']:first").val(),
-                    'name': $("input[name='name']:first").val(),
-                    'school': $("input[name='school']:first").val(),
-                    'class': $("input[name='class']:first").val(),
-                    'password_private': $("input[name='password_private']:first").val(),
-                    'password_public': $("input[name='password_public']:first").val(),
-                    'tab': $("input[name='tab']:first").val(),
-                    'include': $("input[name='include']:first").val(),
-                },
-                    function (response) {
-                        alert(response['result']);
+                //確認都填寫完畢------------------------------------
+                var input_group = document.getElementsByClassName("form-control");
+                let complete = true;
+                $(".form-control").each(function () {
+                    if ($(this) != undefined) {
+                        if ($(this).val() == null || $(this).val().split(" ").join("") == "") {
+                            complete = false;
+                        }
                     }
-                );
+                });
+                if (!complete) {
+                    alert("請輸入完整資訊");
+                    return;
+                } else {
+                    $.post("/BM/update", {
+                            'board_ID': $("input[name='board_ID']:first").val(),
+                            'password': $("input[name='password']:first").val(),
+                            'board': $("select[name='type']:first").val() + '_' + $(
+                                "input[name='board']:first").val(), //測試代碼----
+                            'type': $("select[name='type']:first").val(),
+                            'title': $("input[name='title']:first").val(),
+                            'introduce': $("input[name='introduce']:first").val(),
+                            'name': $("input[name='name']:first").val(),
+                            'school': $("input[name='school']:first").val(),
+                            'class': $("input[name='class']:first").val(),
+                            'password_private': $("input[name='password_private']:first").val(),
+                            'password_public': $("input[name='password_public']:first").val(),
+                            'tab': $("input[name='tab']:first").val(),
+                            'include': $("textarea[name='include']:first").val(),
+                        },
+                        function (response) {
+                            alert(response['result']);
+                        }
+                    );
+                }
+
             });
         });
     </script>
