@@ -41,10 +41,13 @@ function Render(req, res, other) {
 function ReJSON(req, res, other) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
-        var table = db.db("board").collection(req.body.board_ID);
+        var which = '';
+        other == 'core' ? which = req.body.board : which = req.body.board_ID;
+        var table = db.db("board").collection(which);
         var findThing = { };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            //console.log(result);
             res.json({ data: result });
         });
     });
@@ -57,7 +60,11 @@ function GetAllCollection(req, res) {
         var findThing = {};
         table.find(findThing).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            res.json({ data: result });
+            //console.log(result);
+            if (result.length > 0)
+                res.json({ data: result });
+            else
+                res.json({ data: [{ result: 'empty' }] });
         });
     });
 }
@@ -94,12 +101,13 @@ router.post('/download', function (req, res) {
 //(AJAX) 核心管理者下載目標看板的資料
 router.post('/core_download', function (req, res) {
     if (req.body.board_ID == core_ID && req.body.password == core_password)
-        ReJSON(req, res, 'null');
+        ReJSON(req, res, 'core');
     else
         warming(res, 1);
 });
 //(AJAX)得到一個表格的所有東西(JSON List to CSV)
 router.post('/call_all_document', function (req, res) {
+    //console.log(req.body);
     if (req.body.board_ID == core_ID && req.body.password == core_password)
         GetAllCollection(req, res);
     else
