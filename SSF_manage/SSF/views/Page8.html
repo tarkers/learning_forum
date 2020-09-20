@@ -32,7 +32,7 @@
                         <p>警告, 本功能牽涉核心資料須謹慎使用</p>
                         <input name="DB" type="text" placeholder="目標資料庫" />
                         <input name="collection" type="text" placeholder="目標表格" />
-                        <br /><br /><input style="display:none" id="file" accept=".csv" name="data" type="file"  multep/>
+                        <br /><br /><input style="display:none" id="file" accept=".csv" name="data" type="file" multep />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -45,26 +45,52 @@
     <script>
         var $link = $(".btn-link");
         var items = null;
-        function filetoJSON(data) {
+        function filetoJSON(data,api) {
             var urlData;
+            var returnData = [];
             if (data) {
                 var reader = new FileReader();
                 reader.readAsText(data, 'UTF-8');
-                reader.onload = function (e) {
-                    urlData = this.result;
-                    //alert(urlData);
-                    var list = urlData.split('\n');
-                };
+                try {
+                    reader.onload = function (e) {
+                        urlData = this.result;
+                        //alert(urlData);
+                        var lists = urlData.split('\n');
+                        for (var i = 0; i < lists.length - 1; i++) {
+                            var list = lists[i].split(',');
+                            var json = {};
+                            for (var j = 0; j < list.length - 1; j++) {
+                                var mid = list[j].indexOf(':');
+                                var key = list[j].substring(1, mid - 1);
+                                var value = list[j].substring(mid + 2, list[j].length - 1);
+                                json[key] = value.replace(/。/g, ",");
+                            }
+                            returnData.push(json);
+                        }
+                        //console.log(returnData);
+                        //console.log(JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\""));
+                        $.post(api, {
+                            board_ID: '<%=board_ID%>', password: '<%=password%>',
+                            DB: $('.modal-body > input[name="DB"]').val(),
+                            collection: $('.modal-body > input[name="collection"]').val(),
+                            data: JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\"")
+                        }, function (result) {
+                                alert(result['result']);
+                        });
+                    };
+                } catch (e) {
+                    alert(e.message);
+                }
             }
             else
-                alert('您的瀏覽器過舊, 請更換瀏覽器');
+                alert('您的瀏覽器出錯, 請重新整理再試一次');
         }
         function buildCSV(items) {
             //transfer csv file
             var csv = '\uFEFF';
             for (var i in items) {
                 for (var j in items[i]) {
-                    csv += '"' + j + '":"' + JSON.stringify(items[i][j]).replace(/\"/g, "'").replace(/,/g, "。") + '"' + ',';
+                    csv += '"' + j + '":' + JSON.stringify(items[i][j]).replace(/,/g, "。") + ',';
                 }
                 csv += '\r\n';
             }
@@ -129,15 +155,7 @@
                     $link.attr({ href: buildCSV(items), download: 'yourdata.csv' }).show();
                 });
             } else {
-                filetoJSON(document.getElementById('file').files[0]);
-                //$.post(api, {
-                //    board_ID: '<%=board_ID%>', password: '<%=password%>',
-                //    DB: $('.modal-body > input[name="DB"]').val(),
-                //    collection: $('.modal-body > input[name="collection"]').val(),
-                //    data: filetoJSON($('#file').files[0])
-                //}, function (result) {
-                    
-                //});
+                filetoJSON(document.getElementById('file').files[0],api);
             }
 
         });

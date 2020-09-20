@@ -201,35 +201,37 @@
             });
             //貼文編輯
             $('a').click(function () {
-                if ('<%=ID%>' == $(this).attr('name')) {
-                    var password = prompt("請輸入你的個人密碼");
-                    var parent = $(this).parent();
-                    var num = parent.attr('id');
-                    var include = parent.find('.include').html();
-                    if (password != null) {
-                        $('#to_rewrite').find('input').each(function () {
-                            var name = $(this).attr('name');
-                            switch (name) {
-                                case 'password':
-                                    $(this).val(password);
-                                    break;
-                                case 'num':
-                                    $(this).val(num);
-                                    break;
-                                case 'include':
-                                    $(this).val(include);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        });
-                        $('#to_rewrite').submit();
+                if ($(this).html() == '編輯本篇貼文') {
+                    if ('<%=ID%>' == $(this).attr('name')) {
+                        var password = prompt("請輸入你的個人密碼");
+                        var parent = $(this).parent();
+                        var num = parent.attr('id');
+                        var include = parent.find('.include').html();
+                        if (password != null) {
+                            $('#to_rewrite').find('input').each(function () {
+                                var name = $(this).attr('name');
+                                switch (name) {
+                                    case 'password':
+                                        $(this).val(password);
+                                        break;
+                                    case 'num':
+                                        $(this).val(num);
+                                        break;
+                                    case 'include':
+                                        $(this).val(include);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                            $('#to_rewrite').submit();
+                        }
+                        else
+                            alert('請填入你的個人密碼');
                     }
                     else
-                        alert('請填入你的個人密碼');
+                        alert('只有本人可以編輯貼文');
                 }
-                else
-                    alert('只有本人可以編輯貼文');
             });
         });
     </script>

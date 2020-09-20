@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
+const { ObjectId } = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const { GetUrl } = require('./database_url');
 var uri = GetUrl('null');
@@ -30,6 +31,7 @@ function IsPasswordRight(req,res,next,other) {
             }
             else
                 warming(res, 1);
+            db.close();
         });
     });
 }
@@ -48,11 +50,13 @@ function ReJSON(req, res, other) {
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
             //console.log(result);
-            res.json({ data: result });
+            else
+                res.json({ data: result });
+            db.close();
         });
     });
 }
-//week3 new function
+
 function GetAllCollection(req, res) {
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
@@ -65,18 +69,35 @@ function GetAllCollection(req, res) {
                 res.json({ data: result });
             else
                 res.json({ data: [{ result: 'empty' }] });
+            db.close();
         });
     });
 }
 
 function ChangeAllCollection(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        if (err) { warming(res, 2); throw err; }
-        var table = db.db(req.body.DB).collection(req.body.collection);
-        var saveThing = req.body.data;
-        table.save(saveThing, function (err, result) {
-            if (err) { res.json({ result:"error" }); }
-            res.json({ result:"success" });
+    var promiseList = [];
+    for (var i = 0; i < req.body.data.length; i++) {
+        req.body.data[i]['_id'] = ObjectId(req.body.data[i]['_id']);
+        promiseList.push(ChangeOneCollection(req, res, ObjectId(req.body.data[i]['_id']), req.body.data[i]));
+    }
+    Promise.all(promiseList).then(result => res.json({ result: 'success' })).catch(err => res.json({ result:err }));
+}
+
+function ChangeOneCollection(req, res, id, doc) {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+            if (err) { reject({ err: 'error' }); throw err;}
+            var table = db.db(req.body.DB).collection(req.body.collection);
+            //console.log(req.body);
+            var findthing = { _id: id }
+            var saveThing = doc;
+            table.replaceOne(findthing, saveThing, function (err, result) {
+                if (err) { reject({ err: 'error' }); throw err;}
+                else {
+                    db.close();
+                    resolve({ result: 'success' });
+                }
+            });
         });
     });
 }
@@ -115,6 +136,9 @@ router.post('/call_all_document', function (req, res) {
 });
 //(AJAX)把一堆東西存入一個表格(CSV to JSON List)
 router.post('/change_all_document', function (req, res) {
+    //console.log(req.body);
+    req.body.data = JSON.parse(req.body.data);
+    //console.log(req.body);
     if (req.body.board_ID == core_ID && req.body.password == core_password)
         ChangeAllCollection(req, res);
     else

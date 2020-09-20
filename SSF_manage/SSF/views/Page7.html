@@ -37,7 +37,7 @@
                     var csv = '\uFEFF';
                     for (var i in items) {
                         for (var j in items[i]) {
-                            csv += '"' + j + '":"' + JSON.stringify(items[i][j]).replace(/\"/g, "'").replace(/,/g, "。") + '"' + ',';
+                            csv += '"' + j + '":' + JSON.stringify(items[i][j]).replace(/,/g, "。") + ',';
                         }
                         csv += '\r\n';
                     }
