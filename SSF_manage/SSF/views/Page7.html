@@ -37,7 +37,7 @@
                     var csv = '\uFEFF';
                     for (var i in items) {
                         for (var j in items[i]) {
-                            csv += '"' + j + '":"' + JSON.stringify(items[i][j]).replace(/\"/g, "'").replace(/,/g, "。") + '"' + ',';
+                            csv += '"' + j + '":' + JSON.stringify(items[i][j]).replace(/,/g, "。") + ',';
                         }
                         csv += '\r\n';
                     }
@@ -45,7 +45,7 @@
                     var blob = new Blob([csv],
                         { type: "application/octect-stream" });
                     var blobUrl = URL.createObjectURL(blob);
-                    var fileName = "youtdata.txt";
+                    var fileName = "yourdata.csv";
                     $link.attr({ href: blobUrl, download: fileName }).show();
                 },
                 error: function(response){
@@ -55,7 +55,6 @@
         });
         $('.btn-link').on('click', function (e) {
             $(this).slideUp();
-
         });
     </script>
 </body>

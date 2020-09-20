@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="/javascripts/verify.js"></script>
     <title></title>
 </head>
 
@@ -20,7 +20,7 @@
             <!--image-->
             <div class="col-md-4  p-0 mt-2">
                 <img class=" Thumbnail" src="https://i.imgur.com/nBsk21U.jpg" alt="department-image"
-                    style="width:100%; ">
+                     style="width:100%; ">
             </div>
 
             <div class="col-md-4 p-0 m-0">
@@ -30,35 +30,35 @@
                 <div class=" btn-group-vertical d-flex align-items-center mt-5">
                     <div>
                         <button type="button" class="btn btn-outline-info btn-lg mb-1" data-toggle="collapse"
-                            data-target="#log-in-form" value='log-in'>
+                                data-target="#log-in-form" value='log-in'>
                             登入
                         </button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-outline-info btn-lg" data-toggle="collapse"
-                            data-target="#register-form" value='register'>
+                                data-target="#register-form" value='register'>
                             註冊
                         </button>
                     </div>
 
                 </div>
-
                 <!-- 表單發送區 -->
                 <div id="content-div" class="pt-4  h-25">
                     <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
-                        <form method="post" action="/SAN/sign_in" class="carousel-item-right">
+                        <form id="sign_in_form" method="post" action="/SAN/sign_in" class="carousel-item-right">
                             <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
                                 <input type="text" name='ID' placeholder="ID" />
                                 <input type="password" name='password' placeholder="密碼" />
                                 <br>
                             </div>
-
-                            <input type="submit" class=" btn btn-secondary mt-2" />
+                            <div id="verify" style="text-align:center"></div>
+                            <input id="sign_in" type="submit" class=" btn btn-secondary mt-2" />
                         </form>
+                        <br /><br /><br />
                     </div>
 
                     <div id="register-form" class="div-collapse collapse text-center" data-parent="#content-div">
-                        <form method="post" action="/SAN/register" class="carousel-item-right">
+                        <form id="sign_up_form" method="post" action="/SAN/register" class="carousel-item-right">
                             <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
                                 <input type="text" name='ID' placeholder="ID" required />
                                 <input type="text" name='password' placeholder="密碼" required />
@@ -68,16 +68,19 @@
                                 <input type="text" name='gender' placeholder="性別" required />
                                 <br>
                             </div>
-
-                            <input type="submit" class=" btn btn-secondary  mt-2" />
+                            <div id="verify2" style="text-align:center"></div>
+                            <input id="sign_up" type="submit" class=" btn btn-secondary  mt-2" />
                         </form>
+                        <br /><br /><br />
                     </div>
                 </div>
                 <p>
+                    <br /><br />
                     <h5 class="text-center">
                         政治系●法律系●教育所●經濟系●心理系
                         <br>
-                        【自發】X【互動】X【共好】</h5>
+                        【自發】X【互動】X【共好】
+                    </h5>
 
 
                 </p>
@@ -111,6 +114,47 @@
             $("#main").on('click', function () {
                 if (!$(":input").is(":focus")) {
                     $('#main .div-collapse').collapse('hide')
+                }
+            });
+            $('#verify').codeVerify({
+                type: 2,
+                figure: 10,  //位数，仅在type=2时生效
+                arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
+                width: '100%',
+                height: '30px',
+                fontSize: '50%',
+                btnId: 'sign_in',
+                ready: function () {
+                    $('#sign_in_form').attr("onsubmit", "return false");
+                },
+                success: function () {
+                    $('#sign_in_form').attr("onsubmit", "return true");
+                },
+                error: function () {
+                    alert('驗證碼錯誤, 請重新填寫密碼');
+                    $('input[type="password"]').val('');
+                    $('#sign_in_form').attr("onsubmit", "return false");
+                }
+            });
+
+            $('#verify2').codeVerify({
+                type: 2,
+                figure: 10,  //位数，仅在type=2时生效
+                arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
+                width: '100%',
+                height: '30px',
+                fontSize: '50%',
+                btnId: 'sign_up',
+                ready: function () {
+                    $('#sign_up_form').attr("onsubmit", "return false");
+                },
+                success: function () {
+                    $('#sign_up_form').attr("onsubmit", "return true");
+                },
+                error: function () {
+                    alert('驗證碼錯誤, 請重新填寫');
+                    $('input[type="text"]').val('');
+                    $('#sign_up_form').attr("onsubmit", "return false");
                 }
             });
         });
