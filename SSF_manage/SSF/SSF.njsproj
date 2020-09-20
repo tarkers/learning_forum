@@ -32,6 +32,9 @@
     <Content Include="app.js" />
     <Content Include="public\images\ttt.jpg" />
     <Content Include="public\javascripts\jquery.js" />
+    <Content Include="public\javascripts\verify.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="routes\database_url.js" />
     <Content Include="routes\GBD.js" />
     <Content Include="routes\MB.js" />
