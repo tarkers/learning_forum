@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title></title>
+</head>
+<body>
+    <input id="file" type="file" name="file" />
+    <button  type="button" >click</button>
+    <form method="post" action="http://127.0.0.1:1337/getImg" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" />
+    </form>
+    <a style="display:none">download</a>
+    <script>
+        var $link = $("a");
+        function buildCSV(items) {
+            console.log(items);
+            var blob = new Blob(['\uFEFF' + items],
+                { type: "application/octect-stream" });
+            var blobUrl = URL.createObjectURL(blob);
+            //var fileName = "youtdata.csv";
+            return blobUrl;
+            //$link.attr({ href: blobUrl, download: fileName }).show();
+        }
+        function filetoJSON(data,api) {
+            var urlData;
+            var returnData = [];
+            if (data) {
+                var reader = new FileReader();
+                reader.readAsText(data, 'UTF-8');
+                try {
+                    reader.onload = function (e) {
+                        urlData = this.result;
+                        //alert(urlData);
+                        var lists = urlData.split('\n');
+                        for (var i = 0; i < lists.length - 1; i++) {
+                            var list = lists[i].split(',');
+                            var json = {};
+                            for (var j = 0; j < list.length - 1; j++) {
+                                var mid = list[j].indexOf(':');
+                                var key = list[j].substring(1, mid - 1);
+                                var value = list[j].substring(mid + 2, list[j].length - 1);
+                                json[key] = value;
+                            }
+                            returnData.push(json);
+                        }
+                        //console.log(returnData);
+                        //console.log(JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\""));
+                        $.post(api, {
+                            data: JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\"")
+                        }, function (result) {
+                                //console.log(result);
+                                $link.attr({ href: buildCSV(result), download: 'yourdata.csv' }).show();
+                        });
+                    };
+                } catch (e) {
+                    alert(e.message);
+                }
+            }
+            else
+                alert('您的瀏覽器出錯, 請重新整理再試一次');
+        }
+        $(document).ready(function () {
+            $('button').click(function () {
+                filetoJSON(document.getElementById('file').files[0], 'http://127.0.0.1:1337/getTable');
+            });
+        });
+    </script>
+</body>
+</html>

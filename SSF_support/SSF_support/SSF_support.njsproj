@@ -1,18 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <Name>SSF</Name>
-    <RootNamespace>SSF</RootNamespace>
+    <Name>SSF_support</Name>
+    <RootNamespace>SSF_support</RootNamespace>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>48afa785-0cba-4d1c-9c34-e8be3f8eb264</ProjectGuid>
+    <ProjectGuid>66d00de0-2661-4796-a368-6db610687fd6</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>server.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -29,42 +28,15 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="app.js" />
-    <Content Include="public\images\ttt.jpg" />
-    <Content Include="public\javascripts\jquery.js" />
-    <Content Include="public\javascripts\verify.js">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="routes\database_url.js" />
-    <Content Include="routes\GBD.js" />
-    <Content Include="routes\MB.js" />
-    <Content Include="routes\BM.js" />
-    <Content Include="routes\users.js" />
+    <Content Include="server.js" />
     <Content Include="package.json" />
-    <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
-    <Content Include="views\Page1.html" />
-    <Content Include="views\Page10.html" />
-    <Content Include="views\Page2.html" />
-    <Content Include="views\Page3.html" />
-    <Content Include="views\Page4.html" />
-    <Content Include="views\Page5.html" />
-    <Content Include="views\Page6.html" />
-    <Content Include="views\Page7.html" />
-    <Content Include="views\Page8.html" />
-    <Content Include="views\Page9.html" />
-    <Content Include="views\warming.html">
+    <Content Include="testpage.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\writer.html" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="public\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
-    <Folder Include="routes\" />
-    <Folder Include="views\" />
+    <Folder Include="uploadImg\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
