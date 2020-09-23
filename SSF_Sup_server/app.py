@@ -12,7 +12,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={"*": {"origins": "*"}})
+#cors = CORS(app, resources={"*": {"origins": "*"}})
+CORS(app)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF'])
