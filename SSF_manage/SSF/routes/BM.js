@@ -231,5 +231,8 @@ router.post('/core_login', function (req, res) {
     else
         warming(res, 1);
 });
-
+//前往文字to html編輯器
+router.get('/writer', function (req, res) {
+    res.render('writer');
+});
 module.exports = router;
