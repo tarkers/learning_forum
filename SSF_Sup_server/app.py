@@ -7,12 +7,17 @@ Created on Tue Sep 22 23:43:39 2020
 from werkzeug.utils import secure_filename
 from flask import Response, Flask, render_template, jsonify, request, make_response, send_from_directory, abort
 import os,random, string
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={"*": {"origins": "*"}})
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF'])
 localuri = 'http://localhost:5000/'
+
 def get_newname(o_filename):
     filename = os.path.splitext(o_filename)[0]
     extension = os.path.splitext(o_filename)[1]
@@ -57,5 +62,5 @@ def showImg():
 def tableCovert():
     return "<h1>Hello Flask!</h1>"
 
-
-app.run()
+if __name__=="__main__":
+    app.run(host="0.0.0.0", port=5000)
