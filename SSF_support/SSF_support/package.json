@@ -1,0 +1,13 @@
+{
+  "name": "ssf_support",
+  "version": "0.0.0",
+  "description": "SSF_support",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "querystring": "^0.2.0",
+    "util": "^0.12.3"
+  }
+}
