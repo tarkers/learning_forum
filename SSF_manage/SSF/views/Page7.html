@@ -15,13 +15,64 @@
     <div class=" container-fluid text-center">
         <h1 class="jumbotron  p-2">版面管理<sub><small>ID: <%=board_ID %> </small> </sub></h1>
         <div>
-            <button class="btn btn-lg btn-info">下載</button>
+            <button class="btn btn-lg btn-info" id="download">下載</button><br/><br /><label>格式轉換:</label>
+            <input  id="file" type="file" name="file" class="btn  btn-success"/>
+
             <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
         </div>
     </div>
     <script>
         var $link = $(".btn-link");
-        $('.btn').on('click',function(){
+        var api = 'http://127.0.0.1:1337/getTable';
+        function buildCSV(items) {
+            console.log(items);
+            var blob = new Blob(['\uFEFF' + items],
+                { type: "application/octect-stream" });
+            var blobUrl = URL.createObjectURL(blob);
+            //var fileName = "youtdata.csv";
+            return blobUrl;
+            //$link.attr({ href: blobUrl, download: fileName }).show();
+        }
+        function filetoJSON(data,api) {
+            var urlData;
+            var returnData = [];
+            if (data) {
+                var reader = new FileReader();
+                reader.readAsText(data, 'UTF-8');
+                try {
+                    reader.onload = function (e) {
+                        urlData = this.result;
+                        //alert(urlData);
+                        var lists = urlData.split('\n');
+                        for (var i = 0; i < lists.length - 1; i++) {
+                            var list = lists[i].split(',');
+                            var json = {};
+                            for (var j = 0; j < list.length - 1; j++) {
+                                var mid = list[j].indexOf(':');
+                                var key = list[j].substring(1, mid - 1);
+                                var value = list[j].substring(mid + 2, list[j].length - 1);
+                                json[key] = value;
+                            }
+                            returnData.push(json);
+                        }
+                        //console.log(returnData);
+                        //console.log(JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\""));
+                        $.post(api, {
+                            data: JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\"")
+                        }, function (result) {
+                                //console.log(result);
+                                $link.attr({ href: buildCSV(result), download: 'yourdata.csv' }).show();
+                                alert('點擊連結即可下載');
+                        });
+                    };
+                } catch (e) {
+                    alert(e.message);
+                }
+            }
+            else
+                alert('您的瀏覽器出錯, 請重新整理再試一次');
+        }
+        $('#download').on('click',function(){
             $.ajax({
                 type: 'post',
                 url: "/GBD/download",
@@ -47,11 +98,15 @@
                     var blobUrl = URL.createObjectURL(blob);
                     var fileName = "yourdata.csv";
                     $link.attr({ href: blobUrl, download: fileName }).show();
+                    alert('點擊連結即可下載');
                 },
                 error: function(response){
                     console.log('error');
                 }
             });
+        });
+        $('#file').change(function () {
+             filetoJSON(document.getElementById('file').files[0], api);
         });
         $('.btn-link').on('click', function (e) {
             $(this).slideUp();

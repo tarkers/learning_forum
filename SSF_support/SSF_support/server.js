@@ -14,7 +14,7 @@ const baseURL = 'http://localhost:1337';
 
 function createCSV(origin_data) {
     var returnStr;
-    console.log(origin_data);
+    //console.log(origin_data);
     for (var i in origin_data) {
         var len = Object.keys(origin_data[i]).length;
         returnStr += origin_data[i]['num'] + ',';
@@ -37,7 +37,7 @@ function createCSV(origin_data) {
 }
 
 http.createServer(function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', /*'140.116.183.*'*/ '*');
     if (req.method == 'GET') {
         fileServer.serve(req, res);
     }
@@ -71,7 +71,7 @@ http.createServer(function (req, res) {
                 // __dirname is where server is, get the path of file
                 if (files.file != null) {
                     var oldpath = __dirname + "\\" + files.file.path;
-                    console.log(oldpath);
+                    //console.log(oldpath);
                     // time
                     var time = +new Date();
                     // .jpg .png ......
@@ -79,7 +79,7 @@ http.createServer(function (req, res) {
                     // new name
                     var newpath = __dirname + '\\uploadImg\\' + place + '\\' + time + random + extname;
                     var returnpath ='\\' + place + '\\' + time + random + extname;
-                    console.log(newpath);
+                    //console.log(newpath);
                     fs.rename(oldpath, newpath, function (err) {
                         if (err) {
                             console.log(err.message);
