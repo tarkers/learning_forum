@@ -34,7 +34,7 @@
     <div class="container-fluid" style="width: 98%;">
         <div class="row">
             <!-- 左邊版面 -->
-            <div class="col-md-4 mt-2 " style="height:400px;">
+            <div class="col-md-4 mt-2 mb-3" style="height:400px;">
                 <div>
                     <h3>個人信息</h3>
                     <hr>
@@ -46,12 +46,15 @@
                     <h4>e-mail : <%=information['mail']%></h4>
                 </div>
                 <div>
+                    
+                </div>
+                <div>
                     <button type="button" class="btn btn-secondary btn w-100 mb-1" data-toggle="collapse"
                         data-target="#inform" value='change'>
                         更改資訊 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div id=inform class="div-collapse collapse input-group mt-2">
+                <div id=inform class="div-collapse collapse input-group ">
                     <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
@@ -115,17 +118,17 @@
                     <%for(var key in lover){%>
                     <% var l_inform=lover[key].split('_') ;%>
                     <div id="<%-lover[key]%>" class="container">
-                        <div class="row w-100 pb-1">
+                        <div class="row w-100 p-1 row-cols-2">
                             <!-- english to chinese -->
                             <%  if(l_inform[0]==='private'){%>
-                            <span class="col-3 "><b>Type: </b><br>私密</span>
+                            <span class="col-md-3 col-sm-2"><b>Type: </b><br>私密</span>
                             <%}else if(l_inform[0]==='public'){%>
-                            <span class="col-3 "><b>Type: </b><br>公開</span>
+                            <span class="col-md-3 col-sm-1"><b>Type: </b><br>公開</span>
                             <%}%>
 
-                            <span class="col-4"><b>Board: </b><br><%=l_inform[0] + '_' + l_inform[1]%></span>
+                            <span class="col-md-4 col-sm-2"><b>Board: </b><br><%=l_inform[0] + '_' + l_inform[1]%></span>
 
-                            <div class="col-5 d-inline-flex ">
+                            <div class="col-md-5 col-sm-4 d-inline-flex ">
                                 <input type=button value=直接進入版面 class="ml-2 btn btn-outline-secondary"
                                     onclick="change_Page('<%=lover[key]%>','lover')" />
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
@@ -154,20 +157,20 @@
                     <% var n_inform=notice[key].split('_') ;%>
 
                     <div id="<%-notice[key]%>" class=" container">
-                        <div class="row w-100  pb-1">
+                        <div class="row w-100 row-cols-3  pb-1">
                             <!-- english to chinese -->
                             <%  if(n_inform[0]==='private'){%>
-                            <span class="col-2"><b>Type: </b><br>私密</span>
+                            <span class="col-md-2 col-sm-2"><b>Type: </b><br>私密</span>
                             <%}else if(n_inform[0]==='public'){%>
-                            <span class="col-2"><b>Type: </b><br>公開</span>
+                            <span class="col-md-2 col-sm-2"><b>Type: </b><br>公開</span>
                             <%}%>
-                            <span class="col-3"><b>Board: </b><br><%= n_inform[0] + '_' + n_inform[1]%></span>
-                            <span class="col-2"><b>Place: </b><br><%= n_inform[2] %></span>
-                            <div class="col-5 d-inline-flex ">
+                            <span class="col-md-3 col-sm-1"><b>Board: </b><br><%= n_inform[0] + '_' + n_inform[1]%></span>
+                            <span class="col-md-2 col-sm-2"><b>Place: </b><br><%= n_inform[2] %></span>
+                            <div class="col-md-5 col-sm-3 d-inline-flex ">
                                 <input type=button value=直接進入版面
                                     class="ml-2 btn btn-outline-secondary <%= n_inform[0] %>"
                                     onclick="change_Page('<%=notice[key]%>','notice')" />
-                                <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
+                                <input type=button value=刪除 class="ml-2 btn btn-outline-danger"
                                     onclick="delete_List('<%-notice[key]%>','notice')" />
 
                                 <form id="notice<%=notice[key]%>" method="POST" action="/JB/to_<%=n_inform[0]%>_board"
@@ -190,23 +193,7 @@
             </div>
         </div>
 
-        <div class="container-fluid d-flex justify-content-center mt-3 ">
-            <div style="height: 260px">
-                <img src="https://i.imgur.com/TWgg6QP.jpg" class=" thumbnail h-100">
-            </div>
-            <div style="height: 260px">
-                <img src="https://i.imgur.com/NK2K8ug.jpg" class=" thumbnail h-100">
-            </div>
-            <div style="height: 260px">
-                <img src="https://i.imgur.com/wPl2KuF.jpg" class=" thumbnail h-100">
-            </div>
-            <div style="height: 260px">
-                <img src="https://i.imgur.com/yF34ufY.jpg" class=" thumbnail h-100">
-            </div>
-            <div style="height: 260px">
-                <img src="https://i.imgur.com/5uGiD7A.jpg" class=" thumbnail h-100">
-            </div>
-        </div>
+        
         <!--私版浮框 -->
         <div class="modal fade" id="pr-modal">
             <div class="modal-dialog modal-sm">
@@ -232,7 +219,7 @@
                         <h4>Header Test</h4>
                        <label>文字介紹</label>
                        <hr>
-                       <strong >確認跳轉?</strong>
+                       <strong  >確認跳轉?</strong>
                        <button id="pu-btn" type="button" class="btn btn-success  float-right"
                        data-dismiss="modal"> 確認
                         </button>
@@ -331,46 +318,78 @@
             $('#pw-' + board_id).val(password);
             $('#' + board_id).submit();
         });
-
+        $(document).on('click', function (event) {
+                if (event.target.tagName == "DIV") {
+                    $('#main .div-collapse').collapse('hide')
+                }
+            });
         //delete function
         function delete_List(In, mode) {
-    var yes = confirm('你確定要刪除嗎？');
-        if (yes) {
-            var inform = In.split('_');
-            console.log("notice_success");
-            if (mode == "lover") {
-                $.ajax({
-                    type: "post",
-                    url: "/SAN/delete_lover",
-                    data: {
-                        ID: '<%= ID %>',
-                        board_ID: inform[0] + '_' + inform[1],
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        console.log("success");
-                    }
-                });
-            } else if (mode == "notice") {
-                $.ajax({
-                    type: "post",
-                    url: "/SAN/delete_notice",
-                    data: {
-                        ID: '<%= ID %>',
-                        board_ID: inform[0] + '_' + inform[1],
-                        place: inform[2]
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        console.log("success");
-                    }
-                });
+        var yes = confirm('你確定要刪除嗎？');
+            if (yes) {
+                var inform = In.split('_');
+                console.log("notice_success");
+                if (mode == "lover") {
+                    $.ajax({
+                        type: "post",
+                        url: "/SAN/delete_lover",
+                        data: {
+                            ID: '<%= ID %>',
+                            board_ID: inform[0] + '_' + inform[1],
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            console.log("success");
+                        }
+                    });
+                } else if (mode == "notice") {
+                    $.ajax({
+                        type: "post",
+                        url: "/SAN/delete_notice",
+                        data: {
+                            ID: '<%= ID %>',
+                            board_ID: inform[0] + '_' + inform[1],
+                            place: inform[2]
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            console.log("success");
+                        }
+                    });
+                }
+                $('#' + In).remove();
+                alert('已刪除');
             }
-            $('#' + In).remove();
-            alert('已刪除');
         }
-    }
 </script>
 </body>
-
+<style>
+    img {
+    max-width: 100%;
+    max-height: 100%;
+}
+</style>
+<footer>
+    <div class="container-fluid ">
+        <div class="row mt-4" style="height: 200px;">
+            <div class="col-md p-0" >
+                <img src="https://i.imgur.com/TWgg6QP.jpg" class=" thumbnail ">
+            </div>
+           
+            <div class="col-md p-0" >
+                <img src="https://i.imgur.com/wPl2KuF.jpg" class=" thumbnail ">
+            </div>
+            <div class="col-md p-0" >
+                <img src="https://i.imgur.com/NK2K8ug.jpg" class=" thumbnail ">
+            </div>
+            <div class="col-md p-0"  >
+                <img src="https://i.imgur.com/yF34ufY.jpg" class=" thumbnail ">
+            </div>
+            <div class="col-md p-0" >
+                <img src="https://i.imgur.com/5uGiD7A.jpg" class=" thumbnail ">
+            </div>
+        </div>
+      
+    </div>
+</footer>
 </html>
