@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!--head boostrap mode-->
@@ -10,7 +9,7 @@
     <!--google-font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -25,8 +24,8 @@
     }
 </style>
 <header style="font-family: 'Roboto Slab', cursive;">
-    <div name="Title" class="jumbotron text-center mb-1">
-        <h1>高中教師社會科學增能平台</h1>
+    <div name="Title" class="jumbotron text-center mb-0">
+        <h2>高中教師社會科學增能平台</h2>
     </div>
 </header>
 <!-- onClick="handleClick(event)" 暫時刪除-->
@@ -48,14 +47,14 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-secondary btn w-100 mb-1" data-toggle="collapse"
-                            data-target="#inform" value='change'>
+                        data-target="#inform" value='change'>
                         更改資訊 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div id=inform class="div-collapse collapse input-group mt-2">
                     <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                            aria-haspopup="true" aria-expanded="false">
                             類別
                         </button>
                         <div class="dropdown-menu">
@@ -67,7 +66,7 @@
                         </div>
                     </div>
                     <input id="change-input" type="text" class="form-control"
-                           aria-label="Text input with dropdown button">
+                        aria-label="Text input with dropdown button">
                     <div class="input-group-append">
                         <!-- 更改信息區域 -->
                         <form id="change-form" method="POST" action="/SAN/ChangeMe" style="display: none;">
@@ -83,19 +82,23 @@
             <!-- 中間的版面 -->
             <div class="col-md-4 text-center d-flex  align-items-center justify-content-center">
                 <div class=" mb-5">
-                    <form method="POST" action="/CB/to_4">
+                    <form method="POST" action="/CB/department/ALL">
                         <input type="text" name="ID" value="<%= ID %>" style="display: none;">
-                        <input type="submit" class="btn btn-info btn-lg mb-1" value="進入課程">
+                        <input type="submit" class="btn btn-info btn-lg mb-1 btn-block" value="進入課程">
+                    </form>
+                    <form method="POST" action="/CB/department/YT">
+                        <input type="text" name="ID" value="<%= ID %>" style="display: none;">
+                        <input type="submit" class="btn btn-outline-info btn-lg mb-1 btn-block" value="老師看板">
                     </form>
                     <div>
-                        <button type="button" class="btn btn-outline-info btn-lg mb-1" data-toggle="collapse"
-                                data-target="#lover" value='introduction'>
+                        <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block" data-toggle="collapse"
+                            data-target="#lover" value='introduction'>
                             我的最愛
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-outline-info btn-lg w-100 mb-1" data-toggle="collapse"
-                                data-target="#notice" value='register'>
+                        <button type="button" class="btn btn-outline-info btn-lg btn-block mb-1" data-toggle="collapse"
+                            data-target="#notice" value='register'>
                             通知
                         </button>
                     </div>
@@ -124,11 +127,11 @@
 
                             <div class="col-5 d-inline-flex ">
                                 <input type=button value=直接進入版面 class="ml-2 btn btn-outline-secondary"
-                                       onclick="change_Page('lover<%=lover[key]%>','<%= l_inform[0] %>')" />
+                                    onclick="change_Page('<%=lover[key]%>','lover')" />
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
-                                       onclick="delete_List('<%-lover[key]%>', 'lover')" />
+                                    onclick="delete_List('<%-lover[key]%>', 'lover')" />
                                 <form id="lover<%=lover[key]%>" method="POST" action="/JB/to_<%= l_inform[0] %>_board"
-                                      style="margin: 10px; display: none;">
+                                    style="margin: 10px; display: none;">
                                     <%  if(l_inform[0] ==='private'){%>
                                     <input type="password" id="pw-lover<%=lover[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -162,13 +165,13 @@
                             <span class="col-2"><b>Place: </b><br><%= n_inform[2] %></span>
                             <div class="col-5 d-inline-flex ">
                                 <input type=button value=直接進入版面
-                                       class="ml-2 btn btn-outline-secondary <%= n_inform[0] %>"
-                                       onclick="change_Page('notice<%=notice[key]%>','<%= n_inform[0] %>')" />
+                                    class="ml-2 btn btn-outline-secondary <%= n_inform[0] %>"
+                                    onclick="change_Page('<%=notice[key]%>','notice')" />
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
-                                       onclick="delete_List('<%-notice[key]%>','notice')" />
+                                    onclick="delete_List('<%-notice[key]%>','notice')" />
 
                                 <form id="notice<%=notice[key]%>" method="POST" action="/JB/to_<%=n_inform[0]%>_board"
-                                      style="display:none">
+                                    style="display:none">
                                     <%  if(n_inform[0] ==='private'){%>
                                     <input type="password" id="pw-notice<%=notice[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -186,17 +189,7 @@
                 </div>
             </div>
         </div>
-        <div id="demo" class="carousel slide">
-            <!-- Indicators
-            <ul class="carousel-indicators">
-                <li data-target="#demo" data-slide-to="0" class="active"></li>
-                <li data-target="#demo" data-slide-to="1"></li>
-                <li data-target="#demo" data-slide-to="2"></li>
-            </ul>
-            <br> -->
 
-
-        </div>
         <div class="container-fluid d-flex justify-content-center mt-3 ">
             <div style="height: 260px">
                 <img src="https://i.imgur.com/TWgg6QP.jpg" class=" thumbnail h-100">
@@ -214,16 +207,34 @@
                 <img src="https://i.imgur.com/5uGiD7A.jpg" class=" thumbnail h-100">
             </div>
         </div>
-        <!-- 輸入密碼 -->
-        <div class="modal fade" id="pw-modal">
+        <!--私版浮框 -->
+        <div class="modal fade" id="pr-modal">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <!-- Modal body -->
+                    
                     <div class="modal-body ">
                         <input type="password" class="form-control mt-1" placeholder="請輸入版的密碼" />
-                        <button id="pw-btn" type="button" class="btn btn-secondary mt-2 float-right"
+                        <button id="pr-btn" type="button" class="btn btn-success mt-2 float-right"
                                 data-dismiss="modal">
-                            Enter
+                            確認
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <!--公版浮框 -->
+         <div class="modal fade" id="pu-modal" role="alertdialog">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <!-- Modal body -->   
+                    <div class="modal-body ">
+                        <h4>Header Test</h4>
+                       <label>文字介紹</label>
+                       <hr>
+                       <strong >確認跳轉?</strong>
+                       <button id="pu-btn" type="button" class="btn btn-success  float-right"
+                       data-dismiss="modal"> 確認
                         </button>
                     </div>
                 </div>
@@ -268,17 +279,12 @@
             }
         });
 
-        //private board enter password
-        $('#pw-btn').on('click', function () {
-            let password = $(this).siblings('input[type="password"]').val();
-            $('#pw-' + board_id).val(password);
-            $('#' + board_id).submit();
-        });
+        
 
         function handleClick(event) {
             if (event.target.tagName == "DIV") {
                 $('#main .div-collapse').collapse('hide');
-                console.log(event.target.tagName);
+                // console.log(event.target.tagName);
                 if (input_item != null) {
                     input_item.fadeOut();
                     input_item = null;
@@ -286,57 +292,85 @@
             }
 
         }
-        function change_Page(form_id, board) {
-            if (board === "private") {
-                console.log(form_id, board);
-                $('#pw-modal').modal('show');
-                board_id = form_id;
-                console.log(board_id);
+        function change_Page(form_id,board_type) {
+            var inform=form_id.split('_') ;
+            var board=inform[0];
+            board_id = board_type+form_id;
+            
+            if (board === "private") {      
+                $('#pr-modal').modal('show');         
             } else {
-                $('#' + form_id).submit();
+                $.ajax({
+                    type: "get",
+                    url: "/JB/get_board_introduce",
+                    data: {
+                        board_ID:board+'_'+inform[1],
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        // console.log(response["introduce"]);
+                        $('#pu-btn').siblings('h4').text(response["title"]);
+                        $('#pu-btn').siblings('label').text(response["introduce"]);
+                    },
+                    error: function(e){
+                        alert("不可預期的錯誤");
+                    }
+                });
+                $('#pu-modal').modal('show');
+                // console.log(11111);
             }
         }
+        //public board enter 
+        $('#pu-btn').on('click', function () {
+            $('#' + board_id).submit();
+        });
+
+        //private board enter password
+        $('#pr-btn').on('click', function () {
+            let password = $(this).siblings('input[type="password"]').val();
+            $('#pw-' + board_id).val(password);
+            $('#' + board_id).submit();
+        });
 
         //delete function
         function delete_List(In, mode) {
-            var yes = confirm('你確定要刪除嗎？');
-
-            if (yes) {
-                var inform = In.split('_');
-                console.log("notice_success");
-                if (mode == "lover") {
-                    $.ajax({
-                        type: "post",
-                        url: "/SAN/delete_lover",
-                        data: {
-                            ID: '<%= ID %>',
-                            board_ID: inform[0] + '_' + inform[1],
-                        },
-                        dataType: "json",
-                        success: function (response) {
-                            console.log("success");
-                        }
-                    });
-                } else if (mode == "notice") {
-                    $.ajax({
-                        type: "post",
-                        url: "/SAN/delete_notice",
-                        data: {
-                            ID: '<%= ID %>',
-                            board_ID: inform[0] + '_' + inform[1],
-                            place: inform[2]
-                        },
-                        dataType: "json",
-                        success: function (response) {
-                            console.log("success");
-                        }
-                    });
-                }
-                $('#' + In).remove();
-                alert('已刪除');
+    var yes = confirm('你確定要刪除嗎？');
+        if (yes) {
+            var inform = In.split('_');
+            console.log("notice_success");
+            if (mode == "lover") {
+                $.ajax({
+                    type: "post",
+                    url: "/SAN/delete_lover",
+                    data: {
+                        ID: '<%= ID %>',
+                        board_ID: inform[0] + '_' + inform[1],
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("success");
+                    }
+                });
+            } else if (mode == "notice") {
+                $.ajax({
+                    type: "post",
+                    url: "/SAN/delete_notice",
+                    data: {
+                        ID: '<%= ID %>',
+                        board_ID: inform[0] + '_' + inform[1],
+                        place: inform[2]
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("success");
+                    }
+                });
             }
+            $('#' + In).remove();
+            alert('已刪除');
         }
-    </script>
+    }
+</script>
 </body>
 
 </html>

@@ -6,6 +6,8 @@
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
     <!--google-font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -13,38 +15,58 @@
     <script src="/javascripts/verify.js"></script>
     <title></title>
 </head>
+<!-- 手機image切測試 -->
+<style>
+    @media (max-width: 500px) {
+        #image-div {
+            display: none;
+        }
+    }
+</style>
+<header>
+    <div name="Title" class="jumbotron text-center  mb-0">
+        <h2>高中教師社會科學增能平台</h2>
+    </div>
+</header>
 
 <body id="main" style="font-family: 'Roboto Slab', cursive;">
     <div class="container-fluid">
         <div class="row ">
             <!--image-->
-            <div class="col-md-4  p-0 mt-2">
+            <div id="image-div" class="col-md-4  p-0 mt-2">
                 <img class=" Thumbnail" src="https://i.imgur.com/nBsk21U.jpg" alt="department-image"
-                     style="width:100%; ">
+                    style="width:100%; ">
             </div>
 
-            <div class="col-md-4 p-0 m-0">
-                <div name="Title" class=" jumbotron text-center">
-                    <h2>高中教師社會科學增能平台</h2>
-                </div>
-                <div class=" btn-group-vertical d-flex align-items-center mt-5">
-                    <div>
-                        <button type="button" class="btn btn-outline-info btn-lg mb-1" data-toggle="collapse"
-                                data-target="#log-in-form" value='log-in'>
-                            登入
-                        </button>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-outline-info btn-lg" data-toggle="collapse"
-                                data-target="#register-form" value='register'>
-                            註冊
-                        </button>
-                    </div>
+            <div class="col-md-4 ">
 
+                <div class=" justify-content-center d-flex align-items-center mt-5 text-center">
+                    <div class="mt-3">
+
+                        <div>
+                            <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
+                                data-toggle="collapse" data-target="#log-in-form" value='log-in'>
+                                登入
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
+                                data-toggle="collapse" data-target="#register-form" value='register'>
+                                註冊
+                            </button>
+                        </div>
+                        <div>
+                            <a type="button" class="btn btn-outline-warning btn-lg mb-1 btn-block"
+                                href="http://140.116.183.54:1338">
+                                老師管理
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
                 <!-- 表單發送區 -->
                 <div id="content-div" class="pt-4  h-25">
-                    <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
+                    <!-- <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
                         <form id="sign_in_form" method="post" action="/SAN/sign_in" class="carousel-item-right">
                             <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
                                 <input type="text" name='ID' placeholder="ID" />
@@ -54,10 +76,28 @@
                             <div id="verify" style="text-align:center"></div>
                             <input id="sign_in" type="submit" class=" btn btn-secondary mt-2" />
                         </form>
-                        <br /><br /><br />
-                    </div>
+                      
+                    </div> -->
+                    <!--登入 -->
+                    <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
+                        <form method="post" action="/SAN/sign_in">
+                            <div class="w-75 text-center m-auto"
+                                style="font-family:  'Arial Narrow', Arial, sans-serif; ">
+                                <input type="text" name='ID' class="form-control mb-1" placeholder="ID" />
+                                <div class="input-group ">
+                                    <input type="password" name='password' class="form-control mb-1" placeholder="密碼" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text eyes mb-1" style="cursor: pointer;"><i
+                                                class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
 
-                    <div id="register-form" class="div-collapse collapse text-center" data-parent="#content-div">
+                            </div>
+                            <div id="verify" style="text-align:center"></div>
+                            <input type="submit" class=" btn btn-secondary mt-2" />
+                        </form>
+                    </div>
+                    <!-- <div id="register-form" class="div-collapse collapse text-center" data-parent="#content-div">
                         <form id="sign_up_form" method="post" action="/SAN/register" class="carousel-item-right">
                             <div style="font-family:  'Arial Narrow', Arial, sans-serif;">
                                 <input type="text" name='ID' placeholder="ID" required />
@@ -72,22 +112,41 @@
                             <input id="sign_up" type="submit" class=" btn btn-secondary  mt-2" />
                         </form>
                         <br /><br /><br />
+                    </div> -->
+
+                    <!--註冊 -->
+                    <div id="register-form" class="div-collapse collapse text-center " data-parent="#content-div">
+                        <form method="post" action="/SAN/register">
+                            <div class="text-center m-auto w-75   "
+                                style="font-family:  'Arial Narrow', Arial, sans-serif; ">
+                                <input type="text" name='name' class="form-control mb-1" placeholder="名字" required />
+                                <input type="text" name='ID' class="form-control mb-1 " placeholder="ID" required />
+                                <div class="input-group mb-1">
+                                    <input type="password" name='password' class="form-control " placeholder="密碼"
+                                        required />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text eyes" style="cursor: pointer;"><i
+                                                class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <input type="email" name='mail' class="form-control mb-1" placeholder="E-mail"
+                                    required />
+                                <input type="text" name='school' class="form-control mb-1" placeholder="學校" required />
+                                <select type="text" name='gender' class="form-control mb-1" required>
+                                    <option>男</option>
+                                    <option>女</option>
+                                </select>
+                            </div>
+                            <div id="verify2"  style="text-align:center"></div>
+                            <input type="submit" class=" btn btn-secondary  mt-2" />
+                        </form>
                     </div>
                 </div>
-                <p>
-                    <br /><br />
-                    <h5 class="text-center">
-                        政治系●法律系●教育所●經濟系●心理系
-                        <br>
-                        【自發】X【互動】X【共好】
-                    </h5>
 
-
-                </p>
             </div>
             <!-- 介紹區 -->
             <div id="intro-div" class="col-md-4 d-flex" style="height: 700px ">
-                <div class="align-self-center pt-5">
+                <div class=" pt-5">
                     <h1 class=" text-center"><%=title%></h1>
                     <br>
                     <%-include%>
@@ -108,17 +167,17 @@
                     text.find('input[name = "name"]').val('<%=name%>');
                     text.find('input[name = "mail"]').val('<%=mail%>');
                     text.find('input[name = "school"]').val('<%=school%>');
-                    text.find('input[name = "gender"]').val('<%=gender%>');
+                    text.find('select[name = "gender"]').val('<%=gender%>');
                 }
             }
-            $("#main").on('click', function () {
-                if (!$(":input").is(":focus")) {
+            $("#main").on('click', function (event) {
+                if (event.target.tagName == "DIV") {
                     $('#main .div-collapse').collapse('hide')
                 }
             });
             $('#verify').codeVerify({
                 type: 2,
-                figure: 10,  //位数，仅在type=2时生效
+                figure: 10, //位数，仅在type=2时生效
                 arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
                 width: '100%',
                 height: '30px',
@@ -139,7 +198,7 @@
 
             $('#verify2').codeVerify({
                 type: 2,
-                figure: 10,  //位数，仅在type=2时生效
+                figure: 10, //位数，仅在type=2时生效
                 arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
                 width: '100%',
                 height: '30px',
@@ -157,9 +216,26 @@
                     $('#sign_up_form').attr("onsubmit", "return false");
                 }
             });
+            $('.eyes').on('click', function () {
+                // console.log(11254);
+                if ($(this).parent().siblings('input').attr("type") == "text") {
+                    $(this).parent().siblings('input').attr('type', 'password');
+                    $(this).children('i').addClass("fa-eye-slash");
+                    $(this).children('i').removeClass("fa-eye");
+                } else if ($(this).parent().siblings('input').attr("type") == "password") {
+                    $(this).parent().siblings('input').attr('type', 'text');
+                    $(this).children('i').removeClass("fa-eye-slash");
+                    $(this).children('i').addClass("fa-eye");
+                }
+            });
         });
     </script>
 </body>
-
+<footer class="m-auto">
+    <h5 class="text-center">
+        政治系●法律系●教育所●經濟系●心理系
+        <br>
+        【自發】X【互動】X【共好】</h5>
+</footer>
 
 </html>

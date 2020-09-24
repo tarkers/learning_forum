@@ -42,7 +42,7 @@
                 <strong>帳號:</strong><span><%=data[i]['ID']%></span><br />
                 <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">      貼文編號: <%=data[i]['num']%></small>  <a name="<%=data[i]['ID']%>" style="font-size:50%">編輯本篇貼文</a> <br />
                 <small style="font-size:50%" class="simple_include"><%if(data[i]['include'].length > 30){%><%=data[i]['include'].substr(0,30)%><%}else{%><%=data[i]['include'].substr(0)%><%}%>.....按展開內容看全部</small>
-                <div class="include"><%-data[i]['include']%></div> <br />
+                <div class="include" style="word-wrap: break-word;"><%-data[i]['include']%></div> <br />
                 <input class="btn-lg bg-warning" type="button" value="展開內容" />
                 <!-- 寄留言-->
                 <form action="/DB/discuss" method="post">

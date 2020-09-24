@@ -28,12 +28,13 @@
 		<div id="title-div" style="border: 0;">
 			<h3 for="main " class=" d-inline-block"><strong>主題</strong></h3>
 			<span style="display: none;"><small style="color: red; ">*主題不可為空</small></span>
-			<input  type="text" class="form-control w-100" aria-describedby="basic-addon1"
-				 style="font-weight: bold;font-size: xx-large;">
+			<input type="text" class="form-control w-100" aria-describedby="basic-addon1"
+				style="font-weight: bold;font-size: xx-large;">
 		</div>
 
 		<div id="content-area" class="pt-2">
-			<h3 for="main"><strong>內文</strong></h3>
+			<h3 for="main" class=" d-inline-block"><strong>內文</strong></h3>
+			<span style="display: none;" ><small style="color: red; ">*內文不可為空</small></span>
 			<div class="">
 				<!-- heading-group -->
 				<span class="ml-1">
@@ -106,8 +107,8 @@
 						<button class="dropdown-item heading" value="rgb(170, 170, 170)"
 							style="font-weight: bold; color: rgb(102, 102, 102);">gray</button>
 						<button class="dropdown-item heading" value="rgb(76, 78, 78)"
-                            style="font-weight: bold; color: rgb(76, 78, 78);">dark</button>
-                            <div class="dropdown-divider"></div>
+							style="font-weight: bold; color: rgb(76, 78, 78);">dark</button>
+						<div class="dropdown-divider"></div>
 						<button class="dropdown-item heading" value=''
 							style="font-weight: bold; color: rgb(46, 46, 46);">無背景上色</button>
 					</div>
@@ -177,7 +178,8 @@
 			</div>
 		</div>
 		<!-- 內文輸入區 -->
-		<div id="textbox" class="form-control" contentEditable="true" style="height: 630px; overflow-y: auto;">
+		<div id="textbox" class="form-control" contentEditable="true"
+			style="height: 630px; overflow-y: auto;word-wrap: break-word;">
 			<div><br></div>
 		</div>
 	</div>
@@ -215,7 +217,7 @@
 		<input type="password" placeholder="發文密碼" name="board_password"><br />
 		<input type="submit" />
 	</form>
-    <input id="Hidden1" type="hidden" value="<%=type%>"/>
+	<input id="Hidden1" type="hidden" value="<%=type%>" />
 </body>
 <footer>
 	<div class="text-center pb-2">
@@ -225,18 +227,24 @@
 </footer>
 <!-- send information -->
 <script>
-    var board_type = $('#Hidden1').val();
+	var board_type = $('#Hidden1').val();
 	$('#send-label').on('click', function () {
-		if($('#title-div >input').val().split(" ").join("")==""){
-			location.href = "#title-div"; 
-			$('#title-div >input').addClass('alert-danger');
+		$('#title-div >span').hide();
+		$('#content-area >span').hide();
+		if ($('#title-div >input').val().split(" ").join("") == "") {
+			location.href = "#title-div";
 			$('#title-div >span').show();
+			return;
+		}else if ($('#textbox').children().text().split(" ").join("") =="") {
+			console.log($('#textbox').children().text());
+			location.href = "#content-area";
+			$('#content-area >span').show();
 			return;
 		}
 		$('#' + board_type + '-form > input[name="title"]').val($('#title-div >input').val());
 		$('#' + board_type + '-form > input[name="include"]').val(document.getElementById("textbox").innerHTML);
-		console.log($('#' + board_type + '-form > input[name="title"]').val());
-		console.log($('#' + board_type + '-form > input[name="include"]').val());
+		// console.log($('#' + board_type + '-form > input[name="title"]').val());
+		// console.log($('#' + board_type + '-form > input[name="include"]').val());
 		if (board_type == 'private') {
 			var password = prompt("請輸入密碼");
 			if (password != null && password != "") {
@@ -251,13 +259,12 @@
 <script>
 	$('.color-menu > button').on('click', function () {
 		if ($(this).parent().hasClass('back')) {
-            if($(this).val()===""){
-                let node =window.getSelection().anchorNode.parentNode;
-                $(node).css("background-color", ""); 
-            }
-            else{
-                docCommand('backColor', $(this).val());
-            }		
+			if ($(this).val() === "") {
+				let node = window.getSelection().anchorNode.parentNode;
+				$(node).css("background-color", "");
+			} else {
+				docCommand('backColor', $(this).val());
+			}
 		} else {
 			docCommand('foreColor', $(this).val());
 		}
@@ -298,7 +305,8 @@
 				$('#textbox').focus();
 				document.execCommand("insertHTML", false, link);
 			} else {
-				link = '<a href=' + link + ' title=' + link + ' target="_blank" rel="noopener noreferrer">' + name + '</a>';
+				link = '<a href=' + link + ' title=' + link + ' target="_blank" rel="noopener noreferrer">' +
+					name + '</a>';
 				$('#textbox').focus();
 				document.execCommand("insertHTML", false, link);
 			}
