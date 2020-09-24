@@ -403,6 +403,7 @@
 
 <script name="imgur">
 	// imgur api
+    var api = 'http://127.0.0.1:1337/getImg';
 	$("document").ready(function () {
 		$('input[type=file]').on("change", function () {
 
@@ -415,27 +416,23 @@
 					console.log("Please select a smaller file");
 					return false;
 				}
-
-				// Replace ctrlq with your own API key
-				var apiUrl = 'http://localhost:5000/saveImg';
-
-				var formData = new FormData();
-				formData.append("image", $files[0]);
-                formData.append("place",'\\public\\');
+                var formData = new FormData();
+                formData.append('file', $files[0]);
 				var settings = {
 					"async": true,
 					"crossDomain": true,
-					"url": apiUrl,
-					"method": "POST",
-					"datatype": "json",
-					"processData": false,
-					"data": formData,
+					"url": api,
+					"type": "POST",
+                    'contentType': false, //required
+                    'processData': false, // required
+                    'mimeType': 'multipart/form-data',
+                    'data': formData,
 					beforeSend: function (xhr) {
 						$('#img-label >span').show();
 					},
 					success: function (res) {
-						console.log(res.data.link);
-						img = '<p><img src="' + res.data.link +
+						console.log(res);
+						img = '<p><img src="' + res +
 							'" style="width:300px;border: solid 1px #fc0; align:left;"/></p>';
 						$('#textbox').focus();
 						document.execCommand("insertHTML", false, img);
@@ -446,7 +443,7 @@
 					}
 				}
 				$.ajax(settings).done(function (response) {
-					console.log("Done | 成功");
+					console.log("Done | 完成");
 					$('#img-label >span').hide();
 				});
 			}
