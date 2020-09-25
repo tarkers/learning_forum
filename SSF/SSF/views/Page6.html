@@ -6,184 +6,187 @@
     <title>Bootstrap Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
+<!-- Header title -->
+<header>
+    <div name="Title" class="jumbotron text-center  pb-4 mb-0" style="font-family: 'Roboto Slab', cursive;">
+        <h1>公有看板區</h1>
+    </div>
+</header>
 
-<body>
-
+<body style="font-family: 'Roboto Slab', cursive;">
     <div class=" container-fluid">
-        <div class="row" style="height: 600px;">
-            <div class="col-md-8 ">
-                <h1 id= "department_name" class=" text-center"></h1>
-                <!--<div class=" text-center"><%-introduce%></div>-->
-                <div>
-                    <div class=" text-center">
-                        <p class=" text-center">篩選設定</p>
-                        <div class="dropdown " style=" display:inline-block">
-                            <span> &nbsp; &nbsp;<input id='self-search' type='text' placeholder="關鍵字搜尋:" onclick=unlock_List()> </span>
-                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                常見關鍵字搜尋
-                            </button>
-                            <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <%for(var key in keywords){%>
-                                <a class="dropdown-item" id='keywords<%=keywords[key]%>' onclick=unlock_List()><%=keywords[key]%></a>
-                                <%}%>
-                            </span>
-                            <br>
-                        </div>                     
+        
+        <div class="row" style="height: 800px;">
+            <!-- 左邊的欄位 -->
+            <div class="col-md-2" style="background-color:rgb(243, 243, 243);">
+                <div class="mt-4  d-flex flex-column">
+                    <!-- SHOW ALL -->
+                    <div class="p-1">
+                        <button class="btn btn-primary  btn-block " value="all" onclick="unlock_List()">全部顯示</button>
                     </div>
-                </div>
-                <br>
-                
-                <div class="btn-tab">
-                    <button type="button" id='tabs0' class="btn btn-primary " onclick=unlock_List()>全部</button>
-                    <%for(var key in tabs){%>
-                    <button type="button" id='tabs<%=key%>' class="btn btn-primary " onclick=unlock_List()><%=tabs[key]%></button>
-                    <%}%>
-                </div> 
-                <br>
-                <div class="list-group flex-fill" id="list-tab" role="tablist" style=" height:400px; overflow-y:auto">               
-                    <%for(var i=0;i<boards.length;i++){%>
-                        <a class="list-group-item list-group-item-action clearfix"
-                            id='list-<%=boards[i]['board_ID']%>' data-toggle="list"
-                            href='#panel-<%=boards[i]['board_ID']%>' role="tab"
-                            aria-controls=<%=boards[i]['board_ID']%> text-tab="<%=boards[i]['tab']%>" text-title="<%=boards[i]['title']%>"
-                            style="display:none">
-                            <strong class=" text-center"><%=boards[i]['tab']%>: <%=boards[i]['title']%></strong>
-                             <!--change page button-->
-                             <input type="submit" class="btn btn-danger  float-right" name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>            
-                            <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>" 
-                                name="<%=boards[i]['tab']%>">
-                                <input type='text' name='ID' value='<%=ID%>' style="display: none;">
-                                <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>" style="display: none;">                       
-                            </form>
-                        </a>
-                    <%}%>
+                    <!-- 關鍵搜尋 -->
+                    <div class="w-100  p-1">
+                        <!-- 延展button -->
+                        <button class="btn btn-primary dropdown-toggle btn-block " type="button"
+                            id="dropdownMenuButton" data-toggle="collapse" data-target="#keywordpanel"
+                            aria-haspopup="true" aria-expanded="false" onclick="unlock_List()">
+                            關鍵字搜尋
+                        </button>
+                        
+                        <div class="collapse multi-collapse" id="keywordpanel">
+                            <!-- 自己輸入關鍵字 -->
+                            <div class="input-group pb-1 pt-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-search"
+                                            aria-hidden="true"></i></span>
+                                </div>
+                                <input id="self-search" type="text" class="form-control" placeholder="輸入關鍵字"
+                                    aria-label="specific">
+                            </div>
+                            <!-- 常見關鍵字 -->
+                            <label class=" list-group-item-dark text-center w-100 m-0 p-2"><strong>常見關鍵字</strong> </label>
+                            <div class="list-group">           
+                                <%for(var key in keywords){%>
+                                <a  data-toggle="list" role="tab" class="list-group-item list-group-item-action clearfix list-group-item-heading
+                                 text-center p-1" id='keywords<%=keywords[key]%>'
+                                    style="cursor: pointer;" ><%=keywords[key]%>
+                                </a>
+                                <%}%>
+                        </div>
+                      </div>
+                    </div>
                     
                 </div>
-                
             </div>
-            <div class="col-md-4 h-100 " style="background-color:lavenderblush;">
-                <div id="first_introduce" ><%-introduce%></div>
-             
+            <!-- 列表區域 -->
+            <div class="col-md-6  pt-1">
+                
+                <div class="list-group  flex-fill" id="list-tab" role="tablist" style=" height:500px; overflow-y:auto">
+                    <h3 class="text-center m-auto" style="display: none;">查無相關列表</h3>               
+                    <%for(var i=0;i<boards.length;i++){%>
+                        <a class="list-group-item list-group-item-action list-group-item-success"
+                            id='list-<%=boards[i]['board_ID']%>' data-toggle="list" role="tab"
+                            href='#panel-<%=boards[i]['board_ID']%>' 
+                            aria-controls=<%=boards[i]['board_ID']%> text-tab="<%=boards[i]['tab']%>"
+                            text-title="<%=boards[i]['title']%>" >
+                            <strong class=" text-center"><%=boards[i]['tab']%>:
+                                <%=boards[i]['title']%></strong>
+                            <!--跳轉按鈕-->
+                            <input type="submit" class="btn btn-danger  float-right"
+                                name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>
+                            <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>"
+                                name="<%=boards[i]['tab']%>">
+                                <input type='text' name='ID' value='<%=ID%>' style="display: none;">
+                                <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>"
+                                    style="display: none;">
+                            </form>
+                        </a>
+                        <%}%>    
+                </div>          
+            </div>
+            <!-- 介紹面板 -->
+            <div class="col-md-4 h-100 pt-2" style="background-color:rgb(255, 247, 213);">
+                <div id="first_introduce" >
+                    <p style=" text-align: justify;text-justify: inter-word;">
+                        <%-introduce%>
+                    </p>
+                </div>
                 <div class=" tab-content" id="nav-tabContent">
                     <%for(var i=0;i<boards.length;i++){%>
-                        <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
-                            aria-labelledby='list-<%=boards[i]['board_ID']%>'>
+                    <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
+                        aria-labelledby='list-<%=boards[i]['board_ID']%>'>
+                        <p style=" text-align: justify;text-justify: inter-word;">
                             <%-boards[i]['include']%>
-                        </div>
-                    <%}%>
-                    <br>
+                        </p>
+                </div>
+                <%}%>
                 </div>
             </div>        
         </div>
       </div>
+
     <script>
-        var lock=false;
-        var item = null;
-        var nowtopic="全部";
-        
-        switch ('<%=DE%>') {
-            case 'PSY':
-                $('#department_name').text('心理系');
-                break;
-            case 'PS':
-                $('#department_name').text('政治系');
-                break;
-            case 'ECON':
-                $('#department_name').text('經濟系');
-                break;
-            case 'LAW':
-                $('#department_name').text('法律系');
-                break;
-            default:
-                $('#department_name').text('<%=DE%>');
-                break;
-        }
-
-        function unlock_List(){
-            lock=false; 
-            $('.dropdown-toggle').text('常見關鍵字搜尋');
-            if(item!=null){
-                $(item).removeClass('active');
-                $('#panel-'+item.attr('id').substring(5)).removeClass('show active');
-                item=null;
-            }          
-
-        }
-        $('.dropdown-menu a').click(function(){
-            var kind =$(this).text();
-            $(".dropdown-toggle").text(kind);         
-            select_Topic('text-title',kind);
-          });
-          
-        $('.list-group-item').mouseover(function(){  
-            $("#first_introduce").hide();
-            if(lock==false){
-                if(item!=null){
-                    $(item).removeClass('active');
-                    $('#panel-'+item.attr('id').substring(5)).removeClass('show active');
-                }
-                $(this).addClass('active');        
-                item=$(this);
-                $('#panel-'+item.attr('id').substring(5)).addClass('show active');
-            }               
-        });
-        $('.btn-tab button').click(function(){ 
-            $(".dropdown-toggle").text("常見關鍵字搜尋");   
-            $('.btn-tab button').removeClass(" btn-light");
-            $(this).addClass(" btn-light");   
-            nowtopic=$(this).text();
-            if($(this).text()==="全部"){   
-                $('.list-group-item').attr('style','display:block');
+    var lock = false;
+    var before_list = null;
+    // 解除tab鎖定
+    function unlock_List() {
+        lock = false;
+        $('#list-tab >h3').hide();
+        $("#first_introduce").show();
+        $('.list-group >a').removeClass('show active');
+        $('.list-group >a').attr('style', 'display:block');
+        $('#self-search').val('');
+    }
+    //關鍵搜尋點選
+    $('#self-search').click(function () {
+        $('.list-group-item-heading').removeClass('show active');//常見關鍵字取消
+    });
+   
+    //點選列表
+    $('#list-tab >a').hover(function () {
+        $("#first_introduce").hide();
+        if (lock == false) {
+            if (before_list != null) {
+                $(before_list).removeClass('active');
+                $('#panel-' + before_list.attr('id').substring(5)).removeClass('show active');
             }
-            else{
-                select_Topic('text-tab',$(this).text());
-            }              
-          });
-        $('.list-group-item').click(function(){          
-            lock=true;      
-        });
+            before_list = $(this);
+            $('#panel-' + before_list.attr('id').substring(5)).addClass('show active');
+        }
+    });
+  
+    $('#list-tab >a').click(function () {
+        lock = true;
+    });
+    //關鍵搜尋打字
+    $("#self-search").on('keyup', function (e) {
+        select_Topic('text-title', $(this).val());
+    });
+    //常見關鍵字搜尋
+    $('.list-group-item-heading').click(function(){
+        // console.log($(this).text());
+        select_Topic('text-title', $(this).text());
+    });
+    //跳轉頁面
+    $("input[type = 'submit']").click(function () {
+        $('#' + $(this).attr('name')).submit();
+    });
 
-        $("#self-search").on('keyup', function (e) {
-            // if (e.key === 'Enter' || e.keyCode === 13) {  
+    function select_Topic(mode, kind) {
+        let hasTab=false;
+        kind = kind.toLowerCase();
+        var tab_list = $('#list-tab').children('a');
+        console.log(tab_list.length);
+        for (var i = 0; i < tab_list.length; ++i) {
+            let textTitle = tab_list[i].getAttribute("text-title").toString().toLowerCase(); 
+            // let    textTab = tab_list[i].getAttribute("text-tab").toString().toLowerCase(); //search tab
+            // if (mode == "text-tab") {
+            //     if (textTab.includes(kind)) {
+            //         tab_list[i].setAttribute('style', 'display:block');
+            //     } else {
+            //         tab_list[i].setAttribute('style', 'display:none');
+            //     }
+            // } else if (mode == "text-title") {
+            if (textTitle.includes(kind)) {
+                hasTab=true;
+                tab_list[i].setAttribute('style', 'display:block');
+            } else {
+                tab_list[i].setAttribute('style', 'display:none');
+            }
             // }
-            select_Topic('text-title',$(this).val());
-        });
+            hasTab?$('#list-tab >h3').hide():$('#list-tab >h3').show()
 
-        $("input[type = 'submit']").click(function () {           
-            $('#'+$(this).attr('name')).submit();
-          });
-
-        function select_Topic(mode,kind){
-            kind=kind.toLowerCase();
-            var tab_list=document.getElementsByClassName("list-group-item");
-            for(var i=0;i<tab_list.length;++i){
-                let textTitle=tab_list[i].getAttribute("text-title").toString().toLowerCase();
-                let textTab=tab_list[i].getAttribute("text-tab").toString().toLowerCase();
-                //search tab
-                if(mode=="text-tab"){
-                    if(textTab.includes(kind)){
-                        tab_list[i].setAttribute('style','display:block');
-                    } else{
-                        tab_list[i].setAttribute('style','display:none');   
-                    }
-                }else if(mode=="text-title"){
-                    if(((textTab==nowtopic)||nowtopic=="全部") && textTitle.includes(kind)){
-                        tab_list[i].setAttribute('style','display:block');
-                    }  else{
-                        tab_list[i].setAttribute('style','display:none');
-                    }          
-                }
-                
-            }
         }
-
-    </script>
-</body>
-
+    } 
+        </script> 
+    </body> 
 </html>
