@@ -246,7 +246,7 @@
 		// console.log($('#' + board_type + '-form > input[name="title"]').val());
 		// console.log($('#' + board_type + '-form > input[name="include"]').val());
 		if (board_type == 'private') {
-			var password = prompt("請輸入密碼");
+			var password = prompt("請輸入看板進入密碼");
 			if (password != null && password != "") {
 				$('#' + board_type + '-form > input[name="board_password"]').val(password);
 			} else { //press 取消
