@@ -1,7 +1,6 @@
 'use strict';
 var http = require('http');
 var querystring = require('querystring');
-var util = require('util');
 var formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
@@ -37,7 +36,7 @@ function createCSV(origin_data) {
 }
 
 http.createServer(function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', /*'140.116.183.*'*/ '*');
+    res.setHeader('Access-Control-Allow-Origin', /*'140.116.*'*/ '*');
     if (req.method == 'GET') {
         fileServer.serve(req, res);
     }
