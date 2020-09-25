@@ -58,12 +58,7 @@
                     </div>
                     <input type="text" class="form-control" name="school" required>
                 </div>
-                <div class="input-group mb-2  pr-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">科系</span>
-                    </div>
-                    <input type="text" class="form-control" name="class" required>
-                </div>
+
                 <div class="input-group mb-2  pr-2">
                     <div class="input-group-prepend">
                         <span class="input-group-text">類型</span>
@@ -81,14 +76,19 @@
                     <input type="number" min="1" class="form-control" name="board"
                         oninput="$(this).val($(this).val().replace(/[^\d]/g,''))" placeholder="輸入數字" required>
                 </div>
-
+                <div class="input-group mb-2  pr-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">科系</span>
+                    </div>
+                    <input type="text" class="form-control" name="class" value="ALL" required disabled>
+                </div>
                 <div class="input-group mb-2  pr-2">
                     <div class="input-group-prepend">
                         <span class="input-group-text">主題</span>
                     </div>
                     <input type="text" class="form-control" name="title" required>
                 </div>
-                
+
 
                 <div class="input-group mb-2  pr-2">
                     <div class="input-group-prepend">
@@ -106,10 +106,10 @@
                         <span class="input-group-text eyes" style="cursor: pointer;"><i class="fa fa-eye-slash"
                                 aria-hidden="true"></i></span>
                     </div>
-                    <div class="invalid-feedback">
-                        <!-- 測試代碼 -->
+                    <!-- <div class="invalid-feedback">
+                        測試代碼
                         <small>ˇ大小寫皆可</small>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="input-group mb-2  pr-2">
                     <div class="input-group-prepend">
@@ -120,10 +120,10 @@
                         <span class="input-group-text eyes" style="cursor: pointer;"><i class="fa fa-eye-slash"
                                 aria-hidden="true"></i></span>
                     </div>
-                    <div class="invalid-feedback">
-                        <!-- 測試代碼 -->
+                    <!-- <div class="invalid-feedback">
+                        測試代碼
                         <small>ˇ大小寫皆可</small>
-                    </div>
+                    </div> -->
 
                 </div>
 
@@ -132,8 +132,8 @@
                         <span class="input-group-text">議題介紹</span>
                     </div>
                     <!-- <textarea type="text" class="form-control" name="introduce" required></textarea> -->
-                    <textarea type="text" class="form-control is-invalid" name="introduce" style="resize: none;" rows="10"
-                    cols="25" required></textarea>
+                    <textarea type="text" class="form-control is-invalid" name="introduce" style="resize: none;"
+                        rows="10" cols="25" required></textarea>
                 </div>
 
                 <div class="input-group mb-2  pr-2">
@@ -153,19 +153,30 @@
         <!-- <button id="test">測試代碼</button> -->
     </div>
     <script>
+        //版面輸入
+        $('select[name="type"]').on('change', function () {
+            if ($(this).val() == "public") {
+                $('input[name="class"]').val("ALL");
+                $('input[name="class"]').attr('disabled', true);
+            } else {
+                $('input[name="class"]').val("");
+                $('input[name="class"]').attr('disabled', false);
+
+            }
+        });
         //*********************test code*********************************//
         // $('#test').on('click', function () {
         //     console.log($("input[name='board']:first").val()); //測試data
         //     console.log($("select[name='type']:first").val());
         //     console.log($("input[name='title']:first").val());
-     
+
         //     console.log($("input[name='name']:first").val());
         //     console.log($("input[name='school']:first").val());
         //     console.log($("input[name='class']:first").val());
         //     console.log($("input[name='password_private']:first").val());
         //     console.log($("input[name='password_public']:first").val());
         //     console.log($("input[name='tab']:first").val());
-           //     console.log($("textarea[name='introduce']:first").val());
+        //     console.log($("textarea[name='introduce']:first").val());
         //     console.log($("textarea[name='include']:first").val());
         //     console.log($("select[name='type']:first").val() + '_' + $("input[name='board']:first").val());
         // });
@@ -215,7 +226,7 @@
                                     '_')[1]); //測試data
                                 $("select[name='type']:first").val(data['type']);
                                 $("input[name='title']:first").val(data['title']);
-                               
+
                                 $("input[name='name']:first").val(data['name']);
                                 $("input[name='school']:first").val(data['school']);
                                 $("input[name='class']:first").val(data['class']);
@@ -224,7 +235,8 @@
                                 $("input[name='password_public']:first").val(data[
                                     'password_public']);
                                 $("input[name='tab']:first").val(data['tab']);
-                                $("textarea[name='introduce']:first").val(data['introduce']);//更改議題部分
+                                $("textarea[name='introduce']:first").val(data[
+                                'introduce']); //更改議題部分
                                 $("textarea[name='include']:first").val(data['include']);
                             }
                         },
@@ -258,7 +270,7 @@
                                         .split('_')[1]);
                                     $("select[name='type']:first").val(data['type']);
                                     $("input[name='title']:first").val(data['title']);
-                                   
+
                                     $("input[name='name']:first").val(data['name']);
                                     $("input[name='school']:first").val(data['school']);
                                     $("input[name='class']:first").val(data['class']);
@@ -268,7 +280,7 @@
                                         'password_public']);
                                     $("input[name='tab']:first").val(data['tab']);
                                     $("textarea[name='introduce']:first").val(data[
-                                        'introduce']);//更改
+                                        'introduce']); //更改
                                     $("textarea[name='include']:first").val(data[
                                         'include']);
                                 }
@@ -302,14 +314,14 @@
                                 "input[name='board']:first").val(), //測試代碼----
                             'type': $("select[name='type']:first").val(),
                             'title': $("input[name='title']:first").val(),
-                           
+
                             'name': $("input[name='name']:first").val(),
                             'school': $("input[name='school']:first").val(),
                             'class': $("input[name='class']:first").val(),
                             'password_private': $("input[name='password_private']:first").val(),
                             'password_public': $("input[name='password_public']:first").val(),
                             'tab': $("input[name='tab']:first").val(),
-                            'introduce': $("textarea[name='introduce']:first").val(),//暫時更改
+                            'introduce': $("textarea[name='introduce']:first").val(), //暫時更改
                             'include': $("textarea[name='include']:first").val(),
                         },
                         function (response) {
