@@ -92,6 +92,8 @@
             </form> -->
             <form method="POST" action="/BM/build" id="input-form" class="was-validated"
                 style=" height: 460px; overflow-y: auto; ">
+				<input name='board_ID' style="display: none" value="<%=board_ID%>"/>
+                <input name='password' style=" display:none" value="<%=password%>"/>
                 <div class="input-group mb-2  pr-2 ">
                     <div class="input-group mb-2  pr-2">
                         <div class="input-group-prepend">
@@ -123,11 +125,11 @@
                         <input type="number" min="1" class="form-control" name="board"
                             oninput="$(this).val($(this).val().replace(/[^\d]/g,''))" placeholder="輸入數字" required >
                     </div>-->
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  pr-2" id='CLASS_ALL'>
                         <div class="input-group-prepend">
-                            <span class="input-group-text">科系</span>
+                            <span class="input-group-text">班級</span>
                         </div>
-                        <input type="text" class="form-control" name="class" value="ALL" required disabled>
+                        <input type="text" class="form-control" name="class" value="ALL" required>
                     </div>
                     
 
@@ -197,6 +199,9 @@
         </div>
     </div>
     <script>
+		$(document).ready(function(){
+		$('#CLASS_ALL > input').val("ALL");
+		$('#CLASS_ALL').hide();
         $('.eyes').on('click', function () {
             // console.log(11254);
             if ($(this).parent().siblings('input').attr("type") == "text") {
@@ -211,14 +216,13 @@
         });
         $('select[name="type"]').on('change',function(){
             if($(this).val()=="public"){
-                $('input[name="class"]').val("ALL");
-                $('input[name="class"]').attr('disabled', true);
+                $('#CLASS_ALL > input').val("ALL");
+                $('#CLASS_ALL').hide();
             }else{
-                $('input[name="class"]').val("");
-                $('input[name="class"]').attr('disabled', false);
-                
+                $('#CLASS_ALL > input').val("");
+                $('#CLASS_ALL').show();
             }
-        });
+        });});
     </script>
 
 </body>

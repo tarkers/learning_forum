@@ -78,7 +78,7 @@
                 </div>
                 <div class="input-group mb-2  pr-2">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">科系</span>
+                        <span class="input-group-text">班級</span>
                     </div>
                     <input type="text" class="form-control" name="class" value="ALL" required disabled>
                 </div>
@@ -154,16 +154,8 @@
     </div>
     <script>
         //版面輸入
-        $('select[name="type"]').on('change', function () {
-            if ($(this).val() == "public") {
-                $('input[name="class"]').val("ALL");
-                $('input[name="class"]').attr('disabled', true);
-            } else {
-                $('input[name="class"]').val("");
-                $('input[name="class"]').attr('disabled', false);
-
-            }
-        });
+		$('input[name="class"]').attr('disabled', true);
+		$('input[name="board"]').attr('disabled', true);
         //*********************test code*********************************//
         // $('#test').on('click', function () {
         //     console.log($("input[name='board']:first").val()); //測試data
@@ -200,16 +192,19 @@
                 alert('<%=board%>');
             else
                 alert('您剛剛建立的看板是 : ' + '<%=board%>');
-
+			//console.log('<%=board%>');
             $('#information').on('click', function () {
                 //console.log('111');
+				//console.log($("input[name='board_ID']:first").val());
+				//console.log($("input[name='password']:first").val());
+				
                 if ('<%=board%>' != '不是建立看板後跳來,不提供預設看板號') { //original give board_id
                     $.ajax({
                         type: "post",
                         url: "/BM/get_information",
                         data: {
-                            'board_ID': '<%=board_ID%>',
-                            'password': '<%=password%>',
+                            'board_ID': $("input[name='board_ID']:first").val(),
+                            'password': $("input[name='password']:first").val(),
                             'board': '<%=board%>'
                         },
                         dataType: "json",
