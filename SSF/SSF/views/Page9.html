@@ -385,8 +385,57 @@
 	// });
 </script>
 
-
 <script name="imgur">
+    // imgur api
+    var api = 'http://140.116.183.54:1339/getImg';
+    $("document").ready(function () {
+        $('input[type=file]').on("change", function () {
+
+            var $files = $(this).get(0).files;
+
+            if ($files.length) {
+
+                // Reject big files
+                if ($files[0].size > $(this).data("max-size") * 1024) {
+                    console.log("Please select a smaller file");
+                    return false;
+                }
+                var formData = new FormData();
+                formData.append('file', $files[0]);
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": api,
+                    "type": "POST",
+                    'contentType': false, //required
+                    'processData': false, // required
+                    'mimeType': 'multipart/form-data',
+                    'data': formData,
+                    beforeSend: function (xhr) {
+                        $('#img-label >span').show();
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        img = '<p><img src="' + res +
+                            '" style="width:300px;border: solid 1px #fc0; align:left;"/></p>';
+                        $('#textbox').focus();
+                        document.execCommand("insertHTML", false, img);
+                    },
+                    error: function () {
+                        alert("Failed | 上傳失敗");
+                        $('#img-label >span').hide();
+                    }
+                }
+                $.ajax(settings).done(function (response) {
+                    console.log("Done | 完成");
+                    $('#img-label >span').hide();
+                });
+            }
+        });
+    });
+</script>
+
+<!--<script name="imgur">
 	// imgur api
 	$("document").ready(function () {
 		$('input[type=file]').on("change", function () {
@@ -442,6 +491,6 @@
 			}
 		});
 	});
-</script>
+</script>-->
 
 </html>
