@@ -32,12 +32,12 @@ app.use('/JB', JB);
 app.use('/DB', DB);
 
 //以下為最後除錯中間件 勿刪 發布時用
-// catch 404 and forward to error handler
-//app.use(function (req, res, next) {
-//    var err = new Error('Not Found');
-//    err.status = 404;
-//    next(err);
-//});
+ //catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 
 // error handlers
 

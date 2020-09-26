@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title></title>
+    <title>版面管理</title>
 </head>
 
 <body>
@@ -31,10 +31,10 @@
                     變更該版面
                 </button>
                 <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" id='title'>title</a>
-                    <a class="dropdown-item" id='tab'>tab</a>
-                    <a class="dropdown-item" id='include'>include</a>
-                    <a class="dropdown-item" id='introduce'>introduce</a>
+                    <a class="dropdown-item" id='title'>標題</a>
+                    <a class="dropdown-item" id='tab'>分類</a>
+                    <a class="dropdown-item" id='include'>老師介紹</a>
+                    <a class="dropdown-item" id='introduce'>議題介紹</a>
                 </span>
                 <span><input id="include-input" rows="3" cols="10" style=" resize:none" /></span>
                 <span><button id="confirm-btn" class="btn btn-primary">confirm</button></span>
@@ -46,23 +46,23 @@
                    onclick="$('#inform-data').toggle()"> <strong>版面資訊陳列</strong></a>
                 <div id="inform-data" class="row " style="display: none;">
                     <div class="col offset-1">
-                        <p name="board">board:<span></span></p>
-                        <p name="type">type:<span></span></p>
-                        <p name="title">title:<span></span></p>
-                        <p name="intorduce">introduce:<span></span></p>
+                        <p name="board">看板號:<span></span></p>
+                        <p name="type">看板類型:<span></span></p>
+                        <p name="title">看板標題:<span></span></p>
+                        <p name="intorduce">議題介紹:<span></span></p>
 
                     </div>
                     <div class="col offset-1">
-                        <p name="name">name:<span></span></p>
-                        <p name="school">school:<span></span></p>
-                        <p name="class">class:<span></span></p>
-                        <p name="password-private">password_private:<span></span></p>
+                        <p name="name">看板擁有者:<span></span></p>
+                        <p name="school">隸屬學校:<span></span></p>
+                        <p name="class">班級:<span></span></p>
+                        <p name="password-private">私有密碼:<span></span></p>
 
                     </div>
                     <div class="col offset-1">
-                        <p name="password-public">password_public:<span></span></p>
-                        <p name="tab">tab:<span></span></p>
-                        <p name="include">include:<span></span></p>
+                        <p name="password-public">公有密碼:<span></span></p>
+                        <p name="tab">分類:<span></span></p>
+                        <p name="include">老師介紹:<span></span></p>
                     </div>
                 </div>
 
@@ -121,8 +121,8 @@
             });
 
             $('.dropdown-menu a').click(function () {
-                kind = $(this).text();
-                $(".dropdown-toggle").text(kind);
+                kind = $(this).attr('id');
+                $(".dropdown-toggle").text($(this).text());
             });
 
             $('#confirm-btn').on('click', function () {
@@ -136,7 +136,7 @@
                         },
                         function (data) {
                             if (data['result'] == 'success')
-                                alert('更新成功, 重新整理後可以看到變更');
+                                window.location.reload();
                             else
                                 alert('更新失敗, 請過段時間再試一次');
                         });
