@@ -80,7 +80,6 @@
         <input type="text" name="password"/>
         <input type="text" name="board_ID" value="<%=board_ID%>"/>
         <input type="text" name="num"/>
-        <input type="text" name="include"/>
     </form>
     <script>
         function init() {
@@ -129,6 +128,7 @@
             }
         }
         $(document).ready(function () {
+            var yourpassword = "";
             init();
             //內容縮排
             $('input').click(function () {
@@ -188,7 +188,9 @@
                 var div = $(this).closest('form').next('div');
                 var label = $(this).prev();
                 if ('我要留言' == $(this).val() && text.val().trim() != '') {
-                    $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val() }, function (result) {
+                    if (yourpassword == "")
+                        yourpassword = prompt("請輸入您的個人密碼(全部本頁留言功能僅需輸入一次)");
+                    $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val(), personal_password: yourpassword }, function (result) {
                         alert(result['result']);
                         if (result['result'] == 'success') {
                             div.append('<%-ID%>:' + include + '<br/>');
@@ -196,6 +198,7 @@
                             text.val('');
                         }
                         else {
+                            yourpassword = "";
                             alert('並沒有實際儲存請再留言一次');
                         }
                     });
@@ -215,7 +218,6 @@
                         var password = prompt("請輸入你的個人密碼");
                         var parent = $(this).parent();
                         var num = parent.attr('id');
-                        var include = parent.find('.include').html();
                         if (password != null) {
                             $('#to_rewrite').find('input').each(function () {
                                 var name = $(this).attr('name');
@@ -225,9 +227,6 @@
                                         break;
                                     case 'num':
                                         $(this).val(num);
-                                        break;
-                                    case 'include':
-                                        $(this).val(include);
                                         break;
                                     default:
                                         break;

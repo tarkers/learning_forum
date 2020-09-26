@@ -31,7 +31,6 @@ function IsPasswordRight(req,res,next,other) {
             }
             else
                 warming(res, 1);
-            db.close();
         });
     });
 }
@@ -52,7 +51,6 @@ function ReJSON(req, res, other) {
             //console.log(result);
             else
                 res.json({ data: result });
-            db.close();
         });
     });
 }
@@ -69,7 +67,6 @@ function GetAllCollection(req, res) {
                 res.json({ data: result });
             else
                 res.json({ data: [{ result: 'empty' }] });
-            db.close();
         });
     });
 }
@@ -94,7 +91,6 @@ function ChangeOneCollection(req, res, id, doc) {
             table.replaceOne(findthing, saveThing, function (err, result) {
                 if (err) { reject({ err: 'error' }); throw err;}
                 else {
-                    db.close();
                     resolve({ result: 'success' });
                 }
             });

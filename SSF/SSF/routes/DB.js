@@ -13,6 +13,30 @@ function warming(res, mode) {
     res.render('warming', { warming: str[mode] });
 }
 
+//test personal_password
+
+function test_personal_password(req, res, callback) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("people").collection("personal_information");
+        var findThing = { ID: req.body.ID };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            if (result.length > 0) {
+                if (result[0]['password'] == req.body.personal_password) {
+                    callback(req, res);
+                }
+                else
+                    warming(res, 1);
+            }
+            else
+                warming(res, 3);
+        });
+    });
+}
+
 //post public && post private
 
 function getPassword_private(req, res) {
@@ -218,21 +242,43 @@ function to_rewrite(req, res) {
         var findThing = { ID: req.body.ID };
         table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            db.close();
             //console.log(result);
+            db.close();
             if (result.length > 0) {
                 if (result[0]['password'] == req.body.password) {
-                    res.render('Page10', {
-                        board_ID: req.body.board_ID,
-                        ID: req.body.ID, password: req.body.password,
-                        num: req.body.num, include_origin: req.body.include
-                    })
+                    to_rewrite_check_numID(req, res);
                 }
                 else
                     warming(res, 1);
             }
             else
                 warming(res, 1);
+        });
+    });
+}
+
+function to_rewrite_check_numID(req,res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("board").collection(req.body.board_ID);
+        var findThing = { num: req.body.num };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result[0]['include']);
+            if (result.length > 0) {
+                if (result[0]['ID'] == req.body.ID) {
+                    res.render('Page10', {
+                        board_ID: req.body.board_ID,
+                        ID: req.body.ID, password: req.body.password,
+                        num: req.body.num, include_origin: result[0]['include']
+                    })
+                }
+                else
+                    warming(res, 3);
+            }
+            else
+                warming(res, 3);
         });
     });
 }
@@ -248,13 +294,35 @@ function rewrite_check_password(req, res) {
             //console.log(result);
             if (result.length > 0) {
                 if (result[0]['password'] == req.body.password) {
-                    rewrite_update(req, res);
+                    rewrite_checknum(req, res);
                 }
                 else
                     warming(res, 1);
             }
             else
-                warming(res, 1);
+                warming(res, 3);
+        });
+    });
+}
+
+function rewrite_checknum(req, res) {
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("board").collection(req.body.board_ID);
+        var findThing = { num: req.body.num };
+        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            if (result.length > 0) {
+                if (result[0]['ID'] == req.body.ID) {
+                    rewrite_update(req, res);
+                }
+                else
+                    warming(res, 3);
+            }
+            else
+                warming(res, 3);
         });
     });
 }
@@ -316,12 +384,12 @@ function discuss_refresh(req, res) {
 //router block
 router.post('/post_public', function (req, res) {
     //console.log(req.body);
-    getCount_public(req, res);
+    test_personal_password(req, res, getCount_public);
 });
 
 router.post('/post_private', function (req, res) {
     //console.log(req.body);
-    getPassword_private(req, res);
+    test_personal_password(req, res, getPassword_private);
 });
 
 router.get('/post_preview', function (req, res) {
@@ -336,7 +404,7 @@ router.get('/add_lover', function (req, res) {
 
 router.post('/discuss', function (req, res) {
     //console.log(req.body);
-    discuss_getNum(req, res);
+    test_personal_password(req, res, discuss_getNum);
 });
 
 router.post('/to_ReWrite', function (req, res) {
