@@ -202,20 +202,22 @@
 		</div>
 	</div>
 	<!-- 隱藏的form -->
-	<form id='public-form' action="/DB/post_public" method="post" style="display: none;">
-		<input type="text" name="ID" value="<%=ID%>" />
-		<input type="text" name="board_ID" value="<%=board_ID%>" />
-		<input type="text" name="title" />
-		<input type="text" name="include" />
-		<input type="submit" />
-	</form>
+    <form id='public-form' action="/DB/post_public" method="post" style="display: none;">
+        <input type="text" name="ID" value="<%=ID%>" />
+        <input type="text" name="board_ID" value="<%=board_ID%>" />
+        <input type="text" name="title" />
+        <input type="text" name="personal_password" />
+        <input type="text" name="include" />
+        <input type="submit" />
+    </form>
 	<form id="private-form" action="/DB/post_private" method="post" style="display: none;">
 		<input type="text" name="ID" value="<%=ID%>" />
 		<input type="text" name="board_ID" value="<%=board_ID%>" />
 		<input type="text" name="title" />
-		<input type="text" name="include" />
+		<input type="text" name="personal_password" />
 		<input type="password" placeholder="發文密碼" name="board_password"><br />
-		<input type="submit" />
+        <input type="text" name="include" />
+        <input type="submit" />
 	</form>
 	<input id="Hidden1" type="hidden" value="<%=type%>" />
 </body>
@@ -245,15 +247,24 @@
 		$('#' + board_type + '-form > input[name="include"]').val(document.getElementById("textbox").innerHTML);
 		// console.log($('#' + board_type + '-form > input[name="title"]').val());
 		// console.log($('#' + board_type + '-form > input[name="include"]').val());
-		if (board_type == 'private') {
-			var password = prompt("請輸入看板進入密碼");
-			if (password != null && password != "") {
-				$('#' + board_type + '-form > input[name="board_password"]').val(password);
-			} else { //press 取消
+        var personal_password = prompt("請輸入您的個人密碼");
+        if (board_type == 'private') {
+            var password = prompt("請輸入您進入本看板的密碼");
+			if (password != null && password != "" ) {
+                $('#' + board_type + '-form > input[name="board_password"]').val(password);
+            } else { //press 取消
+                alert("請輸入密碼!!!");
 				return;
 			}
-		}
-		$('#' + board_type + '-form').submit();
+        }
+        if (personal_password != null && personal_password != "") {
+            $('#' + board_type + '-form > input[name="personal_password"]').val(personal_password);
+            $('#' + board_type + '-form').submit();
+        }
+        else {
+            alert("請輸入密碼!!!");
+            return;
+        }
 	});
 </script>
 <script>
@@ -415,8 +426,8 @@
                         $('#img-label >span').show();
                     },
                     success: function (res) {
-                        console.log(res);
-                        img = '<p><img src="' + res +
+                        
+                        img = '<p><img src="' + res.replace(/[\\]/g,'/') +
                             '" style="width:300px;border: solid 1px #fc0; align:left;"/></p>';
                         $('#textbox').focus();
                         document.execCommand("insertHTML", false, img);

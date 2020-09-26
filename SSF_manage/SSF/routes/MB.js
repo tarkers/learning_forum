@@ -116,7 +116,6 @@ function hideUpdate(req,res) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             res.json({ result: 'success' });
         });
@@ -152,7 +151,6 @@ function board_update_updateMain(req, res, type, name, right) {
         goal[req.body.type] = req.body.include;
         table.updateOne(filter, { $set: goal }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            db.close();
             switch (type) {
                 case 'title':
                     board_update_updateTwo(req, res, "data", name + '_board', type, right);
@@ -187,7 +185,6 @@ function board_update_updateTwo(req, res, database, collection, type,right) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             if (right == 'public')
                 board_update_updateOne(req, res, database, collection, type);
@@ -210,7 +207,6 @@ function board_update_updateOne(req, res, database, collection, type) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             res.json({ result: 'success' });
         });

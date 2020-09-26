@@ -431,8 +431,7 @@
 						$('#img-label >span').show();
 					},
 					success: function (res) {
-						console.log(res);
-						img = '<p><img src="' + res +
+						img = '<p><img src="' + res.replace(/[\\]/g,'/') +
 							'" style="width:300px;border: solid 1px #fc0; align:left;"/></p>';
 						$('#textbox').focus();
 						document.execCommand("insertHTML", false, img);
