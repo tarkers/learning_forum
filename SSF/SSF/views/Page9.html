@@ -17,10 +17,17 @@
 
 <!-- 頭標 -->
 <header>
-	<div class="text-center jumbotron pb-4" style="font-family:Microsoft JhengHei;font-size:200%">
+	<!-- <div class="text-center jumbotron pb-4" style="font-family:Microsoft JhengHei;font-size:200%">
 		<h1>發帖區<small><%=ID%></small></h1>
 		<small>發往 <%=board_ID%></small>
-	</div>
+	</div> -->
+	<div name="Title" class="jumbotron  mb-0 ">
+		<button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+		 <div class="text-center  align-self-center">
+			<h1>發帖區<small><%=ID%></small></h1>
+			<small>發往 <%=board_ID%></small>
+		 </div>
+	 </div>
 </header>
 
 <body>

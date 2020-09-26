@@ -17,14 +17,20 @@
 </head>
 <!-- Header title -->
 <header>
-    <div name="Title" class="jumbotron text-center  pb-4 mb-0" style="font-family: 'Roboto Slab', cursive;">
-        <h1>公有看板區</h1>
+    <div name="Title" class="jumbotron  mb-0 ">
+        <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+        <div class="text-center  align-self-center">
+            <h1>公有看板區</h1>
+        </div>
     </div>
+    <!-- <div name="Title" class="jumbotron text-center  pb-4 mb-0" style="font-family: 'Roboto Slab', cursive;">
+        <h1>公有看板區</h1>
+    </div> -->
 </header>
 
 <body style="font-family: 'Roboto Slab', cursive;">
     <div class=" container-fluid">
-        
+
         <div class="row" style="height: 800px;">
             <!-- 左邊的欄位 -->
             <div class="col-md-2" style="background-color:rgb(243, 243, 243);">
@@ -36,12 +42,12 @@
                     <!-- 關鍵搜尋 -->
                     <div class="w-100  p-1">
                         <!-- 延展button -->
-                        <button class="btn btn-primary dropdown-toggle btn-block " type="button"
-                            id="dropdownMenuButton" data-toggle="collapse" data-target="#keywordpanel"
-                            aria-haspopup="true" aria-expanded="false" onclick="unlock_List()">
+                        <button class="btn btn-primary dropdown-toggle btn-block " type="button" id="dropdownMenuButton"
+                            data-toggle="collapse" data-target="#keywordpanel" aria-haspopup="true"
+                            aria-expanded="false" onclick="unlock_List()">
                             關鍵字搜尋
                         </button>
-                        
+
                         <div class="collapse multi-collapse" id="keywordpanel">
                             <!-- 自己輸入關鍵字 -->
                             <div class="input-group pb-1 pt-1">
@@ -53,12 +59,13 @@
                                     aria-label="specific">
                             </div>
                             <!-- 常見關鍵字 -->
-                            <label class=" list-group-item-dark text-center w-100 m-0 p-2"><strong>常見關鍵字</strong> </label>
-                            <div class="list-group">           
+                            <label class=" list-group-item-dark text-center w-100 m-0 p-2"><strong>常見關鍵字</strong>
+                            </label>
+                            <div class="list-group">
                                 <%for(var key in keywords){%>
-                                <a  data-toggle="list" role="tab" class="list-group-item list-group-item-action clearfix list-group-item-heading
+                                <a data-toggle="list" role="tab" class="list-group-item list-group-item-action clearfix list-group-item-heading
                                  text-center p-1" id='keywords<%=keywords[key]%>'
-                                    style="cursor: pointer;" ><%=keywords[key]%>
+                                    style="cursor: pointer;"><%=keywords[key]%>
                                 </a>
                                 <%}%>
                         </div>
@@ -73,24 +80,23 @@
                 <div class="list-group  flex-fill" id="list-tab" role="tablist" style=" height:500px; overflow-y:auto">
                     <h3 class="text-center m-auto" style="display: none;">查無相關列表</h3>               
                     <%for(var i=0;i<boards.length;i++){%>
-                        <a class="list-group-item list-group-item-action list-group-item-success"
-                            id='list-<%=boards[i]['board_ID']%>' data-toggle="list" role="tab"
-                            href='#panel-<%=boards[i]['board_ID']%>' 
-                            aria-controls=<%=boards[i]['board_ID']%> text-tab="<%=boards[i]['tab']%>"
-                            text-title="<%=boards[i]['title']%>" >
-                            <strong class=" text-center"><%=boards[i]['tab']%>:
-                                <%=boards[i]['title']%></strong>
-                            <!--跳轉按鈕-->
-                            <input type="submit" class="btn btn-danger  float-right"
-                                name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>
-                            <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>"
-                                name="<%=boards[i]['tab']%>">
-                                <input type='text' name='ID' value='<%=ID%>' style="display: none;">
-                                <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>"
-                                    style="display: none;">
-                            </form>
-                        </a>
-                        <%}%>    
+                                <a class="list-group-item list-group-item-action list-group-item-success"
+                                    id='list-<%=boards[i]['board_ID']%>' data-toggle="list" role="tab"
+                                    href='#panel-<%=boards[i]['board_ID']%>' aria-controls=<%=boards[i]['board_ID']%>
+                                    text-tab="<%=boards[i]['tab']%>" text-title="<%=boards[i]['title']%>">
+                                    <strong class=" text-center"><%=boards[i]['tab']%>:
+                                        <%=boards[i]['title']%></strong>
+                                    <!--跳轉按鈕-->
+                                    <input type="submit" class="btn btn-danger  float-right"
+                                        name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>
+                                    <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>"
+                                        name="<%=boards[i]['tab']%>">
+                                        <input type='text' name='ID' value='<%=ID%>' style="display: none;">
+                                        <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>"
+                                            style="display: none;">
+                                    </form>
+                                </a>
+                                <%}%>    
                 </div>          
             </div>
             <!-- 介紹面板 -->
@@ -98,17 +104,17 @@
                 <div id="first_introduce" >
                     <p style=" text-align: justify;text-justify: inter-word;">
                         <%-introduce%>
-                    </p>
-                </div>
-                <div class=" tab-content" id="nav-tabContent">
-                    <%for(var i=0;i<boards.length;i++){%>
-                    <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
-                        aria-labelledby='list-<%=boards[i]['board_ID']%>'>
-                        <p style=" text-align: justify;text-justify: inter-word;">
-                            <%-boards[i]['include']%>
-                        </p>
-                </div>
-                <%}%>
+                                </p>
+                            </div>
+                            <div class=" tab-content" id="nav-tabContent">
+                                <%for(var i=0;i<boards.length;i++){%>
+                                <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
+                                    aria-labelledby='list-<%=boards[i]['board_ID']%>'>
+                                    <p style=" text-align: justify;text-justify: inter-word;">
+                                        <%-boards[i]['include']%>
+                                    </p>
+                                </div>
+                                <%}%>
                 </div>
             </div>        
         </div>
