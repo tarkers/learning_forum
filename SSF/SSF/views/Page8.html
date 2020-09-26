@@ -13,12 +13,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <title>看板區</title>
 </head>
-<body>
-    <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
-        <div class="text-center jumbotron">
+<header>
+    <div name="Title" class="jumbotron  mb-0 ">
+        <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+         <div class="text-center  align-self-center">
             <h1><small><%=board_ID%></small></h1>
             <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
-        </div>
+         </div>
+     </div>
+</header>
+<body>
+    <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
+        <!-- <div class="text-center jumbotron">
+            <h1><small><%=board_ID%></small></h1>
+            <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
+        </div> -->
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
