@@ -10,15 +10,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>下載</title>
 </head>
-
+<header>
+    <div name="Title" class="jumbotron text-center  mb-0">
+        <h1 class=" d-inline-block">版面管理</h1>ID: <%=board_ID %> 
+    </div>
+</header>
 <body>
-    <div class=" container-fluid text-center">
-        <h1 class="jumbotron  p-2">版面管理<sub><small>ID: <%=board_ID %> </small> </sub></h1>
-        <div>
+    <div class=" container-fluid text-center">  
+        <div class="pt-5">
             <button class="btn btn-lg btn-info" id="download">下載</button><br/><br /><label>格式轉換:</label>
             <input  id="file" type="file" name="file" class="btn  btn-success"/>
 
             <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
+            <p>直接上傳由上方功能下載的檔案, 可以得到純csv表格</p>
         </div>
     </div>
     <script>
