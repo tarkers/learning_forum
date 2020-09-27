@@ -15,19 +15,19 @@ function warming(res, mode) {
 //to public & private board
 
 function test_type(req, res, type) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            if (result.length > 0) {
-                if (result[0]['type'] == type && type == 'public') {
+            if (result != null) {
+                if (result['type'] == type && type == 'public') {
                     jumpboard(req, res);
                 }
-                else if (result[0]['type'] == type && type == 'private' && result[0]['password_public'] == req.body.board_password) {
+                else if (result['type'] == type && type == 'private' && result['password_public'] == req.body.board_password) {
                     jumpboard(req, res);
                 }
                 else
@@ -40,7 +40,7 @@ function test_type(req, res, type) {
 }
 
 function jumpboard(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { hide: 'false' };
@@ -60,16 +60,16 @@ function jumpboard(req, res) {
 
 //get introduce
 function get_board_information(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection('all_board_number');
         var findThing = { board_ID: req.query.board_ID };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            if (result.length > 0)
-                res.send({ title: result[0]['title'], introduce: result[0]['introduce'], type: result[0]['type'] });
+            if (result != null)
+                res.send({ title: result['title'], introduce: result['introduce'], type: result['type'] });
             else
                 warming(res, 3);
         });
