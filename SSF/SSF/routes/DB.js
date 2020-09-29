@@ -235,7 +235,8 @@ function discuss_notice_add(req, data) {
             var list = Object.keys(data);
             //console.log(list);
             for (var i in list)
-                discuss_notice_send(list[i], req.body.board_ID + '_' + req.body.num);
+                if (list[i] != req.body.ID)
+                    discuss_notice_send(list[i], req.body.board_ID + '_' + req.body.num);
         });
     });
 }
@@ -254,8 +255,9 @@ function discuss_notice_send(id, key) {
         });
     });
 }
-//week3 new function
+
 //ReWrite
+
 function to_rewrite(req, res) {
     MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
