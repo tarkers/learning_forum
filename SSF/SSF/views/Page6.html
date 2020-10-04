@@ -104,17 +104,17 @@
                 <div id="first_introduce" >
                     <p style=" text-align: justify;text-justify: inter-word;">
                         <%-introduce%>
-                                </p>
-                            </div>
-                            <div class=" tab-content" id="nav-tabContent">
-                                <%for(var i=0;i<boards.length;i++){%>
-                                <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
-                                    aria-labelledby='list-<%=boards[i]['board_ID']%>'>
-                                    <p style=" text-align: justify;text-justify: inter-word;">
-                                        <%-boards[i]['include']%>
-                                    </p>
-                                </div>
-                                <%}%>
+                     </p>
+                </div>
+                <div class=" tab-content" id="nav-tabContent">
+                    <%for(var i=0;i<boards.length;i++){%>
+                    <div class="tab-pane fade " id='panel-<%=boards[i]['board_ID']%>' role="tabpanel"
+                        aria-labelledby='list-<%=boards[i]['board_ID']%>'>
+                        <p style=" text-align: justify;text-justify: inter-word;">
+                            <%-boards[i]['include']%>
+                        </p>
+                    </div>
+                    <%}%>
                 </div>
             </div>        
         </div>
@@ -128,8 +128,9 @@
         lock = false;
         $('#list-tab >h3').hide();
         $("#first_introduce").show();
-        $('.list-group >a').removeClass('show active');
-        $('.list-group >a').attr('style', 'display:block');
+        $('.list-group > a').removeClass('show active');
+        $('.list-group > a').attr('style', 'display:block');
+        $('#nav-tabContent').children().removeClass('show active');
         $('#self-search').val('');
     }
     //關鍵搜尋點選
