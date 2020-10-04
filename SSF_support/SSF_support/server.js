@@ -77,7 +77,7 @@ http.createServer(function (req, res) {
                     var extname = path.extname(files.file.name);
                     // new name
                     var newpath = __dirname + '\\uploadImg\\' + place + '\\' + time + random + extname;
-                    var returnpath ='\\' + place + '\\' + time + random + extname;
+                    var returnpath ='/' + place + '/' + time + random + extname;
                     //console.log(newpath);
                     fs.rename(oldpath, newpath, function (err) {
                         if (err) {
