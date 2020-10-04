@@ -17,21 +17,20 @@ function warming(res, mode) {
 }
 
 function IsPasswordRight(req,res,next,other) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            if (result.length > 0) {
-                if (result[0]['password_private'] == req.body.password)
+            if (result != null) {
+                if (result['password_private'] == req.body.password)
                     next(req, res, other);
                 else
                     warming(res, 1);
             }
             else
                 warming(res, 1);
-            db.close();
         });
     });
 }
@@ -41,7 +40,7 @@ function Render(req, res, other) {
 }
 
 function ReJSON(req, res, other) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var which = '';
         other == 'core' ? which = req.body.board : which = req.body.board_ID;
@@ -52,13 +51,12 @@ function ReJSON(req, res, other) {
             //console.log(result);
             else
                 res.json({ data: result });
-            db.close();
         });
     });
 }
 
 function GetAllCollection(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri + req.body.DB, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db(req.body.DB).collection(req.body.collection);
         var findThing = {};
@@ -69,7 +67,6 @@ function GetAllCollection(req, res) {
                 res.json({ data: result });
             else
                 res.json({ data: [{ result: 'empty' }] });
-            db.close();
         });
     });
 }
@@ -85,7 +82,7 @@ function ChangeAllCollection(req, res) {
 
 function ChangeOneCollection(req, res, id, doc) {
     return new Promise((resolve, reject) => {
-        MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        MongoClient.connect(uri + req.body.DB, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) { reject({ err: 'error' }); throw err;}
             var table = db.db(req.body.DB).collection(req.body.collection);
             //console.log(req.body);
@@ -94,7 +91,6 @@ function ChangeOneCollection(req, res, id, doc) {
             table.replaceOne(findthing, saveThing, function (err, result) {
                 if (err) { reject({ err: 'error' }); throw err;}
                 else {
-                    db.close();
                     resolve({ result: 'success' });
                 }
             });

@@ -16,14 +16,14 @@ function warming(res, mode) {
 }
 
 function login(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            if (result.length > 0) {
-                if (result[0]['password_private'] == req.body.password)
+            if (result != null) {
+                if (result['password_private'] == req.body.password)
                     res.render('Page3', { board_ID: req.body.board_ID, password: req.body.password });
                 else
                     warming(res, 1);
@@ -36,20 +36,40 @@ function login(req, res) {
 
 function build_getCount(req, res) {
     //console.log({ board_ID: req.body.board_ID, password: req.body.password});
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"lock", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
-        var table = db.db("board").collection("all_board_number");
-        var findThing = {};
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        var table = db.db("lock").collection("totalboard");
+        var findThing = { tag: 1 };
+        var updateThing = { $inc: { count: 1 } };
+        var set = { projection: { _id: 0 } };
+        table.findOneAndUpdate(findThing, updateThing, set, function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            build_insertManagerInformation(req, res, req.body.type + '_' + (result.length + 1).toString());
+            db.close();
+            if (result.ok == 1)
+                build_setLockboard(req, res, result.value.count);
+            else
+                warming(res, 2);
+        });
+    });
+}
+
+function build_setLockboard(req, res, num) {
+    MongoClient.connect(uri +"lock", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+        if (err) { warming(res, 2); throw err; }
+        var table = db.db("lock").collection("board");
+        var insertThing = { board_ID: req.body.type + '_' + (num).toString(), count: 1 };
+        table.insertOne(insertThing, function (err, result) {
+            if (err) { warming(res, 2); throw err; }
+            db.close();
+            //console.log(result);
+            build_insertManagerInformation(req, res, req.body.type + '_' + (num).toString());
         });
     });
 }
 
 function build_insertManagerInformation(req, res, new_board_ID) {
     //console.log({ board_ID: req.body.board_ID, password: req.body.password});
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection('manager_information');
         var insertThing = {
@@ -61,7 +81,6 @@ function build_insertManagerInformation(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            db.close();
             build_insertAllBoardNumber(req, res, new_board_ID);
         });
     });
@@ -69,7 +88,7 @@ function build_insertManagerInformation(req, res, new_board_ID) {
 
 function build_insertAllBoardNumber(req, res, new_board_ID) {
     //console.log({ board_ID: req.body.board_ID, password: req.body.password});
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection('all_board_number');
         var insertThing = {
@@ -77,7 +96,6 @@ function build_insertAllBoardNumber(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            db.close();
             if (req.body.type == 'public')
                 build_insertClass(req, res, new_board_ID);
             else
@@ -88,7 +106,7 @@ function build_insertAllBoardNumber(req, res, new_board_ID) {
 
 function build_insertClass(req, res, new_board_ID) {
     //console.log({ board_ID: req.body.board_ID, password: req.body.password });
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"data", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("data").collection(req.body.class + '_board');
         var insertThing = {
@@ -96,7 +114,6 @@ function build_insertClass(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            db.close();
             res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
             //console.log({ board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
         });
@@ -104,7 +121,7 @@ function build_insertClass(req, res, new_board_ID) {
 }
 
 function update_managerInformation(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var filter = { board_ID: req.body.board };
@@ -120,7 +137,6 @@ function update_managerInformation(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             update_AllBoardNumber(req, res);
         });
@@ -128,7 +144,7 @@ function update_managerInformation(req, res) {
 }
 
 function update_AllBoardNumber(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection("all_board_number");
         var filter = { board_ID: req.body.board };
@@ -138,7 +154,6 @@ function update_AllBoardNumber(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             if (req.body.type == 'public')
                 update_ClassBoard(req, res);
@@ -149,7 +164,7 @@ function update_AllBoardNumber(req, res) {
 }
 
 function update_ClassBoard(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"data", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db('data').collection(req.body.class + '_board');
         var filter = { board_ID: req.body.board };
@@ -159,7 +174,6 @@ function update_ClassBoard(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            db.close();
             //console.log(result);
             res.json({ result: 'success' });
         });
@@ -167,17 +181,17 @@ function update_ClassBoard(req, res) {
 }
 
 function get_information(req, res) {
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) {
                 res.json({ result: 'error' });
                 throw err;
             }
-            if (result.length > 0)
-                res.json({ result: 'success', data: result[0], length: result.length });
+            if (result != null)
+                res.json({ result: 'success', data: result });
             else
                 warming(res, 3);
         });
@@ -202,7 +216,10 @@ router.post('/to_manager_update', function (req, res) {
 //管理者註冊(建立)
 router.post('/build', function (req, res) {
     //console.log({ board_ID: req.body.board_ID, password: req.body.password});
-    build_getCount(req, res);
+    if (req.body.board_ID == core_ID && req.body.password == core_password)
+        build_getCount(req, res);
+    else
+        warming(res, 1);
 });
 //(AJAX)更新管理者註冊資料
 router.post('/update', function (req, res) {
