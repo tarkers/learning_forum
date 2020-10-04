@@ -80,7 +80,7 @@
                     </div> -->
                     <!--登入 -->
                     <div id="log-in-form" class="div-collapse collapse text-center" data-parent="#content-div">
-                        <form method="post" action="/SAN/sign_in">
+                        <form method="post" action="/SAN/sign_in" id="sign_in_form">
                             <div class="w-75 text-center m-auto"
                                 style="font-family:  'Arial Narrow', Arial, sans-serif; ">
                                 <input type="text" name='ID' class="form-control mb-1" placeholder="ID" />
@@ -94,7 +94,7 @@
 
                             </div>
                             <div id="verify" style="text-align:center"></div>
-                            <input type="submit" class=" btn btn-secondary mt-2" />
+                            <input id="sign_in" type="submit" class=" btn btn-secondary mt-2" />
                         </form>
                     </div>
                     <!-- <div id="register-form" class="div-collapse collapse text-center" data-parent="#content-div">
@@ -116,7 +116,7 @@
 
                     <!--註冊 -->
                     <div id="register-form" class="div-collapse collapse text-center " data-parent="#content-div">
-                        <form method="post" action="/SAN/register">
+                        <form method="post" action="/SAN/register" id="sign_up_form">
                             <div class="text-center m-auto w-75   "
                                 style="font-family:  'Arial Narrow', Arial, sans-serif; ">
                                 <input type="text" name='name' class="form-control mb-1" placeholder="名字" required />
@@ -138,7 +138,7 @@
                                 </select>
                             </div>
                             <div id="verify2"  style="text-align:center"></div>
-                            <input type="submit" class=" btn btn-secondary  mt-2" />
+                            <input id="sign_up" type="submit" class=" btn btn-secondary  mt-2" />
                         </form>
                     </div>
                 </div>
