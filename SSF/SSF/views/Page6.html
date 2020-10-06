@@ -154,25 +154,39 @@
     $('#list-tab >a').click(function () {
         lock = true;
     });
+    
     //關鍵搜尋打字
-    $("#self-search").on('keyup', function (e) {
+    $("#self-search").on('keyup', debounce(function (e) {
         select_Topic('text-title', $(this).val());
-    });
+    }));
     //常見關鍵字搜尋
-    $('.list-group-item-heading').click(function(){
-        // console.log($(this).text());
+    $('.list-group-item-heading').click(debounce(function(){
         select_Topic('text-title', $(this).text());
-    });
+    }));
     //跳轉頁面
     $("input[type = 'submit']").click(function () {
         $('#' + $(this).attr('name')).submit();
     });
+    //prevent too many rapid calls 
+    function debounce(fn){
+		var timer;
+		return function(){
+			var that = this;		//防止this 變成window對象
+			var args = arguments;	//得到參數
+			if(timer){		
+				clearTimeout(timer);	//當函數還未執行，清除即將產生的計時器
+			}
+			timer = setTimeout(function(){
+				timer = null;		 
+				fn.apply(that,args); //用apply调用函数	
+			},500);	//0.5秒延遲
+		}	
+	}	
 
     function select_Topic(mode, kind) {
         let hasTab=false;
         kind = kind.toLowerCase();
         var tab_list = $('#list-tab').children('a');
-        console.log(tab_list.length);
         for (var i = 0; i < tab_list.length; ++i) {
             let textTitle = tab_list[i].getAttribute("text-title").toString().toLowerCase(); 
             // let    textTab = tab_list[i].getAttribute("text-tab").toString().toLowerCase(); //search tab
@@ -190,8 +204,7 @@
                 tab_list[i].setAttribute('style', 'display:none');
             }
             // }
-            hasTab?$('#list-tab >h3').hide():$('#list-tab >h3').show()
-
+            hasTab?$('#list-tab >h3').hide():$('#list-tab >h3').show();
         }
     } 
         </script> 
