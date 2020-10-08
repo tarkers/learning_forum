@@ -90,25 +90,25 @@
                 </div>
                 <input type=submit class="btn btn-info w-100" value="建立">
             </form> -->
-            <form method="POST" action="/BM/build" id="input-form" class="was-validated"
-                style=" height: 460px; overflow-y: auto; ">
+            <form method="POST" action="/BM/build" id="input-form" class="was-validated mb-5"
+                style=" overflow-y: auto; ">
 				<input name='board_ID' style="display: none" value="<%=board_ID%>"/>
                 <input name='password' style=" display:none" value="<%=password%>"/>
-                <div class="input-group mb-2  pr-2 ">
-                    <div class="input-group mb-2  pr-2">
+                <div class="input-group mb-2   ">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">名字</span>
                         </div>
                         <input type="text" class="form-control " name="name" required>
                     </div>
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">學校</span>
                         </div>
                         <input type="text" class="form-control" name="school" required>
                     </div>
 
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">類型</span>
                         </div>
@@ -118,14 +118,14 @@
                         </select>
                         <!-- <input type="text" class="form-control" name="type"> -->
                     </div>
-                    <!--<div class="input-group mb-2  pr-2">
+                    <!--<div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">看板</span>
                         </div>
                         <input type="number" min="1" class="form-control" name="board"
                             oninput="$(this).val($(this).val().replace(/[^\d]/g,''))" placeholder="輸入數字" required >
                     </div>-->
-                    <div class="input-group mb-2  pr-2" id='CLASS_ALL'>
+                    <div class="input-group mb-2  " id='CLASS_ALL'>
                         <div class="input-group-prepend">
                             <span class="input-group-text">班級</span>
                         </div>
@@ -133,7 +133,7 @@
                     </div>
                     
 
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">主題</span>
                         </div>
@@ -141,13 +141,13 @@
                     </div>
 
 
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">標籤</span>
                         </div>
                         <input type="text" class="form-control" name="tab" required>
                     </div>
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">私人密碼</span>
                         </div>
@@ -161,7 +161,7 @@
                             <small>ˇ大小寫皆可</small>
                         </div> -->
                     </div>
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">公開密碼</span>
                         </div>
@@ -177,7 +177,7 @@
 
                     </div>
 
-                    <div class="input-group mb-2  pr-2">
+                    <div class="input-group mb-2  ">
                         <div class="input-group-prepend">
                             <span class="input-group-text">議題介紹</span>
                         </div>
@@ -186,9 +186,9 @@
                             rows="10" cols="25" required></textarea>
                     </div>
 
-                    <div class="input-group  pr-2">
+                    <div class="input-group  ">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">老師介紹</span>
+                            <span class="input-group-text">議題主持人介紹</span>
                         </div>
                         <textarea type="text" class="form-control is-invalid" name="include" style="resize: none;"
                             rows="10" cols="25" required></textarea>
