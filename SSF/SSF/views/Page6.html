@@ -90,10 +90,11 @@
                                     <input type="submit" class="btn btn-danger  float-right"
                                         name="<%=boards[i]['board_ID']%>" id='submit-btn' value='進入'>
                                     <form method="POST" action="/JB/to_public_board" id="<%=boards[i]['board_ID']%>"
-                                        name="<%=boards[i]['tab']%>">
+                                          name="<%=boards[i]['tab']%>">
                                         <input type='text' name='ID' value='<%=ID%>' style="display: none;">
                                         <input type='text' name='board_ID' value="<%=boards[i]['board_ID']%>"
-                                            style="display: none;">
+                                               style="display: none;">
+                                        <input name="password" value="<%=password%>"  style="display: none;" />
                                     </form>
                                 </a>
                                 <%}%>    

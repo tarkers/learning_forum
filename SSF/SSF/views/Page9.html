@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -24,6 +23,11 @@
     </div> -->
     <div name="Title" class="jumbotron  mb-0 ">
         <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+        <form method="post" action="/SAN/sign_in" id="sign_in_form">
+            <input type="text" name='ID' style="display:none" value="<%=ID%>" />
+            <input type="password" name='password' style="display:none" value="<%=personal_password%>" />
+            <input type="submit" class=" btn btn-secondary float-left" value="回首頁" />
+        </form>
         <div class="text-center  align-self-center">
             <h1>發帖區<small><%=ID%></small></h1>
             <small>您正位於<%=board_ID%>區</small>
@@ -272,6 +276,7 @@
         <input type="text" name="board_ID" value="<%=board_ID%>" />
         <input type="text" name="title" />
         <input type="text" name="personal_password" />
+        <input type="password" placeholder="發文密碼" name="board_password" value="NA"><br />
         <input type="text" name="include" />
         <input type="submit" />
     </form>
@@ -317,10 +322,7 @@
 </footer>
 <!-- send information -->
 <script>
-    var personal_password = "";
     var board_type = $('#Hidden1').val();
-
-    $("#myModal").modal("toggle");
     $('#send-label').on('click', function () {
         $('#title-div >span').hide();
         $('#content-area >span').hide();
@@ -338,9 +340,9 @@
         $('#' + board_type + '-form > input[name="include"]').val(document.getElementById("textbox").innerHTML);
         // console.log($('#' + board_type + '-form > input[name="title"]').val());
         // console.log($('#' + board_type + '-form > input[name="include"]').val());
-
+        var personal_password = '<%=personal_password%>';
         if (board_type == 'private') {
-            var password = prompt("請輸入您進入本看板的密碼");
+            var password = '<%=board_password%>';
             if (password != null && password != "") {
                 $('#' + board_type + '-form > input[name="board_password"]').val(password);
             } else { //press 取消
@@ -354,7 +356,6 @@
         }
         else {
             alert("請輸入密碼!!!");
-            $("#myModal").modal("toggle");
             return;
         }
     });

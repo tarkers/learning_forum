@@ -18,6 +18,12 @@
 <!-- 頭標 -->
 <header>
     <div class="text-center jumbotron pb-4" style="font-family:Microsoft JhengHei;font-size:200%">
+        <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+        <form method="post" action="/SAN/sign_in" id="sign_in_form">
+            <input type="text" name='ID' style="display:none" value="<%=ID%>" />
+            <input type="password" name='password' style="display:none" value="<%=password%>" />
+            <input type="submit" class=" btn btn-secondary float-left" value="回首頁" />
+        </form>
         <h1>編輯區<small><%=ID%></small></h1>
         <small>發往 <%=board_ID%></small>
     </div>
@@ -253,8 +259,9 @@
     <form id='-form' action="/DB/ReWrite" method="post" style="display: none;">
         <input type="text" name="ID" value="<%=ID%>" />
         <input type="text" name="board_ID" value="<%=board_ID%>" />
-        <input type="text" name="num" value="<%=num%>"/>
-        <input type="text" name="password" value="<%=password%>"/>
+        <input type="text" name="num" value="<%=num%>" />
+        <input type="text" name="password" value="<%=password%>" />
+        <input type="text" name="board_password" value="<%=board_password%>" />
         <input type="text" name="include" />
         <input type="submit" />
     </form>

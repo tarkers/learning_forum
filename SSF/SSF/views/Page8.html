@@ -16,6 +16,11 @@
 <header>
     <div name="Title" class="jumbotron  mb-0 ">
         <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+        <form method="post" action="/SAN/sign_in" id="sign_in_form">
+            <input type="text" name='ID'   style="display:none" value="<%=ID%>"/>
+            <input type="password" name='password'  style="display:none" value="<%=password%>"/>
+            <input type="submit" class=" btn btn-secondary float-left" value="回首頁"/>
+        </form>
         <div class="text-center  align-self-center">
             <h1><small><%=board_ID%></small></h1>
             <small>You are <%=ID%></small>     <button id="plusLover" type="button" class="btn btn-link">加到我的最愛</button>
@@ -37,10 +42,12 @@
             <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
         </div>
         <!-- 發文跳轉 -->
-        <form action="/JB/to_post_page" method="post">
+        <form id="post_submit" action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
+            <input type="text" name="board_password" value="<%=board_password%>" />
             <input type="text" name="type" id="get_type" />
+            <input type="text" name="personal_password" id="personal_password" />
             <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%" />
         </form>
         <br>
@@ -79,7 +86,8 @@
     <input id="Hidden2" type="hidden" value="<%=num%>" />
     <form id="to_rewrite" style="display:none" action="/DB/to_ReWrite" method="post">
         <input type="text" name="ID" value="<%=ID%>" />
-        <input type="text" name="password" />
+        <input type="text" name="board_password" value="<%=board_password%>" />
+        <input type="text" name="password"  value="<%=password%>"/>
         <input type="text" name="board_ID" value="<%=board_ID%>" />
         <input type="text" name="num" />
     </form>
@@ -105,7 +113,7 @@
         </div>
     </div>
     <script>
-        var yourpassword = "";
+        var yourpassword = "<%=password%>";
         function init() {
             $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
                 $("#introduce").html(result['introduce']);
@@ -158,6 +166,16 @@
         }
         $(document).ready(function () {
             init();
+            //發文跳轉
+            $("#post_submit").submit(function (e) {
+                if (yourpassword == "") {
+                    e.preventDefault();
+                    $("#myModal").modal("toggle");
+                }
+                else {
+                    $("#personal_password").val(yourpassword);
+                }
+            });
             //內容縮排
             $('input').click(function () {
                 if ($(this).val() == "縮起內容") {

@@ -173,7 +173,8 @@ router.post('/department/:postId', async (req, res) => {
 
         if (department_name == 'YT') {
             res.render('Page5', {
-                ID: req.body.ID
+                ID: req.body.ID,
+                password: req.body.password
             })
         } else {
             MongoClient.connect(GetUrl("data"), {
@@ -216,7 +217,8 @@ router.post('/department/:postId', async (req, res) => {
                                     introduce: information.introduce,
                                     keywords: information.keyword,
                                     tabs: information.tabs,
-                                    boards: found_data
+                                    boards: found_data,
+                                    password: req.body.password
                                 });
                             })
 
