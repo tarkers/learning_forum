@@ -58,15 +58,14 @@
                                 <input id="self-search" type="text" class="form-control" placeholder="輸入關鍵字"
                                     aria-label="specific">
                             </div>
-                            <!-- 常見關鍵字 -->
-                            <label class=" list-group-item-dark text-center w-100 m-0 p-2"><strong>常見關鍵字</strong>
+                            <!-- 常見標籤 -->
+                            <label class=" list-group-item-dark text-center w-100 m-0 p-2"><strong>常見標籤</strong>
                             </label>
                             <div class="list-group">
                                 <%for(var key in keywords){%>
                                 <a data-toggle="list" role="tab" class="list-group-item list-group-item-action clearfix list-group-item-heading
                                  text-center p-1" id='keywords<%=keywords[key]%>'
-                                    style="cursor: pointer;"><%=keywords[key]%>
-                                </a>
+                                    style="cursor: pointer;"><%=keywords[key]%></a>                      
                                 <%}%>
                         </div>
                       </div>
@@ -155,19 +154,19 @@
         lock = true;
     });
     
-    //關鍵搜尋打字
+    //關鍵搜尋打字--select title
     $("#self-search").on('keyup', debounce(function (e) {
         select_Topic('text-title', $(this).val());
     }));
-    //常見關鍵字搜尋
+    //常見標籤搜尋--select tab
     $('.list-group-item-heading').click(debounce(function(){
-        select_Topic('text-title', $(this).text());
+        select_Topic('text-tab', $(this).text());
     }));
     //跳轉頁面
     $("input[type = 'submit']").click(function () {
         $('#' + $(this).attr('name')).submit();
     });
-    //prevent too many rapid calls 
+    //prevent  rapid calls 
     function debounce(fn){
 		var timer;
 		return function(){
@@ -182,31 +181,50 @@
 			},500);	//0.5秒延遲
 		}	
 	}	
-
+/*select_Topic()
+*   argument:mode,(text-title,text-tab)
+*   kind,(text for search)
+*/
     function select_Topic(mode, kind) {
-        let hasTab=false;
+        let hasTab=false;   //checck if there is a  list exist
         kind = kind.toLowerCase();
         var tab_list = $('#list-tab').children('a');
         for (var i = 0; i < tab_list.length; ++i) {
-            let textTitle = tab_list[i].getAttribute("text-title").toString().toLowerCase(); 
-            // let    textTab = tab_list[i].getAttribute("text-tab").toString().toLowerCase(); //search tab
-            // if (mode == "text-tab") {
-            //     if (textTab.includes(kind)) {
-            //         tab_list[i].setAttribute('style', 'display:block');
-            //     } else {
-            //         tab_list[i].setAttribute('style', 'display:none');
-            //     }
-            // } else if (mode == "text-title") {
-            if (textTitle.includes(kind)) {
+            let search = tab_list[i].getAttribute(mode).toString().toLowerCase(); 
+            if (search.includes(kind)) {
                 hasTab=true;
                 tab_list[i].setAttribute('style', 'display:block');
             } else {
                 tab_list[i].setAttribute('style', 'display:none');
             }
-            // }
             hasTab?$('#list-tab >h3').hide():$('#list-tab >h3').show();
         }
     } 
+    // function select_Topic(mode, kind) {
+    //     let hasTab=false;
+    //     kind = kind.toLowerCase();
+    //     var tab_list = $('#list-tab').children('a');
+    //     for (var i = 0; i < tab_list.length; ++i) {
+    //         let textTitle = tab_list[i].getAttribute("text-title").toString().toLowerCase(); 
+    //         let textTab = tab_list[i].getAttribute("text-tab").toString().toLowerCase(); //search tab
+    //         if (mode == "text-tab") {
+    //             if (textTab.includes(kind)) {
+    //                 tab_list[i].setAttribute('style', 'display:block');
+    //             } else {
+    //                 tab_list[i].setAttribute('style', 'display:none');
+    //             }
+    //         } else if (mode == "text-title") {
+    //         if (textTitle.includes(kind)) {
+    //             hasTab=true;
+    //             tab_list[i].setAttribute('style', 'display:block');
+    //         } else {
+    //             tab_list[i].setAttribute('style', 'display:none');
+    //         }
+    //         // }
+    //         hasTab?$('#list-tab >h3').hide():$('#list-tab >h3').show();
+    //     }
+    //  } 
+    // }
         </script> 
     </body> 
 </html>

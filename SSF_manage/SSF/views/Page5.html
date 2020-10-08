@@ -59,7 +59,7 @@
                 <input id="filter-input" type="number" class="form-control" min="0" placeholder="查看此號後的貼文"
                     oninput="$(this).val($(this).val().replace(/[^\d]/g,''))">
                 <div class="input-group-append">
-                    <button id="filter-btn" class=" btn btn-outline-success" >查看</button>
+                    <button id="filter-btnfilter-btn" class=" btn btn-outline-success" >查看</button>
                     <button class=" btn btn-outline-danger" onclick="$('.list-group>div').show()">解除</button>
                 </div>
             </div>
@@ -188,11 +188,12 @@
                 alert('請填入想變更的類別');
         });
         $('#filter-btn').on('click', function () {
+            $('.list-group>div').show();
             for (var i = $('#filter-input').val(); i >= 1; i--) {
                 $('#div-' + i).hide();
-                console.log('#div-' + i);
+                // console.log('#div-' + i);
             }
-            console.log('#div-' + $('#filter-input').val());
+            // console.log('#div-' + $('#filter-input').val());
             // location.href='#list-' + $('#filter-input').val();
         });
     });
@@ -217,12 +218,11 @@
             $('#list-' + number).find('span').text('顯示');
             $('#list-' + number).find('span').removeClass('badge-dark').addClass('badge-success');
         }
-        else {
-            
+        else {        
             $('#list-' + number).addClass('list-group-item-light');
             $('#list-' + number).find('h5').css('text-decoration','line-through');
             $('#list-' + number).find('span').text('隱藏');
-            $('#list-' + number).find('span').removeClass('badge-dark').addClass('badge-danger');
+            $('#list-' + number).find('span').removeClass('badge-success').addClass('badge-dark');
         }
     }
  </script>
