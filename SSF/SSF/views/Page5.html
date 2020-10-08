@@ -23,11 +23,12 @@
             <div class="text-center " style="position: absolute; top: 30%; background-color: rgba(0, 217, 255, 0.315);">
                 <label class="text-center p-2">輸入你老師的版號與密碼,自動跳轉與加入你的最愛 </label>
                 <br>
-                <form method="post" class=" w-75 d-flex  flex-column m-auto" action="/JB/to_private_board" >               
-                    <input type='text' name='board_ID'  class=" form-control mb-1"  placeholder="看板ID" />
-                    <input type='password' name='board_password' class=" form-control mb-3"   placeholder="看板密碼"/>
-                    <input type='text' name='ID' value='<%=ID%>' style="display: none;" />         
-                    <input type='submit' class="btn btn-primary" value="進入"  />
+                <form method="post" class=" w-75 d-flex  flex-column m-auto" action="/JB/to_private_board">
+                    <input type='text' name='board_ID' class=" form-control mb-1" placeholder="看板ID" />
+                    <input type='password' name='board_password' class=" form-control mb-3" placeholder="看板密碼" />
+                    <input type='text' name='ID' value='<%=ID%>' style="display: none;" />
+                    <input type='submit' class="btn btn-primary" value="進入" />
+                    <input name="password" value="<%=password%>" style="display: none;"/>
                     <br>
                 </form>
               

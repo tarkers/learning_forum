@@ -16,11 +16,16 @@
 <header>
     <div name="Title" class="jumbotron  mb-0 ">
         <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
-         <div class="text-center  align-self-center">
+        <form method="post" action="/SAN/sign_in" id="sign_in_form">
+            <input type="text" name='ID'   style="display:none" value="<%=ID%>"/>
+            <input type="password" name='password'  style="display:none" value="<%=password%>"/>
+            <input type="submit" class=" btn btn-secondary float-left" value="回首頁"/>
+        </form>
+        <div class="text-center  align-self-center">
             <h1><small><%=board_ID%></small></h1>
-            <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
-         </div>
-     </div>
+            <small>You are <%=ID%></small>     <button id="plusLover" type="button" class="btn btn-link">加到我的最愛</button>
+        </div>
+    </div>
 </header>
 <body>
     <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
@@ -31,16 +36,18 @@
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
-            輸入篩選主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
+            找帳號或主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
             輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning" /><br />
             輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input type="button" value="指定貼文" class="bg-warning" /><br />
             <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
         </div>
         <!-- 發文跳轉 -->
-        <form action="/JB/to_post_page" method="post">
+        <form id="post_submit" action="/JB/to_post_page" method="post">
             <input type="text" name="ID" value="<%=ID%>" />
             <input type="text" name="board_ID" value="<%=board_ID%>" />
+            <input type="text" name="board_password" value="<%=board_password%>" />
             <input type="text" name="type" id="get_type" />
+            <input type="text" name="personal_password" id="personal_password" />
             <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%" />
         </form>
         <br>
@@ -68,20 +75,45 @@
                     <%}%>
                 </div>
                 <br />
+                <hr style="color:white; border:5px" />
             </div>
-            <br />
             <%}%>
             <br />
+            <h1 id="NotFind" style="text-align:center">沒找到貼文</h1>
         </div>
     </div>
     <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <input id="Hidden2" type="hidden" value="<%=num%>" />
     <form id="to_rewrite" style="display:none" action="/DB/to_ReWrite" method="post">
-        <input type="text" name="ID" value="<%=ID%>"/>
-        <input type="text" name="password"/>
-        <input type="text" name="board_ID" value="<%=board_ID%>"/>
-        <input type="text" name="num"/>
+        <input type="text" name="ID" value="<%=ID%>" />
+        <input type="text" name="board_password" value="<%=board_password%>" />
+        <input type="text" name="password"  value="<%=password%>"/>
+        <input type="text" name="board_ID" value="<%=board_ID%>" />
+        <input type="text" name="num" />
     </form>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">密碼輸入</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>"請先輸入您的個人密碼(全部本頁留言功能僅需輸入一次)"</p>
+                    <input id="prompt" type="password" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="yourpassword = $('#prompt').val(); if (yourpassword == '') { alert('請輸入您的密碼'); } else { alert('謝謝,請重複剛才操作') }">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
+        var yourpassword = "<%=password%>";
         function init() {
             $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
                 $("#introduce").html(result['introduce']);
@@ -101,8 +133,13 @@
             $('div[name = "reply"]').hide();
             $('.include').hide();
             $('.simple_include').show();
+            $("#NotFind").hide();
+            //alert($("#Hidden2").val());
+            if (parseInt($("#Hidden2").val()) == 0)
+                $("#NotFind").after('<h1 style="text-align:center">本議題無貼文</h1>')
+            $("#prompt").show();
         }
-        function changeReply(THIS,num) {
+        function changeReply(THIS, num) {
             if (THIS.text() == '展開留言') {
                 THIS.text('收合留言');
                 THIS.closest('form').next('div').show();
@@ -110,7 +147,7 @@
             else {
                 //THIS.text('展開留言');
                 //THIS.closest('form').next('div').hide();
-                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num}, function (result) {
+                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num }, function (result) {
                     if (result['result'] == 'success') {
                         var div = THIS.closest('form').next('div');
                         div.html('');
@@ -128,8 +165,17 @@
             }
         }
         $(document).ready(function () {
-            var yourpassword = "";
             init();
+            //發文跳轉
+            $("#post_submit").submit(function (e) {
+                if (yourpassword == "") {
+                    e.preventDefault();
+                    $("#myModal").modal("toggle");
+                }
+                else {
+                    $("#personal_password").val(yourpassword);
+                }
+            });
             //內容縮排
             $('input').click(function () {
                 if ($(this).val() == "縮起內容") {
@@ -142,29 +188,40 @@
             //篩選功能
             $('#find > input[type = "button"]').click(function () {
                 var text = $(this).prev().val();
+                $("#NotFind").show();
                 switch ($(this).val()) {
                     case "篩選主題":
                         $('.post').each(function () {
                             if ($(this).find('span').text().indexOf(text) < 0)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     case "隱藏貼文":
                         var number = parseInt(text);
                         number = parseInt('<%=num%>') - number;
                         $('.post').each(function () {
-                            $(this).show();
                             //console.log(number);
                             if (parseInt($(this).attr('name')) < number)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     case "指定貼文":
                         var place = parseInt(text);
                         $('.post').each(function () {
-                            $(this).show();
                             if (parseInt($(this).attr('id')) != place)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     default:
@@ -176,7 +233,7 @@
                 alert('篩選完成');
             });
             //加入我的最愛功能
-            $('button').click(function () {
+            $('#plusLover').click(function () {
                 $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID=" + '<%-board_ID%>', function (result) {
                     alert(result['result']);
                 });
@@ -186,22 +243,24 @@
                 var include = $(this).next('input').val();
                 var text = $(this).next('input');
                 var div = $(this).closest('form').next('div');
-                var label = $(this).prev();
                 if ('我要留言' == $(this).val() && text.val().trim() != '') {
-                    if (yourpassword == "")
-                        yourpassword = prompt("請輸入您的個人密碼(全部本頁留言功能僅需輸入一次)");
-                    $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val(), personal_password: yourpassword }, function (result) {
-                        alert(result['result']);
-                        if (result['result'] == 'success') {
-                            div.append('<%-ID%>:' + include + '<br/>');
-                            //label.click();
-                            text.val('');
-                        }
-                        else {
-                            yourpassword = "";
-                            alert('並沒有實際儲存請再留言一次');
-                        }
-                    });
+                    if (yourpassword == "") {
+                        $("#myModal").modal("toggle");
+                    }
+                    else {
+                        $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val(), personal_password: yourpassword }, function (result) {
+                            alert(result['result']);
+                            if (result['result'] == 'success') {
+                                div.append('<%-ID%>:' + include + '<br/>');
+                                //label.click();
+                                text.val('');
+                            }
+                            else {
+                                yourpassword = "";
+                                alert('並沒有實際儲存請再留言一次');
+                            }
+                        });
+                    }
                 }
                 else {
                     alert('您的輸入區是空白喔');
@@ -215,27 +274,29 @@
             $('a').click(function () {
                 if ($(this).html() == '編輯本篇貼文') {
                     if ('<%=ID%>' == $(this).attr('name')) {
-                        var password = prompt("請輸入你的個人密碼");
-                        var parent = $(this).parent();
-                        var num = parent.attr('id');
-                        if (password != null) {
-                            $('#to_rewrite').find('input').each(function () {
-                                var name = $(this).attr('name');
-                                switch (name) {
-                                    case 'password':
-                                        $(this).val(password);
-                                        break;
-                                    case 'num':
-                                        $(this).val(num);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            });
-                            $('#to_rewrite').submit();
+                        if (yourpassword == "")
+                            $("#myModal").modal("toggle");
+                        else {
+                            var password = yourpassword;
+                            var parent = $(this).parent();
+                            var num = parent.attr('id');
+                            if (password != null) {
+                                $('#to_rewrite').find('input').each(function () {
+                                    var name = $(this).attr('name');
+                                    switch (name) {
+                                        case 'password':
+                                            $(this).val(password);
+                                            break;
+                                        case 'num':
+                                            $(this).val(num);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                });
+                                $('#to_rewrite').submit();
+                            }
                         }
-                        else
-                            alert('請填入你的個人密碼');
                     }
                     else
                         alert('只有本人可以編輯貼文');

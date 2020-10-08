@@ -90,10 +90,12 @@
                 <div class=" mb-5">
                     <form method="POST" action="/CB/department/ALL">
                         <input type="text" name="ID" value="<%= ID %>" style="display: none;">
+                        <input type="text" name="password" value="<%=information['password']%>" style="display: none;">
                         <input type="submit" class="btn btn-info btn-lg mb-1 btn-block" value="進入課程">
                     </form>
                     <form method="POST" action="/CB/department/YT">
                         <input type="text" name="ID" value="<%= ID %>" style="display: none;">
+                        <input type="text" name="password" value="<%=information['password']%>" style="display: none;">
                         <input type="submit" class="btn btn-outline-info btn-lg mb-1 btn-block" value="老師看板">
                     </form>
                     <div>
@@ -137,7 +139,7 @@
                                 <input type=button value=刪除 class="ml-2 btn btn-outline-danger "
                                     onclick="delete_List('<%-lover[key]%>', 'lover')" />
                                 <form id="lover<%=lover[key]%>" method="POST" action="/JB/to_<%= l_inform[0] %>_board"
-                                    style="margin: 10px; display: none;">
+                                      style="margin: 10px; display: none;">
                                     <%  if(l_inform[0] ==='private'){%>
                                     <input type="password" id="pw-lover<%=lover[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -145,6 +147,7 @@
                                     <input name='ID' value="<%= ID %>" />
                                     <input name='type' value="<%= l_inform[0] %>" />
                                     <input name='board_ID' value="<%= l_inform[0] + '_' + l_inform[1]%>" />
+                                    <input name="password" value="<%=information['password']%>" />
                                 </form>
                             </div>
                         </div>
@@ -177,7 +180,7 @@
                                     onclick="delete_List('<%-notice[key]%>','notice')" />
 
                                 <form id="notice<%=notice[key]%>" method="POST" action="/JB/to_<%=n_inform[0]%>_board"
-                                    style="display:none">
+                                      style="display:none">
                                     <%  if(n_inform[0] ==='private'){%>
                                     <input type="password" id="pw-notice<%=notice[key]%>" name="board_password" />
                                     <input type="submit" value="確認" />
@@ -186,6 +189,7 @@
                                     <input name='type' value='<%= n_inform[0] %>' />
                                     <input name='board_ID' value='<%= n_inform[0] + "_" + n_inform[1]%>' />
                                     <input name='place' value='<%= n_inform[2] %>' />
+                                    <input name="password" value="<%=information['password']%>" />
                                 </form>
                             </div>
                         </div>
