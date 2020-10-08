@@ -249,7 +249,7 @@
                     }
                     else {
                         $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val(), personal_password: yourpassword }, function (result) {
-                            alert(result['result']);
+                            //alert(result['result']);
                             if (result['result'] == 'success') {
                                 div.append('<%-ID%>:' + include + '<br/>');
                                 //label.click();
