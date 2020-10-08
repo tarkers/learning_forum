@@ -31,7 +31,7 @@
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
-            輸入篩選主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
+            找帳號或主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
             輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning" /><br />
             輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input type="button" value="指定貼文" class="bg-warning" /><br />
             <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
@@ -68,18 +68,20 @@
                     <%}%>
                 </div>
                 <br />
+                <hr style="color:white; border:5px" />
             </div>
-            <br />
             <%}%>
             <br />
+            <h1 id="NotFind" style="text-align:center">沒找到貼文</h1>
         </div>
     </div>
     <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <input id="Hidden2" type="hidden" value="<%=num%>" />
     <form id="to_rewrite" style="display:none" action="/DB/to_ReWrite" method="post">
-        <input type="text" name="ID" value="<%=ID%>"/>
-        <input type="text" name="password"/>
-        <input type="text" name="board_ID" value="<%=board_ID%>"/>
-        <input type="text" name="num"/>
+        <input type="text" name="ID" value="<%=ID%>" />
+        <input type="text" name="password" />
+        <input type="text" name="board_ID" value="<%=board_ID%>" />
+        <input type="text" name="num" />
     </form>
     <script>
         function init() {
@@ -101,8 +103,12 @@
             $('div[name = "reply"]').hide();
             $('.include').hide();
             $('.simple_include').show();
+            $("#NotFind").hide();
+            //alert($("#Hidden2").val());
+            if (parseInt($("#Hidden2").val()) == 0)
+                $("#NotFind").after('<h1 style="text-align:center">本議題無貼文</h1>')
         }
-        function changeReply(THIS,num) {
+        function changeReply(THIS, num) {
             if (THIS.text() == '展開留言') {
                 THIS.text('收合留言');
                 THIS.closest('form').next('div').show();
@@ -110,7 +116,7 @@
             else {
                 //THIS.text('展開留言');
                 //THIS.closest('form').next('div').hide();
-                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num}, function (result) {
+                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num }, function (result) {
                     if (result['result'] == 'success') {
                         var div = THIS.closest('form').next('div');
                         div.html('');
@@ -142,29 +148,40 @@
             //篩選功能
             $('#find > input[type = "button"]').click(function () {
                 var text = $(this).prev().val();
+                $("#NotFind").show();
                 switch ($(this).val()) {
                     case "篩選主題":
                         $('.post').each(function () {
                             if ($(this).find('span').text().indexOf(text) < 0)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     case "隱藏貼文":
                         var number = parseInt(text);
                         number = parseInt('<%=num%>') - number;
                         $('.post').each(function () {
-                            $(this).show();
                             //console.log(number);
                             if (parseInt($(this).attr('name')) < number)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     case "指定貼文":
                         var place = parseInt(text);
                         $('.post').each(function () {
-                            $(this).show();
                             if (parseInt($(this).attr('id')) != place)
                                 $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
                         });
                         break;
                     default:
