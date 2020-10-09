@@ -187,10 +187,11 @@
         });
 
         $(document).ready(function () {
+            $('#change').attr('disabled',true);
             $('#information').click();
-            if ('<%=board%>' == '不是建立看板後跳來,不提供預設看板號')
+            if ('<%=board%>' == '不是建立看板後跳來,不提供預設看板號'){
                 alert('<%=board%>');
-            else
+            } else
                 alert('您剛剛建立的看板是 : ' + '<%=board%>');
 			//console.log('<%=board%>');
             $('#information').on('click', function () {
@@ -214,6 +215,7 @@
                                 alert('不存在此看板');
                             else {
                                 alert(data['board_ID'] + '號看板資料投入');
+                                $('#change').removeAttr('disabled');
                                 //console.log(data);
                                 //$("input[name='board_ID']:first").val(data['board_ID']);
                                 //$("input[name='password']:first").val(data['password']);
