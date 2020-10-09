@@ -25,10 +25,10 @@ function test_type(req, res, type) {
             //console.log(result);
             if (result != null) {
                 if (result['type'] == type && type == 'public') {
-                    jumpboard(req, res);
+                    jumpboard(req, res, result['type']);
                 }
                 else if (result['type'] == type && type == 'private' && result['password_public'] == req.body.board_password) {
-                    jumpboard(req, res);
+                    jumpboard(req, res, result['type']);
                 }
                 else
                     warming(res, 1);
@@ -39,7 +39,7 @@ function test_type(req, res, type) {
     });
 }
 
-function jumpboard(req, res) {
+function jumpboard(req, res, type) {
     MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
@@ -48,11 +48,15 @@ function jumpboard(req, res) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            var pkg = { board_ID: req.body.board_ID, ID: req.body.ID, data: result, num: result.length };
+            var pkg = { board_ID: req.body.board_ID, ID: req.body.ID, data: result, num: result.length, password: req.body.password };
             if (req.body.place)
                 pkg['place'] = req.body.place;
             else
                 pkg['place'] = 'NA';
+            if (type == "private")
+                pkg['board_password'] = req.body.board_password;
+            else
+                pkg['board_password'] = 'NA';
             res.render('Page8', pkg);
         });
     });
@@ -95,7 +99,7 @@ router.get('/get_board_introduce', function (req, res) {
 
 router.post('/to_post_page', function (req, res) {
     //console.log(req.body);
-    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type });
+    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type, personal_password: req.body.personal_password, board_password: req.body.board_password});
     //res.render('Page9', { ID: 'leon1234858', board_ID: 'private_0002', type: 'private' });
 });
 

@@ -230,7 +230,7 @@
                         let check = tab_list[i].getAttribute('style');                     
                         if (!search.includes(kind)) {   
                             tab_list[i].setAttribute('style', 'display: none');
-                        } else if (check =='display: block' || mode == "text-tab") {
+                        } else if (check =="display: block" || mode == "text-tab" || now_tag=="all") {
                             console.log(check);
                             hasTab = true;
                             tab_list[i].setAttribute('style', 'display: block');

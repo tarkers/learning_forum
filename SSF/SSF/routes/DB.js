@@ -131,7 +131,7 @@ function jumpPublic(req, board_ID, ID, res) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length };
+            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length, board_password: req.body.board_password, password: req.body.personal_password};
             if (req.body.place)
                 pkg['place'] = req.body.place;
             else
@@ -294,7 +294,9 @@ function to_rewrite_check_numID(req,res) {
                     res.render('Page10', {
                         board_ID: req.body.board_ID,
                         ID: req.body.ID, password: req.body.password,
-                        num: req.body.num, include_origin: result['include']
+                        num: req.body.num, include_origin: result['include'],
+                        board_password: req.body.board_password,
+                        password: req.body.password
                     })
                 }
                 else
@@ -378,7 +380,9 @@ function rewrite_return_board(req, res) {
             var pkg = {
                 board_ID: req.body.board_ID, ID: req.body.ID,
                 data: result, num: result.length,
-                place: req.body.num
+                place: req.body.num,
+                board_password: req.body.board_password,
+                password: req.body.password
             };
             res.render('Page8', pkg);
         });
