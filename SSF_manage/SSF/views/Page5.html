@@ -33,6 +33,7 @@
     <div class=" container-fluid ">
         <div id="upper-board" class=" text-center  m-auto" >
            <!-- 更改資訊欄 -->
+           <small  style="display: none; color: red;">更改老師介紹和議題介紹請先至編輯器做轉換</small>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <button class="btn btn-secondary dropdown-toggle" type="button" 
@@ -42,14 +43,19 @@
                     <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" id='title'>看板標題</a>
                         <a class="dropdown-item" id='tab'>分類</a>
-                        <a class="dropdown-item" id='include'>老師介紹</a>
+                        <a class="dropdown-item" id='include'>議題主持人介紹</a>
                         <a class="dropdown-item" id='introduce'>議題介紹</a>
                     </span>
                 </div>
+               
                 <input id="include-input" type="text" class="form-control" placeholder="更改版面資訊" />
                 <div class="input-group-append">
-                    <button id="confirm-btn" class="btn btn-outline-dark">更改</button>
+                    <a class="btn btn-outline-dark" style="display: none;" href="/BM/writer">編輯器</a>
                 </div>
+                <div class="input-group-append">
+                    <button id="confirm-btn" class="btn btn-outline-success">更改</button>
+                </div>
+                
             </div>
              <!-- 貼文篩選 -->
              <div class="input-group mb-3">
@@ -59,7 +65,7 @@
                 <input id="filter-input" type="number" class="form-control" min="0" placeholder="查看此號後的貼文"
                     oninput="$(this).val($(this).val().replace(/[^\d]/g,''))">
                 <div class="input-group-append">
-                    <button id="filter-btnfilter-btn" class=" btn btn-outline-success" >查看</button>
+                    <button id="filter-btn" class=" btn btn-outline-success" >查看</button>
                     <button class=" btn btn-outline-danger" onclick="$('.list-group>div').show()">解除</button>
                 </div>
             </div>
@@ -93,7 +99,7 @@
                     <div class="col-md-4 mb-1"> <strong>公有密碼:</strong>  <label name="password-public"></label></div>
                     <div class="col-md-4 mb-1"><strong>分類:</strong>   <label name="tab"></label></div>
                     <div class="col-md-4 mb-1"> <strong>議題介紹:</strong>   <label name="intorduce"></label></div>
-                    <div class="col-md-4 mb-1"><strong>老師介紹:</strong>   <label name="include"></label></div>
+                    <div class="col-md-4 mb-1"><strong>議題主持人介紹:</strong>   <label name="include"></label></div>
                 </div>
             </div>
             <!-- 貼文顯示 -->
@@ -166,6 +172,14 @@
         $('.dropdown-menu a').click(function () {
             kind = $(this).attr('id');
             $(".dropdown-toggle").text($(this).text());
+            if(kind=="include" || kind=="introduce"){
+                $('.input-group-append').children('a[href="/BM/writer"]').show();  
+                $("#upper-board").find('small').show();   
+            }
+            else{
+                $('.input-group-append').children('a[href="/BM/writer"]').hide();   
+                $("#upper-board").find('small').hide();   
+            }
         });
 
         $('#confirm-btn').on('click', function () {
