@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/javascripts/jquery.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <title>看板區</title>
+</head>
+<header>
+    <div name="Title" class="jumbotron  mb-0 ">
+        <button class="btn btn-outline-dark  float-left" onclick="history.back()">上一頁</button>
+        <form method="post" action="/SAN/sign_in" id="sign_in_form">
+            <input type="text" name='ID'   style="display:none" value="<%=ID%>"/>
+            <input type="password" name='password'  style="display:none" value="<%=password%>"/>
+            <input type="submit" class=" btn btn-secondary float-left" value="回首頁"/>
+        </form>
+        <div class="text-center  align-self-center">
+            <h1><small><%=board_ID%></small></h1>
+            <small>You are <%=ID%></small>     <button id="plusLover" type="button" class="btn btn-link">加到我的最愛</button>
+        </div>
+    </div>
+</header>
+<body>
+    <div class="container" style="font-family:Microsoft JhengHei;font-size:200%">
+        <!-- <div class="text-center jumbotron">
+            <h1><small><%=board_ID%></small></h1>
+            <small>You are <%=ID%></small>     <button type="button" class="btn btn-link">加到我的最愛</button>
+        </div> -->
+        <div id="introduce" style="text-align:center" class="bg-success"></div>
+        <!-- 篩選功能-->
+        <div id="find" class="bg-warning text-center">
+            找帳號或主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning" /><br />
+            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input type="button" value="指定貼文" class="bg-warning" /><br />
+            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
+        </div>
+        <!-- 發文跳轉 -->
+        <form id="post_submit" action="/JB/to_post_page" method="post">
+            <input type="text" name="ID" value="<%=ID%>" />
+            <input type="text" name="board_ID" value="<%=board_ID%>" />
+            <input type="text" name="board_password" value="<%=board_password%>" />
+            <input type="text" name="type" id="get_type" />
+            <input type="text" name="personal_password" id="personal_password" />
+            <input type="submit" value="我要發文" class="btn-lg bg-warning" style="width:100%" />
+        </form>
+        <br>
+        <div>
+            <!-- 每則貼文主體 -->
+            <%for(var i = num-1;i >= 0;i--){%>
+            <div id="<%=data[i]['num']%>" name="<%=i%>" class="post bg-info">
+                <strong>帳號:</strong><span><%=data[i]['ID']%></span><br />
+                <strong>標題:</strong><span><%=data[i]['title']%></span><small style="color:grey">      貼文編號: <%=data[i]['num']%></small>  <a name="<%=data[i]['ID']%>" style="font-size:50%">編輯本篇貼文</a> <br />
+                <small style="font-size:50%" class="simple_include"><%if(data[i]['include'].length > 30){%><%=data[i]['include'].substr(0,30)%><%}else{%><%=data[i]['include'].substr(0)%><%}%>.....按展開內容看全部</small>
+                <div class="include" style="word-wrap: break-word;"><%-data[i]['include']%></div> <br />
+                <input class="btn-lg bg-warning" type="button" value="展開內容" />
+                <!-- 寄留言-->
+                <form action="/DB/discuss" method="post">
+                    <input type="text" name="num" value="<%=data[i]['num']%>" />
+                    <input type="text" name="ID" value="<%=ID%>" />
+                    <input type="text" name="board_ID" value="<%=board_ID%>" />
+                    <label class="label label-success">展開留言</label><input name="<%=data[i]['num']%>" type="button" value="我要留言" class="btn btn-link" />
+                    <input class="form-control" style="background-color:cornsilk" type="text" name="include" value="" />
+                </form>
+                <!-- 回應區-->
+                <div name="reply">
+                    <%for(var j = 1;j <= Object.keys(data[i]).length - 5; j++){%>
+                    <%=data[i][j.toString()]%><br />
+                    <%}%>
+                </div>
+                <br />
+                <hr style="color:white; border:5px" />
+            </div>
+            <%}%>
+            <br />
+            <h1 id="NotFind" style="text-align:center">沒找到貼文</h1>
+        </div>
+    </div>
+    <input id="Hidden1" type="hidden" value="<%=place%>" />
+    <input id="Hidden2" type="hidden" value="<%=num%>" />
+    <form id="to_rewrite" style="display:none" action="/DB/to_ReWrite" method="post">
+        <input type="text" name="ID" value="<%=ID%>" />
+        <input type="text" name="board_password" value="<%=board_password%>" />
+        <input type="text" name="password"  value="<%=password%>"/>
+        <input type="text" name="board_ID" value="<%=board_ID%>" />
+        <input type="text" name="num" />
+    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">密碼輸入</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>"請先輸入您的個人密碼(全部本頁留言功能僅需輸入一次)"</p>
+                    <input id="prompt" type="password" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="yourpassword = $('#prompt').val(); if (yourpassword == '') { alert('請輸入您的密碼'); } else { alert('謝謝,請重複剛才操作') }">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var yourpassword = "<%=password%>";
+        function init() {
+            $.get("../JB/get_board_introduce?board_ID=" + $('h1 > small').text(), function (result) {
+                $("#introduce").html(result['introduce']);
+                $('.text-center > h1').html(result['title'] + $('h1').html());
+                $("#get_type").val(result['type']);
+            });
+            $('input').hide();
+            $('.form-control').show();
+            $('input[type = "submit"]').show();
+            $('input[type = "button"]').show();
+            $('input[type = "checkbox"]').show();
+            $('#find > input').show();
+            if ($('#Hidden1').val() != 'NA') {
+                $('#where').val($('#Hidden1').val());
+                alert("您由相關功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
+            }
+            $('div[name = "reply"]').hide();
+            $('.include').hide();
+            $('.simple_include').show();
+            $("#NotFind").hide();
+            //alert($("#Hidden2").val());
+            if (parseInt($("#Hidden2").val()) == 0)
+                $("#NotFind").after('<h1 style="text-align:center">本議題無貼文</h1>')
+            $("#prompt").show();
+        }
+        function changeReply(THIS, num) {
+            if (THIS.text() == '展開留言') {
+                THIS.text('收合留言');
+                THIS.closest('form').next('div').show();
+            }
+            else {
+                //THIS.text('展開留言');
+                //THIS.closest('form').next('div').hide();
+                $.post("../DB/discuss_refresh", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: num }, function (result) {
+                    if (result['result'] == 'success') {
+                        var div = THIS.closest('form').next('div');
+                        div.html('');
+                        for (var i in result['data'])
+                            div.append(result['data'][i] + '<br/>');
+                        THIS.text('展開留言');
+                        THIS.closest('form').next('div').hide();
+                    }
+                    else {
+                        alert('更新失敗,伺服器有問題或您已斷線');
+                        THIS.text('展開留言');
+                        THIS.closest('form').next('div').hide();
+                    }
+                });
+            }
+        }
+        $(document).ready(function () {
+            init();
+            //發文跳轉
+            $("#post_submit").submit(function (e) {
+                if (yourpassword == "") {
+                    e.preventDefault();
+                    $("#myModal").modal("toggle");
+                }
+                else {
+                    $("#personal_password").val(yourpassword);
+                }
+            });
+            //內容縮排
+            $('input').click(function () {
+                if ($(this).val() == "縮起內容") {
+                    $(this).val("展開內容").prev().prev().hide().prev().show();
+                }
+                else if ($(this).val() == "展開內容") {
+                    $(this).val("縮起內容").prev().prev().show().prev().hide();
+                }
+            });
+            //篩選功能
+            $('#find > input[type = "button"]').click(function () {
+                var text = $(this).prev().val();
+                $("#NotFind").show();
+                switch ($(this).val()) {
+                    case "篩選主題":
+                        $('.post').each(function () {
+                            if ($(this).find('span').text().indexOf(text) < 0)
+                                $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
+                        });
+                        break;
+                    case "隱藏貼文":
+                        var number = parseInt(text);
+                        number = parseInt('<%=num%>') - number;
+                        $('.post').each(function () {
+                            //console.log(number);
+                            if (parseInt($(this).attr('name')) < number)
+                                $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
+                        });
+                        break;
+                    case "指定貼文":
+                        var place = parseInt(text);
+                        $('.post').each(function () {
+                            if (parseInt($(this).attr('id')) != place)
+                                $(this).hide();
+                            else {
+                                $(this).show();
+                                $("#NotFind").hide();
+                            }
+                        });
+                        break;
+                    default:
+                        $('.post').each(function () {
+                            $(this).show();
+                        });
+                        break;
+                }
+                alert('篩選完成');
+            });
+            //加入我的最愛功能
+            $('#plusLover').click(function () {
+                $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID=" + '<%-board_ID%>', function (result) {
+                    alert(result['result']);
+                });
+            });
+            //加入留言功能
+            $('form > input[type = "button"]').click(function () {
+                var include = $(this).next('input').val();
+                var text = $(this).next('input');
+                var div = $(this).closest('form').next('div');
+                if ('我要留言' == $(this).val() && text.val().trim() != '') {
+                    if (yourpassword == "") {
+                        $("#myModal").modal("toggle");
+                    }
+                    else {
+                        $.post("../DB/discuss", { ID: '<%-ID%>', board_ID: '<%-board_ID%>', num: $(this).attr('name'), include: $(this).next('input').val(), personal_password: yourpassword }, function (result) {
+                            //alert(result['result']);
+                            if (result['result'] == 'success') {
+                                div.append('<%-ID%>:' + include + '<br/>');
+                                //label.click();
+                                text.val('');
+                            }
+                            else {
+                                yourpassword = "";
+                                alert('並沒有實際儲存請再留言一次');
+                            }
+                        });
+                    }
+                }
+                else {
+                    alert('您的輸入區是空白喔');
+                }
+            });
+            //留言展開
+            $('label').click(function () {
+                changeReply($(this), $(this).next('input').attr('name'));
+            });
+            //貼文編輯
+            $('a').click(function () {
+                if ($(this).html() == '編輯本篇貼文') {
+                    if ('<%=ID%>' == $(this).attr('name')) {
+                        if (yourpassword == "")
+                            $("#myModal").modal("toggle");
+                        else {
+                            var password = yourpassword;
+                            var parent = $(this).parent();
+                            var num = parent.attr('id');
+                            if (password != null) {
+                                $('#to_rewrite').find('input').each(function () {
+                                    var name = $(this).attr('name');
+                                    switch (name) {
+                                        case 'password':
+                                            $(this).val(password);
+                                            break;
+                                        case 'num':
+                                            $(this).val(num);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                });
+                                $('#to_rewrite').submit();
+                            }
+                        }
+                    }
+                    else
+                        alert('只有本人可以編輯貼文');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

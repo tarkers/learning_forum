@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>下載</title>
+</head>
+<header>
+    <div name="Title" class="jumbotron text-center  mb-0">
+        <h1 class=" d-inline-block">版面管理</h1>ID: <%=board_ID %> 
+    </div>
+</header>
+<body>
+    <div class=" container-fluid text-center">  
+        <div class="pt-5">
+            <button class="btn btn-lg btn-info" id="download">下載</button><br/><br /><label>格式轉換:</label>
+            <input  id="file" type="file" name="file" class="btn  btn-success"/>
+
+            <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
+            <p>直接上傳由上方功能下載的檔案, 可以得到純csv表格</p>
+        </div>
+    </div>
+    <script>
+        var $link = $(".btn-link");
+        var api = 'http://140.116.183.54:1339/getTable';
+        function buildCSV(items) {
+            console.log(items);
+            var blob = new Blob(['\uFEFF' + items],
+                { type: "application/octect-stream" });
+            var blobUrl = URL.createObjectURL(blob);
+            //var fileName = "youtdata.csv";
+            return blobUrl;
+            //$link.attr({ href: blobUrl, download: fileName }).show();
+        }
+        function filetoJSON(data,api) {
+            var urlData;
+            var returnData = [];
+            if (data) {
+                var reader = new FileReader();
+                reader.readAsText(data, 'UTF-8');
+                try {
+                    reader.onload = function (e) {
+                        urlData = this.result;
+                        //alert(urlData);
+                        var lists = urlData.split('\n');
+                        for (var i = 0; i < lists.length - 1; i++) {
+                            var list = lists[i].split(',');
+                            var json = {};
+                            for (var j = 0; j < list.length - 1; j++) {
+                                var mid = list[j].indexOf(':');
+                                var key = list[j].substring(1, mid - 1);
+                                var value = list[j].substring(mid + 2, list[j].length - 1);
+                                json[key] = value;
+                            }
+                            returnData.push(json);
+                        }
+                        //console.log(returnData);
+                        //console.log(JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\""));
+                        $.post(api, {
+                            data: JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\"")
+                        }, function (result) {
+                                //console.log(result);
+                                $link.attr({ href: buildCSV(result), download: 'yourdata.csv' }).show();
+                                alert('點擊連結即可下載');
+                        });
+                    };
+                } catch (e) {
+                    alert(e.message);
+                }
+            }
+            else
+                alert('您的瀏覽器出錯, 請重新整理再試一次');
+        }
+        $('#download').on('click',function(){
+            $.ajax({
+                type: 'post',
+                url: "/GBD/download",
+                data: {
+                    board_ID:'<%=board_ID%>',
+                    password:'<%=password%>'
+                },
+                dataType: 'JSON',
+                success: function (response) {
+                    console.log("success");
+                    items = response.data;
+                    //transfer csv file
+                    var csv = '\uFEFF';
+                    for (var i in items) {
+                        for (var j in items[i]) {
+                            csv += '"' + j + '":' + JSON.stringify(items[i][j]).replace(/,/g, "。") + ',';
+                        }
+                        csv += '\r\n';
+                    }
+                    //console.log(csv);
+                    var blob = new Blob([csv],
+                        { type: "application/octect-stream" });
+                    var blobUrl = URL.createObjectURL(blob);
+                    var fileName = "yourdata.csv";
+                    $link.attr({ href: blobUrl, download: fileName }).show();
+                    alert('點擊連結即可下載');
+                },
+                error: function(response){
+                    console.log('error');
+                }
+            });
+        });
+        $('#file').change(function () {
+             filetoJSON(document.getElementById('file').files[0], api);
+        });
+        $('.btn-link').on('click', function (e) {
+            $(this).slideUp();
+        });
+    </script>
+</body>
+
+</html>

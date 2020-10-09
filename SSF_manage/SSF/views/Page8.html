@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>下載</title>
+</head>
+
+<body>
+    <div class=" container-fluid">
+        <h1 class="jumbotron text-center p-2">多版面資料取得</h1>
+    </div>
+    <div class=" text-center">
+        <p><strong>Board:</strong> <input type="text" /></p>
+        <p><button class="btn btn-lg btn-info">下載</button></p>
+        <p><button class="btn btn-lg btn-success">全表格下載</button></p>
+        <p><button class="btn btn-lg btn-warning">全表格置換</button></p>
+        <p><a type="button" class="btn btn-link" style="display: none;">Download File</a></p>
+        <div class="modal" tabindex="-1" role="dialog" id="modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">請輸入目標資訊</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>警告, 本功能牽涉核心資料須謹慎使用</p>
+                        <input name="DB" type="text" placeholder="目標資料庫" />
+                        <input name="collection" type="text" placeholder="目標表格" />
+                        <br /><br /><input style="display:none" id="file" accept=".csv" name="data" type="file" multep />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="confirm_btn" type="button" class="btn btn-primary">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var $link = $(".btn-link");
+        var items = null;
+        function filetoJSON(data,api) {
+            var urlData;
+            var returnData = [];
+            if (data) {
+                var reader = new FileReader();
+                reader.readAsText(data, 'UTF-8');
+                try {
+                    reader.onload = function (e) {
+                        urlData = this.result;
+                        //alert(urlData);
+                        var lists = urlData.split('\n');
+                        for (var i = 0; i < lists.length - 1; i++) {
+                            var list = lists[i].split(',');
+                            var json = {};
+                            for (var j = 0; j < list.length - 1; j++) {
+                                var mid = list[j].indexOf(':');
+                                var key = list[j].substring(1, mid - 1);
+                                var value = list[j].substring(mid + 2, list[j].length - 1);
+                                json[key] = value.replace(/。/g, ",");
+                            }
+                            returnData.push(json);
+                        }
+                        //console.log(returnData);
+                        //console.log(JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\""));
+                        $.post(api, {
+                            board_ID: '<%=board_ID%>', password: '<%=password%>',
+                            DB: $('.modal-body > input[name="DB"]').val(),
+                            collection: $('.modal-body > input[name="collection"]').val(),
+                            data: JSON.stringify(returnData).replace(/\\\\/g, "\\").replace(/\\\"/g, "\"")
+                        }, function (result) {
+                                alert(result['result']);
+                        });
+                    };
+                } catch (e) {
+                    alert(e.message);
+                }
+            }
+            else
+                alert('您的瀏覽器出錯, 請重新整理再試一次');
+        }
+        function buildCSV(items) {
+            //transfer csv file
+            var csv = '\uFEFF';
+            for (var i in items) {
+                for (var j in items[i]) {
+                    csv += '"' + j + '":' + JSON.stringify(items[i][j]).replace(/,/g, "。") + ',';
+                }
+                csv += '\r\n';
+            }
+            //console.log(csv);
+            var blob = new Blob([csv],
+                { type: "application/octect-stream" });
+            var blobUrl = URL.createObjectURL(blob);
+            //var fileName = "youtdata.csv";
+            return blobUrl;
+            //$link.attr({ href: blobUrl, download: fileName }).show();
+        }
+        $('.btn-info').on('click', function () {
+            if ($('input:first').val() != '') {
+                $.ajax({
+                    type: 'post',
+                    url: "/GBD/core_download",
+                    data: {
+                        board_ID: '<%=board_ID%>',
+                        password: '<%=password%>',
+                        board: $('input:first').val()
+                    },
+                    dataType: 'JSON',
+                    success: function (response) {
+                        console.log("success");
+                        items = response.data;
+                        $link.attr({ href: buildCSV(items), download: 'yourdata.csv' }).show();
+                    },
+                    error: function (response) {
+                        alert("fail");
+                    },
+                    complete: function () {
+                        //no matter success or error it will run
+                    }
+                });
+            }
+            else
+                alert('請輸入目標看板');
+        });
+        $('.btn-link').on('click', function (e) {
+            $(this).slideUp();
+        });
+        $('.btn-success').click(function () {
+            $('#modal').modal('show');
+            $('#file').hide();
+            $('#confirm_btn').attr('name', '../GBD/call_all_document');
+        });
+        $('.btn-warning').click(function () {
+            $('#modal').modal('show');
+            $('#file').show();
+            $('#confirm_btn').attr('name', '../GBD/change_all_document');
+        });
+        $('#confirm_btn').click(function () {
+            $('#modal').modal('hide');
+            var api = $(this).attr('name');
+            if (api == '../GBD/call_all_document') {
+                $.post(api, {
+                    board_ID: '<%=board_ID%>', password: '<%=password%>',
+                    DB: $('.modal-body > input[name="DB"]').val(),
+                    collection: $('.modal-body > input[name="collection"]').val()
+                }, function (result) {
+                    items = result.data;
+                    $link.attr({ href: buildCSV(items), download: 'yourdata.csv' }).show();
+                });
+            } else {
+                filetoJSON(document.getElementById('file').files[0],api);
+            }
+
+        });
+    </script>
+</body>
+
+</html>

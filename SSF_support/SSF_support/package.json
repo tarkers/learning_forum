@@ -1,0 +1,15 @@
+{
+  "name": "ssf_support",
+  "version": "0.0.0",
+  "description": "SSF_support",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "formidable": "^1.2.2",
+    "node-static": "^0.7.11",
+    "path": "^0.12.7",
+    "querystring": "^0.2.0"
+  }
+}

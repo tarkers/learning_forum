@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>多版面管理</title>
+</head>
+
+<body>
+    <div class=" container-fluid  text-center">
+        <div class=" jumbotron p-2">
+            <h1>多版面管理</h1>
+        </div>
+        <div class="p-3">
+            <form method="post" action="/MB/force_to_personal_manage">
+                <input type=text name=board_ID value="<%=board_ID%>" style="display: none;">
+                <input type=text name=password value="<%=password%>" style="display: none;">
+                <strong>Board:</strong> <input name="board" type="text" />
+                <input type="submit" class="btn btn-success" value="進入" />
+            </form>
+        </div>
+        <div class="p-2">
+            <strong>過濾標題</strong> <input id="filter-input" type="text" />
+            <button id="filter-btn" class="btn btn-info">過濾</button>
+            <button id="lift-btn" class=" btn btn-warning"
+                onclick="$('.list-group li').show();$('.list-group li').removeClass('lock');$('#filter-input').val(' ');">解除</button>
+        </div>
+        <ul class=" list-group mt-3">
+            <% for(var i in data){%>
+            <li class="list-group-item list-group-item-primary ">
+                <strong><%=data[i]['board_ID']%></strong> - <%=data[i]['title']%></li>
+            <%}%>
+        </ul>
+    </div>
+    <script>
+        $('#filter-input').on('keyup',function (){
+            var value = $('#filter-input').val().toLowerCase();
+            $('.list-group li').filter(function(){
+                if(!$(this).hasClass('lock') ){
+                    $(this).toggle(($(this).text().toLowerCase().split('-')[1]).indexOf(value)>-1);
+                }     
+            });       
+        });
+
+        $('#filter-btn').on('click',function(e){
+            console.log('btn-go');
+            var value = $('#filter-input').val().toLowerCase();
+            $('.list-group li').filter(function(){        
+                if($(this).is(':visible')){
+                    $(this).toggle(($(this).text().toLowerCase().split('-')[1]).indexOf(value)>-1);        
+                }      
+                if($(this).is(':hidden')){
+                    $(this).addClass('lock');
+                }
+            });         
+        })
+        
+    </script>
+</body>
+
+</html>

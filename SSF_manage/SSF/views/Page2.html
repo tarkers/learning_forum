@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/javascripts/verify.js"></script>
+    <title>核心管理者登入</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div name="Title" class="jumbotron text-center">
+            <h1>核心管理者系統</h1>
+        </div>
+        <div>
+            <form id="FORM" method="POST" action="/BM/core_login" class=" text-center">
+                <p> <strong>帳號: </strong> <input type="text" name=board_ID></p>
+                <p> <strong>密碼: </strong> <input type="password" name=password></p>
+                <div id="verify" style="text-align:center"></div>
+                <p> <input id="SUBMIT" type=submit class="btn btn-success" value="登入"></p>
+            </form>
+        </div>
+
+
+    </div>
+    <script>
+        $('#verify').codeVerify({
+            type: 2,
+            figure: 10,  //位数，仅在type=2时生效
+            arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
+            width: '100%',
+            height: '30px',
+            fontSize: '50%',
+            btnId: 'SUBMIT',
+            ready: function () {
+                $('#FORM').attr("onsubmit", "return false");
+            },
+            success: function () {
+                $('#FORM').attr("onsubmit", "return true");
+            },
+            error: function () {
+                alert('驗證碼錯誤, 請重新填寫密碼');
+                $('input[type="password"]').val('');
+                $('#FORM').attr("onsubmit", "return false");
+            }
+        });
+    </script>
+</body>
+
+</html>
