@@ -5,7 +5,7 @@ var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const { GetUrl } = require('./database_url');
 var uri = GetUrl('null');
-
+var supuri = GetUrl('supServer');
 //mode 0:  1:密碼錯誤或帳號不存在,按上一頁再試一次 2:伺服器連線問題請,請按上一頁再試一次 3:操作不合法,請聯絡網站管理者
 function warming(res, mode) {
     var str = ['', '密碼錯誤或帳號(版號)不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
@@ -99,7 +99,7 @@ router.get('/get_board_introduce', function (req, res) {
 
 router.post('/to_post_page', function (req, res) {
     //console.log(req.body);
-    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type, personal_password: req.body.personal_password, board_password: req.body.board_password});
+    res.render('Page9', { ID: req.body.ID, board_ID: req.body.board_ID, type: req.body.type, personal_password: req.body.personal_password, board_password: req.body.board_password, uri: supuri});
     //res.render('Page9', { ID: 'leon1234858', board_ID: 'private_0002', type: 'private' });
 });
 

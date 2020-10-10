@@ -1,0 +1,6 @@
+local_uri=本地地址
+sendMailer=寄件Gmail帳號
+Gmail_password=寄件Gmail密碼
+mongodbPlace=mongodb位置
+managePage=管理頁位置
+supportServer=輔助伺服器位置
