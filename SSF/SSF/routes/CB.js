@@ -166,7 +166,7 @@ router.post('/to_4', async (req, res) => {
 router.post('/department/:postId', async (req, res) => {
     //console.log(req.body);
     try {
-        var department_name = req.params.postId.toString()
+        var department_name = req.params.postId.toString();
         var department_board_name = department_name + "_board";
         //console.log("department name>>" + department_name)
         //console.log("board name>>" + department_board_name)

@@ -493,7 +493,8 @@
 
 <script name="imgur">
     // imgur api
-    var api = 'http://140.116.183.54:1339/getImg';
+    //var api = 'http://140.116.183.54:1339/getImg';
+    var api = '<%=uri%>' + '/getImg';
     $("document").ready(function () {
         $('input[type=file]').on("change", function () {
 
