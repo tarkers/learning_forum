@@ -5,8 +5,8 @@ var urlencode = require('urlencode');
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const {GetUrl} = require('./database_url');
-var uri = GetUrl('null');
-var supuri = GetUrl('supServer');
+const uri = GetUrl('null');
+const supuri = GetUrl('supServer');
 //function block
 //mode 0:  1:密碼錯誤或帳號不存在,按上一頁再試一次 2:伺服器連線問題請,請按上一頁再試一次 3:操作不合法,請聯絡網站管理者
 function warming(res, mode) {

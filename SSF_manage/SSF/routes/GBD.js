@@ -5,10 +5,10 @@ var mongo = require('mongodb');
 const { ObjectId } = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const { GetUrl } = require('./database_url');
-var uri = GetUrl('null');
-var core_ID = 'admin';
-var core_password = '0000';
-
+const uri = GetUrl('null');
+const core_ID = GetUrl('core_ID');
+const core_password = GetUrl('core_password');
+const supuri = GetUrl('supServer');
 //function
 
 function warming(res, mode) {
@@ -36,7 +36,10 @@ function IsPasswordRight(req,res,next,other) {
 }
 
 function Render(req, res, other) {
-    res.render(other, { board_ID: req.body.board_ID, password: req.body.password });
+    if (other == 'Page7')
+        res.render(other, { board_ID: req.body.board_ID, password: req.body.password, uri: supuri });
+    else
+        res.render(other, { board_ID: req.body.board_ID, password: req.body.password });
 }
 
 function ReJSON(req, res, other) {

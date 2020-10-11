@@ -4,10 +4,10 @@ var router = express.Router();
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const { GetUrl } = require('./database_url');
-var uri = GetUrl('null');
-var core_ID = 'admin';
-var core_password = '0000';
-
+const uri = GetUrl('null');
+const core_ID = GetUrl('core_ID');
+const core_password = GetUrl('core_password');
+const supuri = GetUrl('supServer');
 //function
 //mode 0:  1:密碼錯誤或帳號不存在,按上一頁再試一次 2:伺服器連線問題請,請按上一頁再試一次 3:操作不合法,請聯絡網站管理者
 function warming(res, mode) {
@@ -250,6 +250,6 @@ router.post('/core_login', function (req, res) {
 });
 //前往文字to html編輯器
 router.get('/writer', function (req, res) {
-    res.render('writer');
+    res.render('writer', { uri: supuri});
 });
 module.exports = router;
