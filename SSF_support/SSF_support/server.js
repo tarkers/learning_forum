@@ -6,9 +6,9 @@ var path = require('path');
 var fs = require('fs');
 var nStatic = require('node-static');
 var fileServer = new nStatic.Server('./uploadImg');
-var port = process.env.PORT || 1337;
+var port = process.env.PORT || 1337; //port要改
 const hashnumber = 17;
-const baseURL = 'http://localhost:1337';
+const baseURL = 'http://localhost:1337'; //自己在哪個domain
 
 
 function createCSV(origin_data) {
@@ -36,7 +36,7 @@ function createCSV(origin_data) {
 }
 
 http.createServer(function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', /*'140.116.*'*/ '*');
+    res.setHeader('Access-Control-Allow-Origin', /*'140.116.*'*/ '*'); //跨域允許要加限制
     if (req.method == 'GET') {
         fileServer.serve(req, res);
     }

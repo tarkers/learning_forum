@@ -1,7 +1,16 @@
+require('dotenv').config();
+
 function GetUrl(database_name) {
-    //return "mongodb+srv://root:0000@cluster0.tbtdc.gcp.mongodb.net/" + database_name + "?retryWrites=true&w=majority";
-    return "mongodb://localhost:27017/";
-    //return "mongodb+srv://leon1234858:8ntscpal@cluster0.gyixj.gcp.mongodb.net/people?retryWrites=true&w=majority";
+    switch (database_name) {
+        case 'core_ID':
+            return process.env.core_ID;
+        case 'core_password':
+            return process.env.core_password;
+        case 'supServer':
+            return process.env.supServer;
+        default:
+            return process.env.mongodbPath;
+    }
 }
 
 module.exports.GetUrl=GetUrl;

@@ -4,9 +4,9 @@ var router = express.Router();
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const { GetUrl } = require('./database_url');
-var uri = GetUrl('null');
-var core_ID = 'admin';
-var core_password = '0000';
+const uri = GetUrl('null');
+const core_ID = GetUrl('core_ID');
+const core_password = GetUrl('core_password');
 
 //function
 
