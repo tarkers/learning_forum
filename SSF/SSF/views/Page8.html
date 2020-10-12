@@ -36,10 +36,10 @@
         <div id="introduce" style="text-align:center" class="bg-success"></div>
         <!-- 篩選功能-->
         <div id="find" class="bg-warning text-center">
-            找帳號或主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning" /><br />
-            輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning" /><br />
-            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input type="button" value="指定貼文" class="bg-warning" /><br />
-            <input type="button" value="解除所有限制" class="btn-lg bg-warning" style="width:100%" />
+            找帳號或主題關鍵字: <input type="text" class="bg-warning" /><input type="button" value="篩選主題" class="bg-warning btnclr" /><br />
+            輸入顯示前幾則貼文: <input type="text" class="bg-warning" /><input type="button" value="隱藏貼文" class="bg-warning btnclr" /><br />
+            輸入目標貼文的號碼: <input type="text" id="where" class="bg-warning" /><input  id="choosePost"  type="button" value="指定貼文" class="bg-warning btnclr" /><br />
+            <input id="unlimit" type="button" value="解除所有限制" class="btn-lg bg-warning btnclr" style="width:100%" />
         </div>
         <!-- 發文跳轉 -->
         <form id="post_submit" action="/JB/to_post_page" method="post">
@@ -126,10 +126,7 @@
             $('input[type = "button"]').show();
             $('input[type = "checkbox"]').show();
             $('#find > input').show();
-            if ($('#Hidden1').val() != 'NA') {
-                $('#where').val($('#Hidden1').val());
-                alert("您由相關功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
-            }
+            
             $('div[name = "reply"]').hide();
             $('.include').hide();
             $('.simple_include').show();
@@ -230,8 +227,18 @@
                         });
                         break;
                 }
-                alert('篩選完成');
+                $('.btnclr').removeClass('bg-primary').addClass('bg-warning');
+                $(this).removeClass('bg-warning').addClass('bg-primary');
+                //alert('篩選完成');
             });
+            if ($('#Hidden1').val() != 'NA') {
+                $('#where').val($('#Hidden1').val());
+                //alert("您由相關功能完成跳轉, 已自動將該則貼文填入[指定貼文]的輸入列中, 若要直接前往, 點擊[指定貼文]鈕即可。")
+                $("#choosePost").click();
+            }
+            else {
+                $("#unlimit").click();
+            }
             //加入我的最愛功能
             $('#plusLover').click(function () {
                 $.get("../DB/add_lover?ID=" + '<%-ID%>' + "&board_ID=" + '<%-board_ID%>', function (result) {
