@@ -1,0 +1,4 @@
+core_ID= ID
+core_password= Password
+supServer=»²§UserverIP
+mongodbPath=mongodb IP

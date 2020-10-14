@@ -2,7 +2,7 @@ require('dotenv').config();
 
 function GetUrl(database_name) {
     if (database_name == 'supServer')
-        return process.env.supportServer
+        return process.env.supportServer;
     else
         return process.env.mongodbPlace;
 }
