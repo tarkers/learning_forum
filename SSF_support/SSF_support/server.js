@@ -6,9 +6,9 @@ var path = require('path');
 var fs = require('fs');
 var nStatic = require('node-static');
 var fileServer = new nStatic.Server('./uploadImg');
-var port = process.env.PORT || 1337; //port要改
+var port = process.env.PORT || 1339; //port要改
 const hashnumber = 17;
-const baseURL = 'http://localhost:1337'; //自己在哪個domain
+const baseURL = 'http://140.116.183.54:1339'; //自己在哪個domain
 
 
 function createCSV(origin_data) {
