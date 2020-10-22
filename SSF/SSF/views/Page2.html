@@ -22,6 +22,10 @@
         transition: none;
         display: none;
     }
+    .mosiac{
+        color: transparent;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
 </style>
 <header style="font-family: 'Roboto Slab', cursive;"> 
     <div name="Title" class="jumbotron  mb-0 ">
@@ -43,7 +47,7 @@
                     <hr>
                     <h4>帳號 : <%=information['ID']%></h4>
                     <h4>姓名 : <%=information['name']%></h4>
-                    <h4>密碼 : <%=information['password']%></h4>
+                    <h4>密碼 : <span class="mosiac"><%=information['password']%></span><small style="color:gray">(反白可以看到密碼)</small></h4>
                     <h4>學校: <%=information['school']%></h4>
                     <h4>性別: <%=information['gender']%></h4>
                     <h4>e-mail : <%=information['mail']%></h4>

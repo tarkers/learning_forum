@@ -3,7 +3,7 @@ var express = require('express');
 //const { GetUrl } = require('./database_url');
 var router = express.Router();
 const { GetUrl } = require('./database_url');
-var uri = GetUrl('null');
+const uri = GetUrl('null');
 var MongoClient = require('mongodb').MongoClient;
 
 //require("dotenv/config")

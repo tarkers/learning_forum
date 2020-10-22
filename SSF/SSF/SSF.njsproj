@@ -51,6 +51,9 @@
     <Content Include="views\error.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\jump.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\Page1.html">
       <SubType>Code</SubType>
     </Content>

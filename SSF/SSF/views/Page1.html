@@ -45,19 +45,31 @@
 
                         <div>
                             <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
-                                data-toggle="collapse" data-target="#log-in-form" value='log-in'>
+                                    data-toggle="collapse" data-target="#log-in-form" value='log-in'>
                                 登入
                             </button>
                         </div>
                         <div>
                             <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
-                                data-toggle="collapse" data-target="#register-form" value='register'>
+                                    data-toggle="collapse" data-target="#register-form" value='register'>
                                 註冊
                             </button>
                         </div>
                         <div>
-                            <a type="button" class="btn btn-outline-warning btn-lg mb-1 btn-block"
-                                href="http://140.116.183.54:1338">
+                            <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
+                                    data-toggle="collapse" id="ReSendMail">
+                                重寄驗證信
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-info btn-lg mb-1 btn-block"
+                                    data-toggle="collapse" id="ForgetPassword">
+                                忘記密碼
+                            </button>
+                        </div>
+                        <div>
+                            <a id='toManage' type="button" class="btn btn-outline-warning btn-lg mb-1 btn-block"
+                               href="">
                                 老師管理
                             </a>
                         </div>
@@ -158,9 +170,12 @@
     </div>
     <script>
         $(document).ready(function () {
+            //$('#sign_in_form').find('input[name == "ID"]').val(localStorage.getItem('ID'));
+            //$('#sign_in_form').find('input[name == "password"]').val(localStorage.getItem('password'));
+            $("#toManage").attr('href', location.protocol + '//' + window.location.href.split('/')[2] + '/SAN/toManageMode');
             if ('<%=result%>' != '第一次進入') {
                 alert('<%=result%>');
-                if ('<%=result%>' == '帳號已存在 請更改帳號再試一次') {
+                if ('<%=result%>' == '帳號或郵箱已存在 請更改後再試一次') {
                     var text = $("#register-form").find('form');
                     text.find('input[name = "ID"]').val('<%=ID%>');
                     text.find('input[name = "password"]').val('<%=password%>');
@@ -170,6 +185,40 @@
                     text.find('select[name = "gender"]').val('<%=gender%>');
                 }
             }
+            $("#ReSendMail").click(function () {
+                var ID = prompt("請輸入您的個人帳號",'');
+                if (ID != '') {
+                    $.post("/SAN/" + $(this).attr('id'), { ID: ID }, function (result) {
+                        if (result.result == 'success')
+                            alert('已成功重寄驗證電子郵件, 請至您註冊時填寫的信箱接收');
+                        else if (result.result == 'already')
+                            alert('您已驗證成功, 不需要再驗證');
+                        else if (result.result == 'null')
+                            alert('該帳號不存在, 請確認輸入帳號正確');
+                        else
+                            alert('系統出現問題, 請稍後再試, 或聯絡我們。')
+                    });
+                }
+                else
+                    alert('帳號不可為空');
+            });
+            $("#ForgetPassword").click(function () {
+                var ID = prompt("請輸入您的個人帳號",'');
+                if (ID != '') {
+                    $.post("/SAN/" + $(this).attr('id'), { ID: ID }, function (result) {
+                        if (result.result == 'success')
+                            alert('已成功寄出含密碼的電子郵件, 請至您註冊時填寫的信箱查看');
+                        else if (result.result == 'already')
+                            alert('未認證郵箱不可使用本功能, 請先認證您的郵箱');
+                        else if (result.result == 'null')
+                            alert('該帳號不存在, 請確認輸入帳號正確');
+                        else
+                            alert('系統出現問題, 請稍後再試, 或聯絡我們。')
+                    });
+                }
+                else
+                    alert('帳號不可為空');
+            });
             $("#main").on('click', function (event) {
                 if (event.target.tagName == "DIV") {
                     $('#main .div-collapse').collapse('hide')
@@ -187,6 +236,9 @@
                     $('#sign_in_form').attr("onsubmit", "return false");
                 },
                 success: function () {
+                    //localStorage.setItem('ID', $('#sign_in_form').find('input[name == "ID"]').val());
+                    //localStorage.setItem('password', $('#sign_in_form').find('input[name == "password"]').val());
+                    //alert(localStorage.getItem('ID') + localStorage.getItem('password'));
                     $('#sign_in_form').attr("onsubmit", "return true");
                 },
                 error: function () {

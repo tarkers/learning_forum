@@ -5,11 +5,12 @@ var urlencode = require('urlencode');
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 const {GetUrl} = require('./database_url');
-var uri = GetUrl('null');
+const uri = GetUrl('null');
+const supuri = GetUrl('supServer');
 //function block
 //mode 0:  1:密碼錯誤或帳號不存在,按上一頁再試一次 2:伺服器連線問題請,請按上一頁再試一次 3:操作不合法,請聯絡網站管理者
 function warming(res, mode) {
-    var str = ['', '密碼錯誤或帳號不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
+    var str = ['電子信箱未認證, 請趕快去您填寫的信箱點擊認證網址', '密碼錯誤或帳號不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
     res.render('warming', { warming: str[mode] });
 }
 
@@ -25,7 +26,10 @@ function test_personal_password(req, res, callback) {
             //console.log(result);
             if (result != null) {
                 if (result['password'] == req.body.personal_password) {
-                    callback(req, res);
+                    if (result.activate)
+                        callback(req, res);
+                    else
+                        warming(res, 0);
                 }
                 else
                     warming(res, 1);
@@ -269,7 +273,10 @@ function to_rewrite(req, res) {
             db.close();
             if (result != null) {
                 if (result['password'] == req.body.password) {
-                    to_rewrite_check_numID(req, res);
+                    if (result.activate)
+                        to_rewrite_check_numID(req, res);
+                    else
+                        warming(res, 0);
                 }
                 else
                     warming(res, 1);
@@ -296,7 +303,8 @@ function to_rewrite_check_numID(req,res) {
                         ID: req.body.ID, password: req.body.password,
                         num: req.body.num, include_origin: result['include'],
                         board_password: req.body.board_password,
-                        password: req.body.password
+                        password: req.body.password,
+                        uri: supuri
                     })
                 }
                 else
