@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        資料庫與api整合 - HackMD
+    </title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+    <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css" integrity="sha256-QiWfLIsCT02Sdwkogf6YMiQlj4NE84MKkzEMkZnMGdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @charset "UTF-8";@import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i|Source+Code+Pro:300,400,500|Source+Sans+Pro:300,300i,400,400i,600,600i|Source+Serif+Pro&subset=latin-ext);.hljs{display:block;background:#fff;padding:.5em;color:#333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-attribute,.hljs-bullet,.hljs-literal,.hljs-number,.hljs-symbol{color:#0086b3}.hljs-built_in,.hljs-builtin-name{color:#005cc5}.hljs-name,.hljs-section{color:#63a35c}.hljs-tag{color:#333}.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}.markdown-body{font-size:16px;line-height:1.5;word-wrap:break-word}.markdown-body:after,.markdown-body:before{display:table;content:""}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body hr{height:.25em;padding:0;margin:24px 0;background-color:#e7e7e7;border:0}.markdown-body blockquote{font-size:16px;padding:0 1em;color:#777;border-left:.25em solid #ddd}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body kbd,.popover kbd{display:inline-block;padding:3px 5px;font-size:11px;line-height:10px;color:#555;vertical-align:middle;background-color:#fcfcfc;border:1px solid #ccc;border-bottom-color:#bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{padding-bottom:.3em;border-bottom:1px solid #eee}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{font-size:.85em;color:#777}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{padding:0;list-style-type:none}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{padding-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body table{display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #ddd}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #ddd}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#333}.markdown-body span.align-center{display:block;overflow:hidden;clear:both}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{display:block;overflow:hidden;clear:both}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{padding:0;padding-top:.2em;padding-bottom:.2em;margin:0;font-size:85%;background-color:rgba(0,0,0,.04);border-radius:3px}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{letter-spacing:-.2em;content:"\00a0"}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f7f7f7;border-radius:3px}.markdown-body pre code,.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{padding:5px;overflow:hidden;font-size:12px;line-height:1;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{padding:10px 8px 9px;text-align:right;background:#fff;border:0}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{font-weight:700;background:#f8f8f8;border-top:0}.news .alert .markdown-body blockquote{padding:0 0 0 40px;border:0 none}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle;cursor:default!important}.markdown-body{padding-top:40px;padding-bottom:40px;max-width:758px;overflow:visible!important;position:relative}.markdown-body .emoji{vertical-align:top}.markdown-body pre{border:inherit!important}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{text-align:right;position:relative;display:inline-block;cursor:default;z-index:4;padding:0 8px 0 0;min-width:20px;box-sizing:content-box;color:#afafaf!important;border-right:3px solid #6ce26c!important}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-left:none;border-top:none;border-bottom:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-spacing:0;border-collapse:inherit!important}.markdown-body code[data-gist-id]{background:none;padding:0}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{overflow:unset;margin-bottom:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{text-align:center;background-color:inherit;border-radius:0;white-space:inherit;overflow:visible}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{max-width:100%;height:100%}.markdown-body pre>code.wrap{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word}.markdown-body .alert>p,.markdown-body .alert>ul{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body .mark,.markdown-body mark{background-color:#fff1a7}.vimeo,.youtube{cursor:pointer;display:table;text-align:center;background-position:50%;background-repeat:no-repeat;background-size:contain;background-color:#000;overflow:hidden}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{width:100%;object-fit:contain;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{width:100%;height:100%;position:absolute;top:0;left:0}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{position:absolute;height:auto;width:auto;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;opacity:.3;transition:opacity .2s;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%}.MJX_Assistive_MathML{display:none}#MathJax_Message{z-index:1000!important}.ui-infobar{position:relative;z-index:2;max-width:760px;margin:25px auto -25px;color:#777}.toc .invisable-node{list-style-type:none}.ui-toc{position:fixed;bottom:20px;z-index:998}.ui-toc.both-mode{margin-left:8px}.ui-toc.both-mode .ui-toc-label{height:40px;padding:10px 4px;border-top-left-radius:0;border-bottom-left-radius:0}.ui-toc-label{background-color:#e6e6e6;border:none;color:#868686;transition:opacity .2s}.ui-toc .open .ui-toc-label{opacity:1;color:#fff;transition:opacity .2s}.ui-toc-label:focus{opacity:.3;background-color:#ccc;color:#000}.ui-toc-label:hover{opacity:1;background-color:#ccc;transition:opacity .2s}.ui-toc-dropdown{margin-top:20px;margin-bottom:20px;padding-left:10px;padding-right:10px;max-width:45vw;width:25vw;max-height:70vh;overflow:auto;text-align:inherit}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{padding-right:0;letter-spacing:.0029em}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{display:block;padding:4px 20px;font-size:13px;font-weight:500;color:#767676}.ui-toc-dropdown .nav>li:first-child:last-child > ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{padding-left:19px;color:#000;text-decoration:none;background-color:transparent;border-left:1px solid #000}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{padding-right:19px;border-left:none;border-right:1px solid #000}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{padding-left:18px;font-weight:700;color:#000;background-color:transparent;border-left:2px solid #000}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{padding-right:18px;border-left:none;border-right:2px solid #000}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{padding-top:1px;padding-bottom:1px;padding-left:30px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:40px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{padding-left:28px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{padding-left:38px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif}html[lang^=ja] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html .markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html .markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html .markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html[lang^=ja] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html[lang=zh-tw] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html[lang=zh-cn] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}html .ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html .ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html .ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}.ui-affix-toc{position:fixed;top:0;max-width:15vw;max-height:70vh;overflow:auto}.back-to-top,.expand-toggle,.go-to-bottom{display:block;padding:4px 10px;margin-top:10px;margin-left:10px;font-size:12px;font-weight:500;color:#999}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{width:20px;height:20px;display:block;border-radius:50%;margin-top:2px;margin-bottom:2px;margin-right:5px;background-position:50%;background-repeat:no-repeat;background-size:cover}.ui-user-icon.small{width:18px;height:18px;display:inline-block;vertical-align:middle;margin:0 0 .2em}.ui-infobar>small>span{line-height:22px}.ui-infobar>small .dropdown{display:inline-block}.ui-infobar>small .dropdown a:focus,.ui-infobar>small .dropdown a:hover{text-decoration:none}.ui-more-info{color:#888;cursor:pointer;vertical-align:middle}.ui-more-info .fa{font-size:16px}.ui-connectedGithub,.ui-published-note{color:#888}.ui-connectedGithub{line-height:23px;white-space:nowrap}.ui-connectedGithub a.file-path{color:#888;text-decoration:none;padding-left:22px}.ui-connectedGithub a.file-path:active,.ui-connectedGithub a.file-path:hover{color:#888;text-decoration:underline}.ui-connectedGithub .fa{font-size:20px}.ui-published-note .fa{font-size:20px;vertical-align:top}.unselectable{-webkit-user-select:none;-o-user-select:none;user-select:none}.selectable{-webkit-user-select:text;-o-user-select:text;user-select:text}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{position:relative;z-index:1;color:#222}.markdown-body.slides:before{content:"";display:block;position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;background-color:currentColor;box-shadow:0 0 0 50vw}.markdown-body.slides section[data-markdown]{position:relative;margin-bottom:1.5em;background-color:#fff;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{position:absolute;top:50%;left:1em;right:1em;transform:translateY(-50%);max-height:100%;overflow:hidden}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{content:"";position:absolute;top:-1.5em;right:1em;height:1.5em;border:3px solid #777}.site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;text-shadow:0 0 1em transparent,1px 1px 1.2px rgba(0,0,0,.004);-webkit-overflow-scrolling:touch;letter-spacing:.025em;font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] body{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}abbr[data-original-title],abbr[title]{cursor:help}body.modal-open{overflow-y:auto;padding-right:0!important}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true"><h1 id="資料庫與api整合" data-id="資料庫與api整合"><a class="anchor hidden-xs" href="#資料庫與api整合" title="資料庫與api整合"><span class="octicon octicon-link"></span></a><span>資料庫與api整合</span></h1><p><span>目前內容: 資料庫(全),api設計(使用者系統完成)</span></p><h1 id="資料庫" data-id="資料庫"><a class="anchor hidden-xs" href="#資料庫" title="資料庫"><span class="octicon octicon-link"></span></a><span>資料庫</span></h1><h4 id="第一層表示DBsub-db" data-id="第一層表示DBsub-db"><a class="anchor hidden-xs" href="#第一層表示DBsub-db" title="第一層表示DBsub-db"><span class="octicon octicon-link"></span></a><span>第一層表示DB(sub db)</span></h4><h4 id="第二層表示collectiontable" data-id="第二層表示collectiontable"><a class="anchor hidden-xs" href="#第二層表示collectiontable" title="第二層表示collectiontable"><span class="octicon octicon-link"></span></a><span>第二層表示collection(table)</span></h4><h4 id="第三層表示documentelement-or-JSON" data-id="第三層表示documentelement-or-JSON"><a class="anchor hidden-xs" href="#第三層表示documentelement-or-JSON" title="第三層表示documentelement-or-JSON"><span class="octicon octicon-link"></span></a><span>第三層表示document(element or JSON)</span></h4><h4 id="collection前添加M表示該collection有多個" data-id="collection前添加M表示該collection有多個"><a class="anchor hidden-xs" href="#collection前添加M表示該collection有多個" title="collection前添加M表示該collection有多個"><span class="octicon octicon-link"></span></a><span>collection前添加(M)表示該collection有多個</span></h4><h4 id="collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去" data-id="collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去"><a class="anchor hidden-xs" href="#collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去" title="collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去"><span class="octicon octicon-link"></span></a><span>collection後添加(D)表示該collection有不一定數量的element 會用 1,2,3,…n 的方式延續下去</span></h4><h4 id="lt--gt表示有多個實際上會去掉兩邊符號" data-id="lt--gt表示有多個實際上會去掉兩邊符號"><a class="anchor hidden-xs" href="#lt--gt表示有多個實際上會去掉兩邊符號" title="lt--gt表示有多個實際上會去掉兩邊符號"><span class="octicon octicon-link"></span></a><span>&lt; ??? &gt;表示有多個,實際上會去掉兩邊符號</span></h4><h4 id="型別不寫表示省略-代表裡面是string" data-id="型別不寫表示省略-代表裡面是string"><a class="anchor hidden-xs" href="#型別不寫表示省略-代表裡面是string" title="型別不寫表示省略-代表裡面是string"><span class="octicon octicon-link"></span></a><span>型別不寫表示省略 代表裡面是string</span></h4><h4 id="中間插或表示多選一-會在裡面陳列有哪些可能" data-id="中間插或表示多選一-會在裡面陳列有哪些可能"><a class="anchor hidden-xs" href="#中間插或表示多選一-會在裡面陳列有哪些可能" title="中間插或表示多選一-會在裡面陳列有哪些可能"><span class="octicon octicon-link"></span></a><span>中間插"或"表示多選一 會在裡面陳列有哪些可能</span></h4><h4 id="---為附註" data-id="---為附註"><a class="anchor hidden-xs" href="#---為附註" title="---為附註"><span class="octicon octicon-link"></span></a><span>[ ??? ] ???為附註</span></h4><h4 id="“”-表示中略依此類推" data-id="“”-表示中略依此類推"><a class="anchor hidden-xs" href="#“”-表示中略依此類推" title="“”-表示中略依此類推"><span class="octicon octicon-link"></span></a><span>“~” 表示中略,依此類推</span></h4><ul>
+<li>
+<p><span>people</span></p>
+<ul>
+<li><span>personal_information</span>
+<ul>
+<li><span>ID: a0001</span></li>
+<li><span>password: 1234</span></li>
+<li><span>name: 小明</span></li>
+<li><span>mail: </span><a href="mailto:AAAAAA@gmail.com" target="_blank" rel="noopener"><span>AAAAAA@gmail.com</span></a></li>
+<li><span>school: 台南一中</span></li>
+<li><span>gender: male 或 female</span></li>
+</ul>
+</li>
+<li><span>personal_setting(目前不做)</span></li>
+<li><span>personal_lover(D)</span>
+<ul>
+<li><span>ID:a0001</span></li>
+<li><span>public_23445:public_23445</span></li>
+<li><span>private_11133:private_11133</span></li>
+<li><span>public_22443:public_22443</span></li>
+</ul>
+</li>
+<li><span>personal_notice(D)</span>
+<ul>
+<li><span>ID:a0001</span></li>
+<li><span>public_23445_3:public_23445_3 [ 最後的數字表示第幾則留言 ]</span></li>
+<li><span>public_11133_2:public_11133_2</span></li>
+<li><span>public_22443_1:public_22443_1</span></li>
+</ul>
+</li>
+<li><span>manager_information</span>
+<ul>
+<li><span>board_ID:該管理者版號</span></li>
+<li><span>type: public 或 private</span></li>
+<li><span>title: 機械手臂的受力急停感測 [ &lt;系英文簡寫&gt;_board,all_board_number 都有重複 ]</span></li>
+<li><span>introduce: </span><code>&lt;h1&gt;dsadsas&lt;/h1&gt;</code><span>(string) [ 用在實際board內的說明 ][ all_board_number 有重複 ]</span></li>
+<li><span>name: 擁有者</span></li>
+<li><span>school: 擁有者學校</span></li>
+<li><span>class: 擁有者班級 或 說明 [若是公版 則填入科系英文簡寫 ex:PSY]</span></li>
+<li><span>password_private: z1234 [ 擁有者登入管理者系統密碼, 帳號為版號 ]</span></li>
+<li><span>password_public: x1234 [ 外人進入私版密碼以及發文密碼 ]</span></li>
+<li><span>tab: 機械設計組 [ 私版填NA, 因為私板不分類 ]</span></li>
+<li><span>include: </span><code>&lt;h1&gt;dsadsas&lt;/h1&gt;</code><span>(string) [ 私版填NA, 因為用再公版選頁時右邊的介紹 ][ &lt;系英文簡寫&gt;_board有重複 ]</span></li>
+</ul>
+</li>
+<li><span>token</span>
+<ul>
+<li><span>ID: aaaa</span></li>
+<li><span>token: bbbb</span></li>
+</ul>
+</li>
+<li><span>board_notice(目前不做)</span></li>
+<li><span>board_data(目前不做)</span></li>
+</ul>
+</li>
+<li>
+<p><span>data</span></p>
+<ul>
+<li><span>page1 </span><br><span> [ 特別: 以下兩個key 各佔一個document,本collection 共 2 個 document ]</span>
+<ul>
+<li><span>title: 我是標題</span></li>
+<li><span>include: </span><code>&lt;h1&gt;test&lt;/h1&gt;&lt;p&gt;testtesttest&lt;/p&gt;</code><span> (string)</span></li>
+</ul>
+</li>
+<li><span>page3</span>
+<ul>
+<li><span>num: 2</span></li>
+<li><span>data:</span><code>&lt;h1&gt;test&lt;/h1&gt;&lt;p&gt;testtesttest&lt;/p&gt;</code><span> (string)</span></li>
+</ul>
+</li>
+<li><span>page4 [ 本頁特殊 所以列出所有docunent的情況作範例 ]</span>
+<ul>
+<li><span>{type:data,1:任意html, ~ 5:任意html}</span></li>
+<li><span>{type:image,1:任意圖片URL, ~ 5:任意圖片URL}</span></li>
+<li><span>{type:title,1:政治系,2:經濟系,3:心理系,4:法律系,5:你的老師}</span></li>
+<li><span>{type:nick_name,1:PS,2:ECON,3:PSY,4:LAW,5:YT}</span></li>
+</ul>
+</li>
+<li><span>(M)&lt;系英文簡寫&gt;_board</span>
+<ul>
+<li><span>board_ID:public_1234</span></li>
+<li><span>title:三軸機械手臂的自動控制</span></li>
+<li><span>tab:控制</span></li>
+<li><span>include:</span><code>&lt;h1&gt;test&lt;/h1&gt;&lt;p&gt;testtesttest&lt;/p&gt;</code><span> (string)</span></li>
+</ul>
+</li>
+<li><span>(M)&lt;系英文簡寫&gt; [ 內含以下三個document ]</span>
+<ul>
+<li><span>{type:department_introduce,text:‘一段任意html’}</span></li>
+<li><span>{type:department_keywords,1:‘AI’,2:‘IOT’,3:‘ML’,4:‘機器學習’,5:‘姆咪’,6:‘嘻嘻’} (D)</span></li>
+<li><span>{type:department_tabs,1:‘全部’,2:‘固力’,3:‘熱流’,4:‘控制’,5:‘設計’,6:‘製造’} (D)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>board</span></p>
+<ul>
+<li><span>(M)board_ID</span>
+<ul>
+<li><span>num: 3  [表示第幾則帖子 在該版內]</span></li>
+<li><span>ID: S2243  [ 發文者ID ]</span></li>
+<li><span>title: 我是標題</span></li>
+<li><span>include: </span><code>&lt;h1&gt;test&lt;/h1&gt;&lt;p&gt;testtesttest&lt;/p&gt;</code><span>(string)</span></li>
+<li><span>hide: false 或 true</span></li>
+<li><span>1: 我是第一則留言 (D)</span></li>
+<li><span>2: 我是第二則留言 (D)</span></li>
+<li><span>3: 我是第三則留言 (D)</span></li>
+</ul>
+</li>
+<li><span>all_board_number</span>
+<ul>
+<li><span>board_ID:public_2223</span></li>
+<li><span>type: public or private</span></li>
+<li><span>title: 我是該看板標題</span></li>
+<li><span>introduce: </span><code>&lt;h1&gt;test&lt;/h1&gt;&lt;p&gt;testtesttest&lt;/p&gt;</code><span> (string)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>follow</span></p>
+<ul>
+<li><span>(M)board_ID</span>
+<ul>
+<li><span>num: 3 [ 第幾則帖子 ]</span></li>
+<li><span>第一個追蹤者的使用者ID: 第一個追蹤者的使用者ID (D)</span></li>
+<li><span>第二個追蹤者的使用者ID: 第二個追蹤者的使用者ID (D)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>lock</span></p>
+<ul>
+<li><span>(M)board_ID</span>
+<ul>
+<li><span>num: 3 [ 第幾則帖子 ]</span></li>
+<li><span>count: 4 [下一個新增的留言(目前幾則留言 - 1 )]</span></li>
+</ul>
+</li>
+<li><span>board</span>
+<ul>
+<li><span>board_ID : public [貼文號]</span></li>
+<li><span>count: 5 [下一個新增的貼文 (目前num到幾號 - 1)]</span></li>
+</ul>
+</li>
+<li><span>totalboard</span>
+<ul>
+<li><span>tag:1</span></li>
+<li><span>count: 1 [下一個新增的看板 (目前num到幾號 - 1)]</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h1 id="API" data-id="API"><a class="anchor hidden-xs" href="#API" title="API"><span class="octicon octicon-link"></span></a><span>API</span></h1><h4 id="第一層表示api在哪一個路由下sub-router" data-id="第一層表示api在哪一個路由下sub-router"><a class="anchor hidden-xs" href="#第一層表示api在哪一個路由下sub-router" title="第一層表示api在哪一個路由下sub-router"><span class="octicon octicon-link"></span></a><span>第一層表示api在哪一個路由下(sub router)</span></h4><h4 id="第二層表示實際api指令interface" data-id="第二層表示實際api指令interface"><a class="anchor hidden-xs" href="#第二層表示實際api指令interface" title="第二層表示實際api指令interface"><span class="octicon octicon-link"></span></a><span>第二層表示實際api指令(interface)</span></h4><h4 id="第三層表示api類別功能與行為" data-id="第三層表示api類別功能與行為"><a class="anchor hidden-xs" href="#第三層表示api類別功能與行為" title="第三層表示api類別功能與行為"><span class="octicon octicon-link"></span></a><span>第三層表示api類別功能與行為</span></h4><h4 id="後面添加AJAX表示該api不進行渲染直接回傳" data-id="後面添加AJAX表示該api不進行渲染直接回傳"><a class="anchor hidden-xs" href="#後面添加AJAX表示該api不進行渲染直接回傳" title="後面添加AJAX表示該api不進行渲染直接回傳"><span class="octicon octicon-link"></span></a><span>後面添加(AJAX)表示該api不進行渲染,直接回傳</span></h4><table>
+<thead>
+<tr>
+<th style="text-align:left"><span>CB</span></th>
+<th style="text-align:left"><span>DB</span></th>
+<th style="text-align:left"><span>JB</span></th>
+<th style="text-align:left"><span>SAN</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><span>/department/&lt;系英文簡寫&gt;</span></td>
+<td style="text-align:left"><span>/post_private</span></td>
+<td style="text-align:left"><span>/to_public_board</span></td>
+<td style="text-align:left"><span>/sign_in</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/direct_to_4</span></td>
+<td style="text-align:left"><span>/post_public</span></td>
+<td style="text-align:left"><span>/to_private_board</span></td>
+<td style="text-align:left"><span>/register</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/to_3</span></td>
+<td style="text-align:left"><span>/post_preview</span></td>
+<td style="text-align:left"><span>/get_board_introduce</span></td>
+<td style="text-align:left"><span>/delete_lover</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/direct_to_3</span></td>
+<td style="text-align:left"><span>/discuss</span></td>
+<td style="text-align:left"><span>/to_post_page</span></td>
+<td style="text-align:left"><span>/delete_notice</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/</span></td>
+<td style="text-align:left"><span>/add_lover</span></td>
+<td style="text-align:left"><span>NA</span></td>
+<td style="text-align:left"><span>NA</span></td>
+</tr>
+</tbody>
+</table><h2 id="User-System" data-id="User-System"><a class="anchor hidden-xs" href="#User-System" title="User-System"><span class="octicon octicon-link"></span></a><span>User System</span></h2><ol>
+<li><span>選擇版面子系統 (Choice Board Subsystem , CB）</span></li>
+</ol><ul>
+<li><span>‘./CB’ or ‘./’ ,進入網站 [兩句同功能]</span>
+<ul>
+<li><span>get, parameter-&gt; no parameter</span>
+<ul>
+<li><span>渲染至第一頁</span></li>
+<li><span>攜帶page1的參數,其為’介紹’功能的內容</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./CB/direct_to_3’ , 不輸入密碼 直接進入第三頁</span>
+<ul>
+<li><span>get, parameter-&gt; no parameter</span>
+<ul>
+<li><span>渲染至第三頁</span></li>
+<li><span>攜帶page3的參數,其為公告內容</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./CB/to_3’ , 含帳號進入第三頁</span>
+<ul>
+<li><span>post, parameter-&gt; ID</span>
+<ul>
+<li><span>渲染至第三頁</span></li>
+<li><span>攜帶page3的參數和ID</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./CB/direct_to_4’ , 進入第4頁</span>
+<ul>
+<li><span>post, parameter-&gt; ID</span>
+<ul>
+<li><span>選染到page4</span></li>
+<li><span>回傳 ID以及page4的參數</span></li>
+<li><span>page4的參數包含各系小名 名子 介紹 …等等</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./CB/department/&lt;系英文簡寫&gt;’, 進入該英文簡寫科系的看板介紹頁面</span>
+<ul>
+<li><span>post,  parameter-&gt; ID,&lt;系英文簡寫&gt;    [&lt;系英文簡寫&gt;是利用動態路由傳到的 不是post的parameter]</span>
+<ul>
+<li><span>如果是 YT 渲染頁面至page5,且回傳收到的使用者ID</span></li>
+<li><span>如果是&lt;系英文簡寫&gt;就渲染到page6,且攜帶 &lt;系英文簡寫&gt;,&lt;系英文簡寫&gt;_board,該系名子(直接把收到的參數當字串回傳即可)</span></li>
+<li><span>&lt;系英文簡寫&gt;,&lt;系英文簡寫&gt;_board,包含該系下轄的所有看板介紹,和搜索機制</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol start="2">
+<li><span>討論版面子系統（Discussion Board Subsystem , DB）</span></li>
+</ol><ul>
+<li><span>‘./DB/post_private’ , 發布私有版帖子</span>
+<ul>
+<li><span>post, parameter-&gt; ID,board_ID,title,include,password,personal_password</span>
+<ul>
+<li><span>檢查密碼</span></li>
+<li><span>把帖子加上該看板內序號後插入</span></li>
+<li><span>在follow.&lt;board_ID&gt; 插入 document {num:上面得到的看板內序號}</span></li>
+<li><span>渲染到page8</span></li>
+<li><span>攜帶board.board_ID全部沒隱藏的文件(data),ID,board_ID,第一個參數的長度(num) 共四個值作為回傳</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./DB/post_public’ , 發布公有版帖子</span>
+<ul>
+<li><span>post, parameter-&gt; ID,board_ID,title,include,personal_password</span>
+<ul>
+<li><span>把帖子加上該看板內序號後插入</span></li>
+<li><span>在follow.&lt;board_ID&gt; 插入 document {num:上面得到的看板內序號}</span></li>
+<li><span>渲染到page8</span></li>
+<li><span>攜帶board.board_ID全部沒隱藏的文件(data),ID,board_ID,第一個參數的長度(num) 共四個值作為回傳</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./DB/post_preview’ , 預覽發帖</span>
+<ul>
+<li><span>get, parameter-&gt; html</span>
+<ul>
+<li><span>渲染至preiview</span></li>
+<li><span>攜帶參數帶來的html為參數回傳</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./DB/discuss’ , 看板留言(AJAX)</span>
+<ul>
+<li><span>post, parameter-&gt; num,ID,board_ID,include,personal_password</span>
+<ul>
+<li><span>取得board_ID內該序號帖子</span></li>
+<li><span>得到裡面留言新序號</span></li>
+<li><span>update該則帖子新留言,key值為新訊號</span></li>
+<li><span>取得follow.board_ID 中 num 符合的element,且把 ID insert(update)入該element(document)</span></li>
+<li><span>最後,針對element內所有追蹤ID的 personal_notice update {board_ID_num:board_ID_num}</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./DB/add_lover’ , 添加我的最愛(AJAX)</span>
+<ul>
+<li><span>get, parameter-&gt; ID,board_ID</span>
+<ul>
+<li><span>對 personal_lover 中 該ID update {board_ID:board_ID}</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol start="3">
+<li><span>跳轉版面子系統（Jump Board  Subsystem , JB）</span></li>
+</ol><ul>
+<li><span>‘./JB/to_public_board’ , 進入某公共看板</span>
+<ul>
+<li><span>post, parameter-&gt; ID,board_ID</span>
+<ul>
+<li><span>如果有place最後多傳place這個參數</span></li>
+<li><span>抓取該board_ID 全部document</span></li>
+<li><span>渲染到page8</span></li>
+<li><span>攜帶board.board_ID全部沒隱藏的文件(data),ID,board_ID,第一個參數的長度(num),(place:place) 共四(五)個值作為回傳</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./JB/to_private_board’ , 進入某私有看板</span>
+<ul>
+<li><span>post, parameter-&gt; ID,board_ID,password</span>
+<ul>
+<li><span>如果有place最後多傳place這個參數</span></li>
+<li><span>到manager_information確認密碼符合</span></li>
+<li><span>抓取該board_ID 全部document</span></li>
+<li><span>渲染到page8</span></li>
+<li><span>攜帶board.board_ID全部文件(data),ID,board_ID,第一個參數的長度(num),(place:place) 共四(五)個值作為回傳</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./JB/get_board_introduce’ , 獲得該討論版的特定資料(AJAX)</span>
+<ul>
+<li><span>get, parameter-&gt; board_ID</span>
+<ul>
+<li><span>抓取all_board_number裡ID對應的資料用JSON格式回傳</span></li>
+<li><span>資料含 看板 title 和 introduce</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./JB/to_post_page’ , 看板中選擇發帖子</span>
+<ul>
+<li><span>post, parameter-&gt; ID,board_ID,type [type 是 public 或 private ]</span>
+<ul>
+<li><span>選染到page9</span></li>
+<li><span>攜帶 ID,board_ID,type 三個收到的參數</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol start="4">
+<li><span>註冊與通知子系統（Sign And Notice Subsystem , SAN）</span></li>
+</ol><ul>
+<li><span>‘./SAN/sign_in’ 登入</span>
+<ul>
+<li><span>post, parameter-&gt; ID: 帳號,password: 密碼</span>
+<ul>
+<li><span>比對密碼是否與帳號相符</span></li>
+<li><span>符合就帶著使用者ID和他的個人資料到page2</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./SAN/register’ 註冊</span>
+<ul>
+<li><span>post, parameter-&gt; ID: 帳號,password: 密碼,name: 姓名,mail: e-mail,school: 學校,gender: 性別</span>
+<ul>
+<li><span>查看註冊帳號是否重複</span></li>
+<li><span>儲存使用者資料</span></li>
+<li><span>建立個人通知,最愛儲存區</span></li>
+<li><span>渲染至第一頁</span></li>
+<li><span>失敗則回傳原因</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./SAN/delete_lover’ (AJAX)刪除我的最愛</span>
+<ul>
+<li><span>post,parameters-&gt; ID,board_ID</span>
+<ul>
+<li><span>到personal_lover 該ID的document,刪除key為 board_ID的欄位</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./SAN/delete_notice’ (AJAX)刪除我的通知</span>
+<ul>
+<li><span>post,parameters-&gt; ID,board_ID,place</span>
+<ul>
+<li><span>到personal_notice 該ID的document,刪除key為 board_ID_place的欄位</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><table>
+<thead>
+<tr>
+<th style="text-align:left"><span>GBD</span></th>
+<th style="text-align:left"><span>MB</span></th>
+<th style="text-align:left"><span>BM</span></th>
+<th style="text-align:left"><span>入口網頁</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><span>/to_personal_data</span></td>
+<td style="text-align:left"><span>/post_display</span></td>
+<td style="text-align:left"><span>/login</span></td>
+<td style="text-align:left"><span>./</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/to_all_data</span></td>
+<td style="text-align:left"><span>/force_to_personal_manage</span></td>
+<td style="text-align:left"><span>/update</span></td>
+<td style="text-align:left"><span>./manager</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/core_download</span></td>
+<td style="text-align:left"><span>/to_personal_manage</span></td>
+<td style="text-align:left"><span>/to_manager_update</span></td>
+<td style="text-align:left"><span>./core_manager</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>/download</span></td>
+<td style="text-align:left"><span>/to_all_manage</span></td>
+<td style="text-align:left"><span>/build</span></td>
+<td style="text-align:left"><span>NA</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>NA</span></td>
+<td style="text-align:left"><span>/board_information</span></td>
+<td style="text-align:left"><span>/to_manager_build</span></td>
+<td style="text-align:left"><span>NA</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>NA</span></td>
+<td style="text-align:left"><span>/board_update</span></td>
+<td style="text-align:left"><span>/get_information</span></td>
+<td style="text-align:left"><span>NA</span></td>
+</tr>
+<tr>
+<td style="text-align:left"><span>NA</span></td>
+<td style="text-align:left"><span>NA</span></td>
+<td style="text-align:left"><span>/core_login</span></td>
+<td style="text-align:left"><span>NA</span></td>
+</tr>
+</tbody>
+</table><h2 id="Manager-System" data-id="Manager-System"><a class="anchor hidden-xs" href="#Manager-System" title="Manager-System"><span class="octicon octicon-link"></span></a><span>Manager System</span></h2><ol start="0">
+<li><span>網頁入口</span></li>
+</ol><ul>
+<li><span>‘./’ or ‘./manager’  進入page1 (給一般管理者)</span>
+<ul>
+<li><span>get ,no parameter</span>
+<ul>
+<li><span>直接渲染到page1</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./core_manager’   進入page2 (給核心管理者)</span>
+<ul>
+<li><span>get ,no parameter</span>
+<ul>
+<li><span>直接渲染到page2</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol>
+<li><span>版面資料獲得子系統（Get Board Data Subsystem , GBD）</span></li>
+</ol><ul>
+<li><span>‘./GBD/to_personal_data’ 個人前往個人資料頁面</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 版號,password: 個人私有密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page7且攜帶board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./GBD/to_all_data’ 核心管理者前往全體資料頁</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 核心管理者帳號,password: 核心管理者密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page8且攜帶board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./GBD/download’(AJAX) 個人下載自己看板的資料</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>回傳該board_ID 在board.&lt;board_ID&gt; 中的全部document</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./GBD/core_download’(AJAX) 核心管理者下載目標看板的資料</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 版號,password: 密碼</span>
+<ul>
+<li><span>回傳該board_ID 在board.&lt;board_ID&gt; 中的全部document</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol start="2">
+<li><span>版面管理子系統（Manage Board Subsystem , MB）</span></li>
+</ol><ul>
+<li><span>‘./MB/to_personal_manage’ 前往個人看板管理</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page5</span></li>
+<li><span>攜帶該board_ID的所有document和board_ID和password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./MB/to_all_manage’ 前往全體看板管理頁</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 核心管理者帳號,password: 核心管理者密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page6</span></li>
+<li><span>攜帶all_board_number的所有document和board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./MB/force_to_personal_manage’ 從全體看板管理頁指定個人看版管理頁跳躍</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 核心管理者帳號,password: 核心管理者密碼,board:實際要跳得版號</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page5</span></li>
+<li><span>攜帶該board的所有document和board_ID和password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./MB/post_display’(AJAX) 變更看板hide 屬性</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼,hide:True/false,num:3</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>更改&lt;board_ID&gt;中num符合傳入的num的document的hide屬性為傳入的hide</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./MB/board_update’(AJAX) 更改看板相關資訊</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼, type:title/tab/include/introduce,include:‘XXXX’</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>更改,manager_information中該board_ID的 該type資訊(再做下方行為4擇1)</span></li>
+<li><span>若type為title: 更改all_board_number,&lt;系英文簡寫&gt;_board中的title</span></li>
+<li><span>若type為tab: 更改&lt;系英文簡寫&gt;_board中的tab</span></li>
+<li><span>若type為include: 更改&lt;系英文簡寫&gt;_board中的include</span></li>
+<li><span>若type為introduce: 更改all_board_number中的introduce</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./MB/board_information’ (AJAX) 取得看板資訊</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>回傳manager_information中該board_ID的document</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><ol start="3">
+<li><span>管理者建立子系統（Build Manager Subsystem , BM）</span></li>
+</ol><ul>
+<li><span>‘./BM/to_manager_build’ 管理者建立頁</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: core帳號,password: core密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page9</span></li>
+<li><span>攜帶board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/to_manager_update’ 管理者資料更新頁</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: core帳號,password: core密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page10</span></li>
+<li><span>攜帶board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/build’ 管理者註冊(建立)</span>
+<ul>
+<li><span>post, parameter-&gt; board_ID: 帳號(這邊不是真正的板號,是核心管理者帳號),password: 密碼,type,title,introduce,name,school,class(公版則為科系大寫簡寫),password_private,password_public,tab,include</span>
+<ul>
+<li><span>比對帳號密碼符合(核心管理者)</span></li>
+<li><span>根據type生成一個沒有重複過的板號board_ID,在manager_information插入資料</span></li>
+<li><span>在all_board_number新增document 包含type,title,introduce,board_ID</span></li>
+<li><span>若type為public 再新增document於class_board  含參數:board_ID,title,include,tab //class 是科系大寫簡寫</span></li>
+<li><span>渲染到page10 攜帶參數 board_ID,password,board(其為剛剛創建的版號)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/update’ 更新管理者註冊資料(AJAX)</span>
+<ul>
+<li><span>post, parameter-&gt; board_ID: 帳號(這邊不是真正的板號,是核心管理者帳號),password: 密碼,board,type,title,introduce,name,school,class,password_private,password_public,tab,include</span>
+<ul>
+<li><span>比對帳號密碼符合(核心管理者)</span></li>
+<li><span>board,type,class 不可更改 ,其他可直接變更</span></li>
+<li><span>更新 manager_information</span></li>
+<li><span>更新 all_board_number內的board_ID符合的document 包含type,title,introduce,board_ID</span></li>
+<li><span>若type為public 更新document於class_board  含參數:board_ID,title,include,tab</span></li>
+<li><span>回傳result:success/error</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/get_information’ (AJAX)獲得管理者註冊資料</span>
+<ul>
+<li><span>post, parameter-&gt; board_ID: 帳號(這邊不是真正的板號,是核心管理者帳號),password: 密碼,board:目標看板版號</span>
+<ul>
+<li><span>比對帳號密碼符合(核心管理者)</span></li>
+<li><span>獲得符合board裡面的board_ID的 manager_information的document</span></li>
+<li><span>回傳該document</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/login’ 管理者登入</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: 帳號,password: 密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page3</span></li>
+<li><span>攜帶參數 board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>‘./BM/core_login’ 核心管理者登入</span>
+<ul>
+<li><span>post, parameter-&gt;  board_ID: core帳號,password: core密碼</span>
+<ul>
+<li><span>比對帳號密碼符合</span></li>
+<li><span>渲染到page4</span></li>
+<li><span>攜帶參數 board_ID,password</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li class=""><a href="#資料庫與api整合" title="資料庫與api整合">資料庫與api整合</a></li>
+<li><a href="#資料庫" title="資料庫">資料庫</a><ul class="nav">
+<li class="invisable-node"><ul class="nav">
+<li><a href="#第一層表示DBsub-db" title="第一層表示DB(sub db)">第一層表示DB(sub db)</a></li>
+<li><a href="#第二層表示collectiontable" title="第二層表示collection(table)">第二層表示collection(table)</a></li>
+<li><a href="#第三層表示documentelement-or-JSON" title="第三層表示document(element or JSON)">第三層表示document(element or JSON)</a></li>
+<li><a href="#collection前添加M表示該collection有多個" title="collection前添加(M)表示該collection有多個">collection前添加(M)表示該collection有多個</a></li>
+<li><a href="#collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去" title="collection後添加(D)表示該collection有不一定數量的element 會用 1,2,3,…n 的方式延續下去">collection後添加(D)表示該collection有不一定數量的element 會用 1,2,3,…n 的方式延續下去</a></li>
+<li><a href="#lt--gt表示有多個實際上會去掉兩邊符號" title="< ??? >表示有多個,實際上會去掉兩邊符號">&lt; ??? &gt;表示有多個,實際上會去掉兩邊符號</a></li>
+<li><a href="#型別不寫表示省略-代表裡面是string" title="型別不寫表示省略 代表裡面是string">型別不寫表示省略 代表裡面是string</a></li>
+<li><a href="#中間插或表示多選一-會在裡面陳列有哪些可能" title="中間插&quot;或&quot;表示多選一 會在裡面陳列有哪些可能">中間插"或"表示多選一 會在裡面陳列有哪些可能</a></li>
+<li><a href="#---為附註" title="[ ??? ] ???為附註">[ ??? ] ???為附註</a></li>
+<li><a href="#“”-表示中略依此類推" title="“~” 表示中略,依此類推">“~” 表示中略,依此類推</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#API" title="API">API</a><ul class="nav">
+<li class="invisable-node"><ul class="nav">
+<li><a href="#第一層表示api在哪一個路由下sub-router" title="第一層表示api在哪一個路由下(sub router)">第一層表示api在哪一個路由下(sub router)</a></li>
+<li><a href="#第二層表示實際api指令interface" title="第二層表示實際api指令(interface)">第二層表示實際api指令(interface)</a></li>
+<li><a href="#第三層表示api類別功能與行為" title="第三層表示api類別功能與行為">第三層表示api類別功能與行為</a></li>
+<li><a href="#後面添加AJAX表示該api不進行渲染直接回傳" title="後面添加(AJAX)表示該api不進行渲染,直接回傳">後面添加(AJAX)表示該api不進行渲染,直接回傳</a></li>
+</ul>
+</li>
+<li><a href="#User-System" title="User System">User System</a></li>
+<li><a href="#Manager-System" title="Manager System">Manager System</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">全部展開</a><a class="back-to-top" href="#">回到頂部</a><a class="go-to-bottom" href="#">移至底部</a></div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
+        <div class="toc"><ul class="nav">
+<li class=""><a href="#資料庫與api整合" title="資料庫與api整合">資料庫與api整合</a></li>
+<li><a href="#資料庫" title="資料庫">資料庫</a><ul class="nav">
+<li class="invisable-node"><ul class="nav">
+<li><a href="#第一層表示DBsub-db" title="第一層表示DB(sub db)">第一層表示DB(sub db)</a></li>
+<li><a href="#第二層表示collectiontable" title="第二層表示collection(table)">第二層表示collection(table)</a></li>
+<li><a href="#第三層表示documentelement-or-JSON" title="第三層表示document(element or JSON)">第三層表示document(element or JSON)</a></li>
+<li><a href="#collection前添加M表示該collection有多個" title="collection前添加(M)表示該collection有多個">collection前添加(M)表示該collection有多個</a></li>
+<li><a href="#collection後添加D表示該collection有不一定數量的element-會用-123…n-的方式延續下去" title="collection後添加(D)表示該collection有不一定數量的element 會用 1,2,3,…n 的方式延續下去">collection後添加(D)表示該collection有不一定數量的element 會用 1,2,3,…n 的方式延續下去</a></li>
+<li><a href="#lt--gt表示有多個實際上會去掉兩邊符號" title="< ??? >表示有多個,實際上會去掉兩邊符號">&lt; ??? &gt;表示有多個,實際上會去掉兩邊符號</a></li>
+<li><a href="#型別不寫表示省略-代表裡面是string" title="型別不寫表示省略 代表裡面是string">型別不寫表示省略 代表裡面是string</a></li>
+<li><a href="#中間插或表示多選一-會在裡面陳列有哪些可能" title="中間插&quot;或&quot;表示多選一 會在裡面陳列有哪些可能">中間插"或"表示多選一 會在裡面陳列有哪些可能</a></li>
+<li><a href="#---為附註" title="[ ??? ] ???為附註">[ ??? ] ???為附註</a></li>
+<li><a href="#“”-表示中略依此類推" title="“~” 表示中略,依此類推">“~” 表示中略,依此類推</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#API" title="API">API</a><ul class="nav">
+<li class="invisable-node"><ul class="nav">
+<li><a href="#第一層表示api在哪一個路由下sub-router" title="第一層表示api在哪一個路由下(sub router)">第一層表示api在哪一個路由下(sub router)</a></li>
+<li><a href="#第二層表示實際api指令interface" title="第二層表示實際api指令(interface)">第二層表示實際api指令(interface)</a></li>
+<li><a href="#第三層表示api類別功能與行為" title="第三層表示api類別功能與行為">第三層表示api類別功能與行為</a></li>
+<li><a href="#後面添加AJAX表示該api不進行渲染直接回傳" title="後面添加(AJAX)表示該api不進行渲染,直接回傳">後面添加(AJAX)表示該api不進行渲染,直接回傳</a></li>
+</ul>
+</li>
+<li><a href="#User-System" title="User System">User System</a></li>
+<li><a href="#Manager-System" title="Manager System">Manager System</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">全部展開</a><a class="back-to-top" href="#">回到頂部</a><a class="go-to-bottom" href="#">移至底部</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>
