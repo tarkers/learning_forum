@@ -21,7 +21,7 @@ router.get('/', function (req, res) {
         if (err) { warming(res, 2); throw err; }
         //console.log("index.js:connect DB!");
         var found_database = db.db("data");
-        found_database.collection("page1").find({}, { projection: { _id: 0 } }).toArray(function (err, found_data) {
+        found_database.collection("page1").find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, found_data) {
             if (err) { warming(res, 2); throw err; }
             //console.log(found_data);
             //console.log("title>>")

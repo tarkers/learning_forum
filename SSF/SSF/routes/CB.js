@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
         if (err) { warming(res, 2); throw err; }
         //console.log("index.js:connect DB!");
         var found_database = db.db("data");
-        found_database.collection("page1").find({}, { projection: { _id: 0 } }).toArray(function (err, found_data) {
+        found_database.collection("page1").find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, found_data) {
             if (err) { warming(res, 2); throw err; }
             //console.log("title>>");
             //console.log(found_data[0]['title']);
@@ -56,7 +56,7 @@ router.get('/direct_to_3', async (req, res) => {
     }, function (err, found_connect) {
         if (err) { warming(res, 2); throw err; }
         var found_database = found_connect.db("data");
-        found_database.collection("page3").find({}, { projection: { _id: 0 } }).toArray(function (err, found_data) {
+        found_database.collection("page3").find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, found_data) {
             if (err) { warming(res, 2); throw err; }
             //console.log('getting data>>')
             //console.log(found_data[0]['data'])
@@ -64,6 +64,7 @@ router.get('/direct_to_3', async (req, res) => {
                 ID: '匿名者',
                 data: found_data[0]['data']
             });
+            found_connect.close();
         })
     });
 });
@@ -78,7 +79,7 @@ router.post('/to_3', async (req, res) => {
     }, function (err, found_connect) {
         if (err) { warming(res, 2); throw err; }
         var found_database = found_connect.db("data");
-        found_database.collection("page3").find({}, { projection: { _id: 0 } }).toArray(function (err, found_data) {
+        found_database.collection("page3").find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, found_data) {
             if (err) { warming(res, 2); throw err; }
             //console.log('getting ID>>')
             //console.log(req.body.ID)
@@ -89,6 +90,7 @@ router.post('/to_3', async (req, res) => {
                     data: "",
                     ID: req.body.ID
                 });
+                found_connect.close();
             } else {
                 //console.log('getting data>>')
                 //console.log(found_data)
@@ -96,6 +98,7 @@ router.post('/to_3', async (req, res) => {
                     ID: req.body.ID,
                     data: found_data
                 });
+                found_connect.close();
             }
         })
     });
@@ -149,6 +152,7 @@ router.post('/to_4', async (req, res) => {
                                     nick_name: information.nick_name,
                                     ID: req.body.ID
                                 });
+                                created_connect.close();
                             });
                         });
                     });
@@ -203,7 +207,7 @@ router.post('/department/:postId', async (req, res) => {
                             if (err) { warming(res, 2); throw err; }
                             information['tabs'] = (found_data == null) ? "" : found_data;
 
-                            found_database.collection(department_board_name).find({}, { projection: { _id: 0 } }).toArray(async (err, found_data) => {
+                            found_database.collection(department_board_name).find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(async (err, found_data) => {
                                 if (err) { warming(res, 2); throw err; }
 
                                 db.close();

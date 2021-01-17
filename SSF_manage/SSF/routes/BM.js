@@ -22,6 +22,7 @@ function login(req, res) {
         var findThing = { board_ID: req.body.board_ID };
         table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             if (result != null) {
                 if (result['password_private'] == req.body.password)
                     res.render('Page3', { board_ID: req.body.board_ID, password: req.body.password });
@@ -81,6 +82,7 @@ function build_insertManagerInformation(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             build_insertAllBoardNumber(req, res, new_board_ID);
         });
     });
@@ -96,6 +98,7 @@ function build_insertAllBoardNumber(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             if (req.body.type == 'public')
                 build_insertClass(req, res, new_board_ID);
             else
@@ -114,6 +117,7 @@ function build_insertClass(req, res, new_board_ID) {
         };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             res.render('Page10', { board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
             //console.log({ board_ID: req.body.board_ID, password: req.body.password, board: new_board_ID });
         });
@@ -137,6 +141,7 @@ function update_managerInformation(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
+            db.close();
             //console.log(result);
             update_AllBoardNumber(req, res);
         });
@@ -155,6 +160,7 @@ function update_AllBoardNumber(req, res) {
                 throw err;
             }
             //console.log(result);
+            db.close();
             if (req.body.type == 'public')
                 update_ClassBoard(req, res);
             else
@@ -174,6 +180,7 @@ function update_ClassBoard(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
+            db.close();
             //console.log(result);
             res.json({ result: 'success' });
         });
@@ -190,6 +197,7 @@ function get_information(req, res) {
                 res.json({ result: 'error' });
                 throw err;
             }
+            db.close();
             if (result != null)
                 res.json({ result: 'success', data: result });
             else
