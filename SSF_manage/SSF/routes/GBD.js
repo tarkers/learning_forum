@@ -12,17 +12,18 @@ const supuri = GetUrl('supServer');
 //function
 
 function warming(res, mode) {
-     var str = ['', '密碼錯誤或帳號不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
+    var str = ['', '密碼錯誤或帳號不存在,按上一頁再試一次', '伺服器連線問題,請按上一頁再試一次', '操作不合法,請聯絡網站管理者'];
     res.render('warming', { warming: str[mode] });
 }
 
-function IsPasswordRight(req,res,next,other) {
-    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+function IsPasswordRight(req, res, next, other) {
+    MongoClient.connect(uri + "people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             if (result != null) {
                 if (result['password_private'] == req.body.password)
                     next(req, res, other);
@@ -43,17 +44,19 @@ function Render(req, res, other) {
 }
 
 function ReJSON(req, res, other) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var which = '';
         other == 'core' ? which = req.body.board : which = req.body.board_ID;
         var table = db.db("board").collection(which);
-        var findThing = { };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        var findThing = {};
+        table.find(findThing, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
             //console.log(result);
-            else
+            else {
                 res.json({ data: result });
+                db.close();
+            }
         });
     });
 }
@@ -63,9 +66,9 @@ function GetAllCollection(req, res) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db(req.body.DB).collection(req.body.collection);
         var findThing = {};
-        table.find(findThing).toArray(function (err, result) {
+        table.find(findThing).sort({ _id: 1 }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
-            //console.log(result);
+            db.close();
             if (result.length > 0)
                 res.json({ data: result });
             else
@@ -80,20 +83,21 @@ function ChangeAllCollection(req, res) {
         req.body.data[i]['_id'] = ObjectId(req.body.data[i]['_id']);
         promiseList.push(ChangeOneCollection(req, res, ObjectId(req.body.data[i]['_id']), req.body.data[i]));
     }
-    Promise.all(promiseList).then(result => res.json({ result: 'success' })).catch(err => res.json({ result:err }));
+    Promise.all(promiseList).then(result => res.json({ result: 'success' })).catch(err => res.json({ result: err }));
 }
 
 function ChangeOneCollection(req, res, id, doc) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(uri + req.body.DB, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
-            if (err) { reject({ err: 'error' }); throw err;}
+            if (err) { reject({ err: 'error' }); throw err; }
             var table = db.db(req.body.DB).collection(req.body.collection);
             //console.log(req.body);
             var findthing = { _id: id }
             var saveThing = doc;
             table.replaceOne(findthing, saveThing, function (err, result) {
-                if (err) { reject({ err: 'error' }); throw err;}
+                if (err) { reject({ err: 'error' }); throw err; }
                 else {
+                    db.close();
                     resolve({ result: 'success' });
                 }
             });

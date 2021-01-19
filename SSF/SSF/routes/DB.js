@@ -4,7 +4,7 @@ var router = express.Router();
 var urlencode = require('urlencode');
 var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
-const {GetUrl} = require('./database_url');
+const { GetUrl } = require('./database_url');
 const uri = GetUrl('null');
 const supuri = GetUrl('supServer');
 //function block
@@ -21,8 +21,9 @@ function test_personal_password(req, res, callback) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_information");
         var findThing = { ID: req.body.ID };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
+            db.close();
             //console.log(result);
             if (result != null) {
                 if (result['password'] == req.body.personal_password) {
@@ -47,7 +48,7 @@ function getPassword_private(req, res) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("manager_information");
         var findThing = { board_ID: req.body.board_ID };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
@@ -72,7 +73,7 @@ function getCount_public(req, res) {
         var findThing = { board_ID: req.body.board_ID };
         var updateThing = { $inc: { count: 1 } };
         var set = { projection: { _id: 0 } };
-        table.findOneAndUpdate(findThing, updateThing, set ,function (err, result) {
+        table.findOneAndUpdate(findThing, updateThing, set, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             if (result.ok == 1)
@@ -87,7 +88,7 @@ function add_lockForboardID(req, res, num) {
     MongoClient.connect(uri + "lock", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("lock").collection(req.body.board_ID);
-        var insertThing = { num: (num).toString(), count:1 };
+        var insertThing = { num: (num).toString(), count: 1 };
         table.insertOne(insertThing, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
@@ -112,7 +113,7 @@ function plus_follower(req, res, num) {
 }
 
 function insert_public(req, res, num) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var insertThing = { num: (num).toString(), ID: req.body.ID, title: req.body.title, include: req.body.include, hide: 'false' };
@@ -127,15 +128,15 @@ function insert_public(req, res, num) {
 }
 
 function jumpPublic(req, board_ID, ID, res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(board_ID);
         var findThing = { hide: 'false' };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.find(findThing, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
-            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length, board_password: req.body.board_password, password: req.body.personal_password};
+            var pkg = { board_ID: board_ID, ID: ID, data: result, num: result.length, board_password: req.body.board_password, password: req.body.personal_password };
             if (req.body.place)
                 pkg['place'] = req.body.place;
             else
@@ -147,7 +148,7 @@ function jumpPublic(req, board_ID, ID, res) {
 
 //add lover
 function add_lover(req, res) {
-    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_lover");
         var filter = { ID: req.query.ID };
@@ -168,13 +169,13 @@ function add_lover(req, res) {
 
 //discuss
 function discuss_getNum(req, res) {
-    MongoClient.connect(uri +"lock", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "lock", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("lock").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
         var updateThing = { $inc: { count: 1 } };
         var set = { projection: { _id: 0 } };
-        table.findOneAndUpdate(findThing, updateThing, set , function (err, result) {
+        table.findOneAndUpdate(findThing, updateThing, set, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
@@ -187,7 +188,7 @@ function discuss_getNum(req, res) {
 }
 
 function discuss_update(req, res, num) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var filter = { num: req.body.num };
@@ -209,7 +210,7 @@ function discuss_update(req, res, num) {
 }
 
 function discuss_notice(req) {
-    MongoClient.connect(uri +"follow", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "follow", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("follow").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
@@ -226,7 +227,7 @@ function discuss_notice(req) {
 }
 
 function discuss_notice_add(req, data) {
-    MongoClient.connect(uri +"follow", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "follow", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("follow").collection(req.body.board_ID);
         var filter = { num: req.body.num };
@@ -246,7 +247,7 @@ function discuss_notice_add(req, data) {
 }
 
 function discuss_notice_send(id, key) {
-    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_notice");
         var filter = { ID: id };
@@ -263,11 +264,11 @@ function discuss_notice_send(id, key) {
 //ReWrite
 
 function to_rewrite(req, res) {
-    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_information");
         var findThing = { ID: req.body.ID };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             //console.log(result);
             db.close();
@@ -287,12 +288,12 @@ function to_rewrite(req, res) {
     });
 }
 
-function to_rewrite_check_numID(req,res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+function to_rewrite_check_numID(req, res) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result[0]['include']);
@@ -317,11 +318,11 @@ function to_rewrite_check_numID(req,res) {
 }
 
 function rewrite_check_password(req, res) {
-    MongoClient.connect(uri +"people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "people", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("people").collection("personal_information");
         var findThing = { ID: req.body.ID };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
@@ -339,11 +340,11 @@ function rewrite_check_password(req, res) {
 }
 
 function rewrite_checknum(req, res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
-        table.findOne(findThing, { projection: { _id: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0 } }, function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
@@ -361,7 +362,7 @@ function rewrite_checknum(req, res) {
 }
 
 function rewrite_update(req, res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var filter = { num: req.body.num };
@@ -377,11 +378,11 @@ function rewrite_update(req, res) {
 }
 
 function rewrite_return_board(req, res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { hide: 'false' };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.find(findThing, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);
@@ -400,18 +401,18 @@ function rewrite_return_board(req, res) {
 //refresh
 
 function discuss_refresh(req, res) {
-    MongoClient.connect(uri +"board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+    MongoClient.connect(uri + "board", { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { num: req.body.num };
-        table.findOne(findThing, { projection: { _id: 0, num: 0, ID: 0, title: 0, include: 0, hide: 0 } },function (err, result) {
+        table.findOne(findThing, { projection: { _id: 0, num: 0, ID: 0, title: 0, include: 0, hide: 0 } }, function (err, result) {
             if (err) {
-                res.json({ result: 'error' ,data:'NA'});
+                res.json({ result: 'error', data: 'NA' });
                 throw err;
             }
             db.close();
             //console.log(result);
-            res.json({ result: 'success', data: result});
+            res.json({ result: 'success', data: result });
         });
     });
 }

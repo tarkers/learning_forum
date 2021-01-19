@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        資料庫設計 - HackMD
+    </title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+    <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css" integrity="sha256-QiWfLIsCT02Sdwkogf6YMiQlj4NE84MKkzEMkZnMGdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @charset "UTF-8";@import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i|Source+Code+Pro:300,400,500|Source+Sans+Pro:300,300i,400,400i,600,600i|Source+Serif+Pro&subset=latin-ext);.hljs{display:block;background:#fff;padding:.5em;color:#333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-attribute,.hljs-bullet,.hljs-literal,.hljs-number,.hljs-symbol{color:#0086b3}.hljs-built_in,.hljs-builtin-name{color:#005cc5}.hljs-name,.hljs-section{color:#63a35c}.hljs-tag{color:#333}.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}.markdown-body{font-size:16px;line-height:1.5;word-wrap:break-word}.markdown-body:after,.markdown-body:before{display:table;content:""}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body hr{height:.25em;padding:0;margin:24px 0;background-color:#e7e7e7;border:0}.markdown-body blockquote{font-size:16px;padding:0 1em;color:#777;border-left:.25em solid #ddd}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body kbd,.popover kbd{display:inline-block;padding:3px 5px;font-size:11px;line-height:10px;color:#555;vertical-align:middle;background-color:#fcfcfc;border:1px solid #ccc;border-bottom-color:#bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{padding-bottom:.3em;border-bottom:1px solid #eee}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{font-size:.85em;color:#777}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{padding:0;list-style-type:none}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{padding-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body table{display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #ddd}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #ddd}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#333}.markdown-body span.align-center{display:block;overflow:hidden;clear:both}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{display:block;overflow:hidden;clear:both}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{padding:0;padding-top:.2em;padding-bottom:.2em;margin:0;font-size:85%;background-color:rgba(0,0,0,.04);border-radius:3px}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{letter-spacing:-.2em;content:"\00a0"}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f7f7f7;border-radius:3px}.markdown-body pre code,.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{padding:5px;overflow:hidden;font-size:12px;line-height:1;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{padding:10px 8px 9px;text-align:right;background:#fff;border:0}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{font-weight:700;background:#f8f8f8;border-top:0}.news .alert .markdown-body blockquote{padding:0 0 0 40px;border:0 none}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle;cursor:default!important}.markdown-body{padding-top:40px;padding-bottom:40px;max-width:758px;overflow:visible!important;position:relative}.markdown-body .emoji{vertical-align:top}.markdown-body pre{border:inherit!important}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{text-align:right;position:relative;display:inline-block;cursor:default;z-index:4;padding:0 8px 0 0;min-width:20px;box-sizing:content-box;color:#afafaf!important;border-right:3px solid #6ce26c!important}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-left:none;border-top:none;border-bottom:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-spacing:0;border-collapse:inherit!important}.markdown-body code[data-gist-id]{background:none;padding:0}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{overflow:unset;margin-bottom:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{text-align:center;background-color:inherit;border-radius:0;white-space:inherit;overflow:visible}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{max-width:100%;height:100%}.markdown-body pre>code.wrap{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word}.markdown-body .alert>p,.markdown-body .alert>ul{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body .mark,.markdown-body mark{background-color:#fff1a7}.vimeo,.youtube{cursor:pointer;display:table;text-align:center;background-position:50%;background-repeat:no-repeat;background-size:contain;background-color:#000;overflow:hidden}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{width:100%;object-fit:contain;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{width:100%;height:100%;position:absolute;top:0;left:0}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{position:absolute;height:auto;width:auto;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;opacity:.3;transition:opacity .2s;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%}.MJX_Assistive_MathML{display:none}#MathJax_Message{z-index:1000!important}.ui-infobar{position:relative;z-index:2;max-width:760px;margin:25px auto -25px;color:#777}.toc .invisable-node{list-style-type:none}.ui-toc{position:fixed;bottom:20px;z-index:998}.ui-toc.both-mode{margin-left:8px}.ui-toc.both-mode .ui-toc-label{height:40px;padding:10px 4px;border-top-left-radius:0;border-bottom-left-radius:0}.ui-toc-label{background-color:#e6e6e6;border:none;color:#868686;transition:opacity .2s}.ui-toc .open .ui-toc-label{opacity:1;color:#fff;transition:opacity .2s}.ui-toc-label:focus{opacity:.3;background-color:#ccc;color:#000}.ui-toc-label:hover{opacity:1;background-color:#ccc;transition:opacity .2s}.ui-toc-dropdown{margin-top:20px;margin-bottom:20px;padding-left:10px;padding-right:10px;max-width:45vw;width:25vw;max-height:70vh;overflow:auto;text-align:inherit}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{padding-right:0;letter-spacing:.0029em}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{display:block;padding:4px 20px;font-size:13px;font-weight:500;color:#767676}.ui-toc-dropdown .nav>li:first-child:last-child > ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{padding-left:19px;color:#000;text-decoration:none;background-color:transparent;border-left:1px solid #000}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{padding-right:19px;border-left:none;border-right:1px solid #000}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{padding-left:18px;font-weight:700;color:#000;background-color:transparent;border-left:2px solid #000}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{padding-right:18px;border-left:none;border-right:2px solid #000}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{padding-top:1px;padding-bottom:1px;padding-left:30px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:40px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{padding-left:28px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{padding-left:38px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif}html[lang^=ja] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html .markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html .markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html .markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html[lang^=ja] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html[lang=zh-tw] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html[lang=zh-cn] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}html .ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html .ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html .ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}.ui-affix-toc{position:fixed;top:0;max-width:15vw;max-height:70vh;overflow:auto}.back-to-top,.expand-toggle,.go-to-bottom{display:block;padding:4px 10px;margin-top:10px;margin-left:10px;font-size:12px;font-weight:500;color:#999}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{width:20px;height:20px;display:block;border-radius:50%;margin-top:2px;margin-bottom:2px;margin-right:5px;background-position:50%;background-repeat:no-repeat;background-size:cover}.ui-user-icon.small{width:18px;height:18px;display:inline-block;vertical-align:middle;margin:0 0 .2em}.ui-infobar>small>span{line-height:22px}.ui-infobar>small .dropdown{display:inline-block}.ui-infobar>small .dropdown a:focus,.ui-infobar>small .dropdown a:hover{text-decoration:none}.ui-more-info{color:#888;cursor:pointer;vertical-align:middle}.ui-more-info .fa{font-size:16px}.ui-connectedGithub,.ui-published-note{color:#888}.ui-connectedGithub{line-height:23px;white-space:nowrap}.ui-connectedGithub a.file-path{color:#888;text-decoration:none;padding-left:22px}.ui-connectedGithub a.file-path:active,.ui-connectedGithub a.file-path:hover{color:#888;text-decoration:underline}.ui-connectedGithub .fa{font-size:20px}.ui-published-note .fa{font-size:20px;vertical-align:top}.unselectable{-webkit-user-select:none;-o-user-select:none;user-select:none}.selectable{-webkit-user-select:text;-o-user-select:text;user-select:text}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{position:relative;z-index:1;color:#222}.markdown-body.slides:before{content:"";display:block;position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;background-color:currentColor;box-shadow:0 0 0 50vw}.markdown-body.slides section[data-markdown]{position:relative;margin-bottom:1.5em;background-color:#fff;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{position:absolute;top:50%;left:1em;right:1em;transform:translateY(-50%);max-height:100%;overflow:hidden}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{content:"";position:absolute;top:-1.5em;right:1em;height:1.5em;border:3px solid #777}.site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;text-shadow:0 0 1em transparent,1px 1px 1.2px rgba(0,0,0,.004);-webkit-overflow-scrolling:touch;letter-spacing:.025em;font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] body{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}abbr[data-original-title],abbr[title]{cursor:help}body.modal-open{overflow-y:auto;padding-right:0!important}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true"><h1 id="資料庫設計" data-id="資料庫設計"><a class="anchor hidden-xs" href="#資料庫設計" title="資料庫設計"><span class="octicon octicon-link"></span></a><span>資料庫設計</span></h1><h2 id="各collection名稱" data-id="各collection名稱"><a class="anchor hidden-xs" href="#各collection名稱" title="各collection名稱"><span class="octicon octicon-link"></span></a><span>各collection名稱</span></h2><p><img src="https://i.imgur.com/ntdHFj7.png" alt=""></p><ul>
+<li><span>mongoDB</span>
+<ul>
+<li>
+<p><span>GQ_data</span></p>
+<ul>
+<li><span>A_one</span></li>
+<li><span>A_group</span></li>
+<li><span>B_one</span></li>
+<li><span>B_group</span></li>
+<li><span>C_one</span></li>
+<li><span>C_group</span></li>
+<li><span>D_one</span></li>
+<li><span>D_group</span></li>
+<li><span>E_one</span></li>
+<li><span>E_group</span></li>
+<li><span>F_one</span></li>
+<li><span>F_group</span></li>
+<li><span>G_one</span></li>
+<li><span>G_group</span></li>
+<li><span>H_one</span></li>
+<li><span>H_group</span></li>
+<li><span>I_one</span></li>
+<li><span>I_group</span></li>
+<li><span>J_one</span></li>
+<li><span>J_group</span></li>
+<li><span>K_one</span></li>
+<li><span>K_group</span></li>
+<li><span>L_one</span></li>
+<li><span>L_group</span></li>
+<li><span>M_one</span></li>
+<li><span>M_group</span></li>
+</ul>
+</li>
+<li>
+<p><span>GQ_personal</span></p>
+<ul>
+<li><span>personal_critical_data</span></li>
+<li><span>personal_Date</span></li>
+</ul>
+</li>
+<li>
+<p><span>EW</span></p>
+<ul>
+<li><span>personal_information</span></li>
+<li><span>personal_data</span></li>
+</ul>
+</li>
+<li>
+<p><span>data</span></p>
+<ul>
+<li><span>Mtable</span></li>
+<li><span>Ltable</span></li>
+<li><span>critical_value</span></li>
+</ul>
+</li>
+<li>
+<p><span>lock</span></p>
+<ul>
+<li><span>users</span></li>
+</ul>
+</li>
+<li>
+<p><span>QQ</span></p>
+<ul>
+<li><span>one_q1</span></li>
+<li><span>one_q2</span></li>
+<li><span>one_q3</span></li>
+<li><span>one_q4</span></li>
+<li><span>one_q5</span></li>
+<li><span>one_q6</span></li>
+<li><span>one_q7</span></li>
+<li><span>one_q8</span></li>
+<li><span>all</span></li>
+<li><span>personal_Date</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h2 id="含參數填範例參數" data-id="含參數填範例參數"><a class="anchor hidden-xs" href="#含參數填範例參數" title="含參數填範例參數"><span class="octicon octicon-link"></span></a><span>含參數(填範例參數)</span></h2><h6 id="詳細需求請見需求書v2httpsdrivegooglecomopenid1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t" data-id="詳細需求請見需求書v2httpsdrivegooglecomopenid1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t"><a class="anchor hidden-xs" href="#詳細需求請見需求書v2httpsdrivegooglecomopenid1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t" title="詳細需求請見需求書v2httpsdrivegooglecomopenid1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t"><span class="octicon octicon-link"></span></a><span>詳細需求請見需求書(v2):</span><a href="https://drive.google.com/open?id=1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t" target="_blank" rel="noopener"><span>https://drive.google.com/open?id=1aDQwcRCu-0JwdU6oIg94KCmTYE9PIR2t</span></a></h6><h6 id="參數名及參數格式未特別註明即為字串string" data-id="參數名及參數格式未特別註明即為字串string"><a class="anchor hidden-xs" href="#參數名及參數格式未特別註明即為字串string" title="參數名及參數格式未特別註明即為字串string"><span class="octicon octicon-link"></span></a><span>參數名及參數格式未特別註明即為字串(string)</span></h6><h6 id="api參數需屏蔽----於EW----_-於GQ" data-id="api參數需屏蔽----於EW----_-於GQ"><a class="anchor hidden-xs" href="#api參數需屏蔽----於EW----_-於GQ" title="api參數需屏蔽----於EW----_-於GQ"><span class="octicon octicon-link"></span></a><span>api參數需屏蔽 ~ - 於EW, ~ - _ 於GQ</span></h6><h6 id="未填寫參數統一訂為-1" data-id="未填寫參數統一訂為-1"><a class="anchor hidden-xs" href="#未填寫參數統一訂為-1" title="未填寫參數統一訂為-1"><span class="octicon octicon-link"></span></a><span>未填寫參數統一訂為-1</span></h6><h6 id="機率的數字支援小數點其他數字無小數點" data-id="機率的數字支援小數點其他數字無小數點"><a class="anchor hidden-xs" href="#機率的數字支援小數點其他數字無小數點" title="機率的數字支援小數點其他數字無小數點"><span class="octicon octicon-link"></span></a><span>機率的數字支援小數點,其他數字無小數點</span></h6><ul>
+<li>
+<p><span>GQ_data</span></p>
+<ul>
+<li><span>A_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 93</span></li>
+<li><span>color: G</span></li>
+<li><span>ACC: 1</span></li>
+<li><span>RT: 324</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>A_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC: 78</span></li>
+<li><span>RT: 256</span></li>
+<li><span>FA: 16.67</span></li>
+<li><span>FA_RT: 345</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>B_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 93</span></li>
+<li><span>color: G</span></li>
+<li><span>CorrAns: 1</span></li>
+<li><span>Press: 2</span></li>
+<li><span>Acc: 1</span></li>
+<li><span>RT: 324</span></li>
+<li><span>SSD: 58</span></li>
+<li><span>SS_Acc: 77</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>B_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC: 66.7</span></li>
+<li><span>Go_Acc: 88</span></li>
+<li><span>Go_RT: 456</span></li>
+<li><span>NCRate: 14.4</span></li>
+<li><span>NC_RT: 178</span></li>
+<li><span>mSSD: 422</span></li>
+<li><span>SSRT: 34</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>C_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串" data-id="123型別為整數而不是字串"><a class="anchor hidden-xs" href="#123型別為整數而不是字串" title="123型別為整數而不是字串"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 33</span></li>
+<li><span>CoherenceRate: 25</span></li>
+<li><span>RT: 543</span></li>
+<li><span>Acc: 1</span></li>
+<li><span>Direction: 3</span></li>
+<li><span>PressKey: 3</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>C_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC_R1: 66.7</span></li>
+<li><span>ACC_R2: 23</span></li>
+<li><span>ACC_R3: 56.4</span></li>
+<li><span>CR_R1: 14.4</span></li>
+<li><span>CR_R2: 17.8</span></li>
+<li><span>CR_R3: 42.2</span></li>
+<li><span>AVR_R: 33.5</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>D_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串1" data-id="123型別為整數而不是字串"><a class="anchor hidden-xs" href="#123型別為整數而不是字串1" title="123型別為整數而不是字串1"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 113</span></li>
+<li><span>Size: 2</span></li>
+<li><span>PresentTime: 243</span></li>
+<li><span>Direction: 1</span></li>
+<li><span>Press: 2</span></li>
+<li><span>Acc: 0</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>D_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>R1: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 256</span></li>
+<li><span>t3: 200</span></li>
+<li><span>t10: 188</span></li>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc3: 60</span></li>
+<li><span>Acc10:70.7</span></li>
+</ol>
+</li>
+<li><span>R2: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 256</span></li>
+<li><span>t3: 200</span></li>
+<li><span>t10: 188</span></li>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc3: 60</span></li>
+<li><span>Acc10:70.7</span></li>
+</ol>
+</li>
+<li><span>R3: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 256</span></li>
+<li><span>t3: 200</span></li>
+<li><span>t10: 188</span></li>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc3: 60</span></li>
+<li><span>Acc10:70.7</span></li>
+</ol>
+</li>
+<li><span>mt1: 14.4</span></li>
+<li><span>mt3: 17.8</span></li>
+<li><span>mt10: 42.2</span></li>
+<li><span>SI: 33.5</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>E_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 96</span></li>
+<li><span>Cue: 4</span></li>
+<li><span>Congruent: 2</span></li>
+<li><span>Position: 1</span></li>
+<li><span>Orientation: 2</span></li>
+<li><span>Press: 0</span></li>
+<li><span>Acc: 0</span></li>
+<li><span>RT: 799</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>E_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 66.7</span></li>
+<li><span>RT: 238</span></li>
+<li><span>NoCue: 123</span></li>
+<li><span>Center: 123</span></li>
+<li><span>Dual: 123</span></li>
+<li><span>Spatial: 123</span></li>
+<li><span>Cong: 123.3</span></li>
+<li><span>Ing: 123</span></li>
+<li><span>Neutral: 123</span></li>
+<li><span>Alert: 123</span></li>
+<li><span>Orientation: 123</span></li>
+<li><span>Conflict: 123</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>F_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 96</span></li>
+<li><span>Cue: 2</span></li>
+<li><span>SoA: 1200</span></li>
+<li><span>TargetPosition: 2</span></li>
+<li><span>Press: 2</span></li>
+<li><span>Acc: 1</span></li>
+<li><span>RT: 799</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>F_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 66.7</span></li>
+<li><span>RT: 238</span></li>
+<li><span>Neutral: 123</span></li>
+<li><span>Congruent: 123</span></li>
+<li><span>InCongruent: 123</span></li>
+<li><span>SoA200: 123</span></li>
+<li><span>SoA1200: 123.3</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>G_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json,json],2:[json,json,json,json],3:[json,json,json,json],4: …}</span>
+<h6 id="1234型別為整數而不是字串此處為level" data-id="1234型別為整數而不是字串此處為level"><a class="anchor hidden-xs" href="#1234型別為整數而不是字串此處為level" title="1234型別為整數而不是字串此處為level"><span class="octicon octicon-link"></span></a><span>1,2,3,4型別為整數而不是字串,此處為level</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 4</span></li>
+<li><span>Point: 8</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>G_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Level: 6</span></li>
+<li><span>Score: 121</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>H_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串2" data-id="123型別為整數而不是字串"><a class="anchor hidden-xs" href="#123型別為整數而不是字串2" title="123型別為整數而不是字串2"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 19</span></li>
+<li><span>Color: 3</span></li>
+<li><span>CorrAns: 3</span></li>
+<li><span>Press: 3</span></li>
+<li><span>Acc: 1</span></li>
+<li><span>RT: 345</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>H_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc2: 60</span></li>
+<li><span>Acc3: 70</span></li>
+<li><span>RT1: 123</span></li>
+<li><span>RT2: 456</span></li>
+<li><span>RT3: 789</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>I_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 12</span></li>
+<li><span>NofDig: 8</span></li>
+<li><span>CorrDig: 13254689</span></li>
+<li><span>PressDig: 13254688</span></li>
+<li><span>Accuracy: 11111110</span></li>
+<li><span>Sum: 7</span></li>
+<li><span>RT: 579</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>I_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Score: 55</span></li>
+<li><span>Acc: 50.8</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>J_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {2:[json,json,json…],3:[json,json,json…],4:[json,json,json…]}</span>
+<h6 id="234…型別為整數而不是字串-是為N等級" data-id="234…型別為整數而不是字串-是為N等級"><a class="anchor hidden-xs" href="#234…型別為整數而不是字串-是為N等級" title="234…型別為整數而不是字串-是為N等級"><span class="octicon octicon-link"></span></a><span>2,3,4,…型別為整數而不是字串 是為N(等級)</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 23</span></li>
+<li><span>Position: 2</span></li>
+<li><span>CorrAns: 1</span></li>
+<li><span>Press: 0</span></li>
+<li><span>Accuracy: 0</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>J_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>N: 6</span></li>
+<li><span>Acc: 90.8</span></li>
+<li><span>Score: 162</span></li>
+<li><span>back_Score2: 30</span></li>
+<li><span>back_Score3: 26</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>K_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 120</span></li>
+<li><span>Condition: 2</span></li>
+<li><span>Pic: XX.jpg</span></li>
+<li><span>Color: 3</span></li>
+<li><span>Press: 3</span></li>
+<li><span>Acc: 1</span></li>
+<li><span>RT: 579</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>K_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 66.6</span></li>
+<li><span>RT: 330</span></li>
+<li><span>Positive: 340</span></li>
+<li><span>Negative: 320</span></li>
+<li><span>Middle: 330</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>L_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 22</span></li>
+<li><span>filename: XX.jpg</span></li>
+<li><span>X: 57</span></li>
+<li><span>Y: 33</span></li>
+<li><span>Sub_X: 45</span></li>
+<li><span>Sub_Y: 10</span></li>
+<li><span>Spin: 4</span></li>
+<li><span>Ans: 5</span></li>
+<li><span>Acc: 0</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>L_group</span>
+<ul>
+<li><span>null</span></li>
+</ul>
+</li>
+<li><span>M_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 18</span></li>
+<li><span>file: XX.jpg</span></li>
+<li><span>CorrAns: 2</span></li>
+<li><span>Ans: 2</span></li>
+<li><span>Acc: 1</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>M_group</span>
+<ul>
+<li><span>null</span></li>
+</ul>
+</li>
+<li><span>M_video</span>
+<ul>
+<li><span>pathname: XX.jpg</span></li>
+<li><span>Corr: 36</span></li>
+<li><span>InCorr: 84</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>GQ_personal</span></p>
+<ul>
+<li><span>personal_critical_data</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>A1: 23</span></li>
+<li><span>A2: 23</span></li>
+<li><span>A3: 25</span></li>
+<li><span>A4: 27</span></li>
+<li><span>A5: 28</span></li>
+<li><span>A6: 28</span></li>
+<li><span>A7: 29</span></li>
+<li><span>A8: 21</span></li>
+<li><span>A9: 13</span></li>
+<li><span>A10: 93</span></li>
+<li><span>B1: 23</span></li>
+<li><span>B2: 43</span></li>
+<li><span>B3: 33</span></li>
+<li><span>B4: 63</span></li>
+<li><span>B5: 23</span></li>
+<li><span>C1: 77</span></li>
+<li><span>C2: 23</span></li>
+<li><span>C3: 44</span></li>
+<li><span>C4: 23</span></li>
+<li><span>C5: 54</span></li>
+<li><span>C6: 23</span></li>
+<li><span>C7: 23</span></li>
+<li><span>C8: 88</span></li>
+<li><span>C9: 87</span></li>
+<li><span>C10: 23</span></li>
+<li><span>D1: 23</span></li>
+<li><span>D2: 23</span></li>
+<li><span>D3: 23</span></li>
+<li><span>D4: 3</span></li>
+<li><span>D5: 23</span></li>
+</ul>
+</li>
+<li><span>personal_Date</span>
+<ul>
+<li><span>ID : A_1</span></li>
+<li><span>A ~ M : ISO(Time)</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>EW</span></p>
+<ul>
+<li><span>personal_information</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>password: 0000</span></li>
+<li><span>first: True(bool)</span></li>
+</ul>
+</li>
+<li><span>personal_data</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>name: 小明</span></li>
+<li><span>gender: male</span></li>
+<li><span>age: 23</span></li>
+<li><span>birth: 19970917</span></li>
+<li><span>TW_ID: A123456789</span></li>
+<li><span>height: 170</span></li>
+<li><span>weight: 70</span></li>
+<li><span>phone: 0970785699</span></li>
+<li><span>place: 台北市XXXXXXXXXXXXX</span></li>
+<li><span>mail: </span><a href="mailto:a0970785699@gmail.com" target="_blank" rel="noopener"><span>a0970785699@gmail.com</span></a></li>
+<li><span>school: 成功大學</span></li>
+<li><span>degree: 機械109</span></li>
+<li><span>year: 12</span></li>
+<li><span>nice: 大專盃個人組XXXXXX</span></li>
+<li><span>Ghand: left</span></li>
+<li><span>Phand: right</span></li>
+<li><span>teacher: 林大偉</span></li>
+<li><span>oneExercise: 15</span></li>
+<li><span>groupExercise: 8</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>data</span></p>
+<ul>
+<li><span>Mtable</span>
+<ul>
+<li><span>filepath:XXX.mp4</span></li>
+<li><span>ans: 1</span></li>
+<li><span>ans: 3</span></li>
+</ul>
+</li>
+<li><span>Ltable</span>
+<ul>
+<li><span>No: 1</span></li>
+<li><span>filepath:XXX.mp4</span></li>
+<li><span>ans: 1</span></li>
+<li><span>X: 32</span></li>
+<li><span>Y: 113</span></li>
+<li><span>Difficulty : 0</span></li>
+<li><span>human : C01</span></li>
+</ul>
+</li>
+<li><span>critical_value</span>
+<ul>
+<li><span>mode: 1~3</span></li>
+<li><span>personal_critical_data中A1到D5</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>lock</span></p>
+<ul>
+<li><span>users</span>
+<ul>
+<li><span>name:usersCount</span></li>
+<li><span>count:1</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>QQ</span></p>
+<ul>
+<li><span>one_q1</span>
+<ul>
+<li><span>28題 =&gt; 1~4</span></li>
+</ul>
+</li>
+<li><span>one_q2</span>
+<ul>
+<li><span>31題 =&gt; 1~5</span></li>
+</ul>
+</li>
+<li><span>one_q3</span>
+<ul>
+<li><span>21題 =&gt; 1~4</span></li>
+</ul>
+</li>
+<li><span>one_q4</span>
+<ul>
+<li><span>18題 =&gt; 1~5</span></li>
+</ul>
+</li>
+<li><span>one_q5</span>
+<ul>
+<li><span>25題 =&gt; 1~5</span></li>
+</ul>
+</li>
+<li><span>one_q6</span>
+<ul>
+<li><span>14題 =&gt; 1~3</span></li>
+</ul>
+</li>
+<li><span>one_q7</span>
+<ul>
+<li><span>16題 =&gt; 1~7</span></li>
+</ul>
+</li>
+<li><span>one_q8</span>
+<ul>
+<li><span>38題(76個答案) =&gt; 1~4</span></li>
+</ul>
+</li>
+<li><span>all</span>
+<ul>
+<li><span>230題 =&gt; 上面各題答案</span></li>
+</ul>
+</li>
+<li><span>personal_Date</span>
+<ul>
+<li><span>ID : XXX</span></li>
+<li><span>Q1~Q8 : ISO制時間</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h2 id="含參數填說明" data-id="含參數填說明"><a class="anchor hidden-xs" href="#含參數填說明" title="含參數填說明"><span class="octicon octicon-link"></span></a><span>含參數(填說明)</span></h2><ul>
+<li>
+<p><span>GQ_data</span></p>
+<ul>
+<li><span>A_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 依照題目呈現順序由 1~100。</span></li>
+<li><span>color: 該題實心圓所呈現之顏色，G 表綠色，R 表紅色</span></li>
+<li><span>ACC: 該題使用者是否作出正確按鍵反應。即綠色實心圓按【J】鍵。紅色實心圓不按鍵。答對紀錄為【1】。答錯紀錄為【0】。</span></li>
+<li><span>RT: 點出現至使用者按鍵反應的時間,沒按為</span><span class="ui-comment-inline-span">-1</span><span>。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>A_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC: 整體正確率</span></li>
+<li><span>RT: 平均正確反應時間</span></li>
+<li><span>FA: 假警報機率</span></li>
+<li><span>FA_RT: 假警報平均反應時間</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>B_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 題號1 ~ 240</span></li>
+<li><span>color: 該題實心圓所呈現之顏色，G 表綠色，R 表紅色</span></li>
+<li><span>CorrAns: 該題正確反應，1 代表【J】，2 代表【F】，0 代表不反應</span></li>
+<li><span>Press: 記錄使用者該題按鍵反應，1 代表按【J】，2 代表【F】，0 代表沒有按鍵反應。</span></li>
+<li><span>Acc: 記錄使用者該題是否做出正確反應，答對記為 1，答錯記為 0。</span></li>
+<li><span>RT: 記錄使用者該題反應時間</span></li>
+<li><span>SSD: 延遲時間</span></li>
+<li><span>SS_Acc: 題示音正確率</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>B_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC: 整體正確率</span></li>
+<li><span>Go_Acc: 無題示音題目正確率</span></li>
+<li><span>Go_RT: 無題示音題目平均反應時間</span></li>
+<li><span>NCRate: 題示音題目錯誤率</span></li>
+<li><span>NC_RT: 題示音題目平均反應時間</span></li>
+<li><span>mSSD: 平均延遲時間</span></li>
+<li><span>SSRT: 停止訊號反應時間</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>C_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串-表示-gt-回合Run。" data-id="123型別為整數而不是字串-表示-gt-回合Run。"><a class="anchor hidden-xs" href="#123型別為整數而不是字串-表示-gt-回合Run。" title="123型別為整數而不是字串-表示-gt-回合Run。"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串 表示 =&gt; 回合(Run)。</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 題號 40一回合 for 3 回合</span></li>
+<li><span>CoherenceRate: 同方向移動比例</span></li>
+<li><span>RT: 反應時間</span></li>
+<li><span>Acc: 紀錄該題使用者是否做出正確反應，如果按鍵反應正確則紀錄為 1，錯誤則紀錄為 0。</span></li>
+<li><span>Direction: 紀錄該題一致性移動的方向，往右紀錄為 1，往下紀錄為 2，往左紀錄為 3，往上紀錄為 4。</span></li>
+<li><span>PressKey: 紀錄使用者選的移動方向，往右紀錄為 1，往下紀錄為 2，往左紀錄為 3，往上紀錄為 4。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>C_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>ACC_R1: 回合正確率</span></li>
+<li><span>ACC_R2: 回合正確率</span></li>
+<li><span>ACC_R3: 回合正確率</span></li>
+<li><span>CR_R1: 紀錄每一回合最終一致性移動比率，單位為百分比(%)</span></li>
+<li><span>CR_R2: 紀錄每一回合最終一致性移動比率，單位為百分比(%)</span></li>
+<li><span>CR_R3: 紀錄每一回合最終一致性移動比率，單位為百分比(%)</span></li>
+<li><span>AVR_R: 上三平均</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>D_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串-123-mean-each-run-totla-have-3-run" data-id="123型別為整數而不是字串-123-mean-each-run-totla-have-3-run"><a class="anchor hidden-xs" href="#123型別為整數而不是字串-123-mean-each-run-totla-have-3-run" title="123型別為整數而不是字串-123-mean-each-run-totla-have-3-run"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串 1,2,3 mean each run totla have 3 run</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 依照題目呈現順序由 1~120。</span></li>
+<li><span>Size: 如果該題呈現小 Gabor，則記為 1。呈現中 Gabor，記為 2。呈現大Gabor 記為 3。</span></li>
+<li><span>PresentTime: 記錄該題 Gabor 的呈現時間，單位為毫秒(ms)。</span></li>
+<li><span>Direction: 記錄該題 Gabor 線條移動方向。往右記為 1，往左記為 2。</span></li>
+<li><span>Press: 記錄使用者該題的按鍵反應。按【J】記錄為 1，按【F】記錄為 2。</span></li>
+<li><span>Acc: 記錄該題使用者是否做出正確反應。正確則記錄為 1，錯誤記錄為 0。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>D_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>R1: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 每一回合小 Gabor 的最終呈現時間</span></li>
+<li><span>t3: 每一回合中 Gabor 的最終呈現時間</span></li>
+<li><span>t10: 每一回合大 Gabor 的最終呈現時間</span></li>
+<li><span>Acc1: 記錄每一個回合小 Gabor的正確率，單位為百分比</span></li>
+<li><span>Acc3: 記錄每一個回合中 Gabor的正確率，單位為百分比</span></li>
+<li><span>Acc10: 記錄每一個回合大 Gabor正確率，單位為百分比</span></li>
+</ol>
+</li>
+<li><span>R2: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 256</span></li>
+<li><span>t3: 200</span></li>
+<li><span>t10: 188</span></li>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc3: 60</span></li>
+<li><span>Acc10:70.7</span></li>
+</ol>
+</li>
+<li><span>R3: inJson</span><br>
+<span>inJson=&gt;</span>
+<ol>
+<li><span>t1: 256</span></li>
+<li><span>t3: 200</span></li>
+<li><span>t10: 188</span></li>
+<li><span>Acc1: 50</span></li>
+<li><span>Acc3: 60</span></li>
+<li><span>Acc10:70.7</span></li>
+</ol>
+</li>
+<li><span>mt1: R1 R2 R3的 t1平均</span></li>
+<li><span>mt3: R1 R2 R3的 t3平均</span></li>
+<li><span>mt10: R1 R2 R3的 t10平均</span></li>
+<li><span>SI: 為 SI = mt10 – mt1。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>E_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 依照題目呈現順序由 1~96。</span></li>
+<li><span>Cue: 記錄該題線索種類，無線索No Cue記錄為1，中央線索Center Cue記錄為2，雙線索Dual Cue記錄為3，空間線索(Spatial Cue)記錄為4。</span></li>
+<li><span>Congruent: ：記錄該題箭頭種類，方向一致記錄為 1，方向不一致紀錄為 2，中性紀錄為 3。</span></li>
+<li><span>Position: 記錄該題箭頭呈現的位置在上方或下方。上方記錄為 1，下方記錄為 2。</span></li>
+<li><span>Orientation: 記錄該題目標箭頭(中央箭頭)的指向，指向右記錄為 1，指向左記錄為2。</span></li>
+<li><span>Press: 記錄該題使用者的按鍵反應，按【J】記錄為 1，按【F】記錄為 2，未按鍵記錄為 0。</span></li>
+<li><span>Acc: 記錄該題使用者是否做出正確反應，正確紀錄為 1，錯誤記錄為 0。</span></li>
+<li><span>RT: 記錄該題使用者從箭頭出現至作出按鍵反應的時間。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>E_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 回合正確率</span></li>
+<li><span>RT: 回合平均反應時間</span></li>
+<li><span>NoCue: 無線索平均反應時間</span></li>
+<li><span>Center: 中央線索平均反應時間</span></li>
+<li><span>Dual: 雙線索平均反應時間</span></li>
+<li><span>Spatial: 空間線索平均反應時間</span></li>
+<li><span>Cong: 箭頭一致平均反應時間</span></li>
+<li><span>Ing: 箭頭不一致平均反應時間</span></li>
+<li><span>Neutral: 中性條件平均反應時間</span></li>
+<li><span>Alert: 警覺性指標Alert = NoCue – Dual。</span></li>
+<li><span>Orientation: 指向性指標Orientation = Center – Spatial。</span></li>
+<li><span>Conflict: 對抗性指標Conflict = Ing – Cong。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>F_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 依照題目呈現順序由 1~96。</span></li>
+<li><span>Cue: 記錄該題出現的眼神線索。中性線索記錄為 1，一致性線索記錄為 2，不一致線索記錄為 3。</span></li>
+<li><span>SoA: SoA 共有兩種情況 200 / 1200 ms。</span></li>
+<li><span>TargetPosition: 如果出現在左側記錄為1，出現在右側記錄為 2</span></li>
+<li><span>Press: 記錄該題使用者的按鍵反應。</span><span class="ui-comment-inline-span">按【F】記錄為 1，按【J】記錄為 2</span><span>，如果未按鍵記錄為 0。</span></li>
+<li><span>Acc: 記錄該題從目標出現到使用者作出按鍵反應的</span><span class="ui-comment-inline-span">時間</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>F_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 計算整回合使用者的答題正確率。</span></li>
+<li><span>RT: 計算整回合的平均反應時間。僅將正確反應的題目列入計算</span></li>
+<li><span>Neutral: 計算中性線索的題目正確反應的平均反應時間</span></li>
+<li><span>Congruent: 計算一致性線索的題目正確反應的平均反應時間</span></li>
+<li><span>InCongruent: 計算不一致線索的題目正確反應的平均反應時間。</span></li>
+<li><span>SoA200: 計算 SoA200 的題目正確反應的平均反應時間。</span></li>
+<li><span>SoA1200: 計算 SoA1200 的題目正確反應的平均反應時間。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>G_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json,json],2:[json,json,json,json],3:[json,json,json,json],4: …}</span>
+<h6 id="1234型別為整數而不是字串此處為level等級Level：該題總方塊數。從-6-開始，4-題一個-level，如果該-level-得分-10-分以上，進入下一個-level，總方塊數1，目標方塊維持-3-個。" data-id="1234型別為整數而不是字串此處為level等級Level：該題總方塊數。從-6-開始，4-題一個-level，如果該-level-得分-10-分以上，進入下一個-level，總方塊數1，目標方塊維持-3-個。"><a class="anchor hidden-xs" href="#1234型別為整數而不是字串此處為level等級Level：該題總方塊數。從-6-開始，4-題一個-level，如果該-level-得分-10-分以上，進入下一個-level，總方塊數1，目標方塊維持-3-個。" title="1234型別為整數而不是字串此處為level等級Level：該題總方塊數。從-6-開始，4-題一個-level，如果該-level-得分-10-分以上，進入下一個-level，總方塊數1，目標方塊維持-3-個。"><span class="octicon octicon-link"></span></a><span>1,2,3,4型別為整數而不是字串,此處為level,等級(Level)：該題總方塊數。從 6 開始，4 題一個 level，如果該 level 得分 10 分以上，進入下一個 level，總方塊數+1，目標方塊維持 3 個。</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 該level第幾題</span></li>
+<li><span>Point: 該題得分</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>G_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Level: 最終等級</span></li>
+<li><span>Score: 最終總分</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>H_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {1:[json,json,json…],2:[json,json,json…],3:[json,json,json…]}</span>
+<h6 id="123型別為整數而不是字串-紀錄該題屬於哪一個部分，13。" data-id="123型別為整數而不是字串-紀錄該題屬於哪一個部分，13。"><a class="anchor hidden-xs" href="#123型別為整數而不是字串-紀錄該題屬於哪一個部分，13。" title="123型別為整數而不是字串-紀錄該題屬於哪一個部分，13。"><span class="octicon octicon-link"></span></a><span>1,2,3型別為整數而不是字串 ,紀錄該題屬於哪一個部分，1~3。</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 依照題目呈現順序編號，第一部分 1~20，第二、三部分 1~60。</span></li>
+<li><span>Color: 記錄該題實心圓顏色。綠色記錄為1，紅色記錄為2，藍色紀錄為3，黃色紀錄為4。</span></li>
+<li><span>CorrAns: 記錄該題正確答案(與顏色同)。綠色紀錄為1，紅色紀錄為2，藍色紀錄為3，黃色紀錄為4。</span></li>
+<li><span>Press: 輸入答案，綠色紀錄為1，紅色紀錄為2，藍色紀錄為3，黃色紀錄為4。</span></li>
+<li><span>Acc: 1代表答案對,0代表答案錯</span></li>
+<li><span>RT: 計算該題實心圓出現至使用者按鍵反應之間的時間。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>H_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc1: 計算各部分正確率</span></li>
+<li><span>Acc2: 計算各部分正確率</span></li>
+<li><span>Acc3: 計算各部分正確率</span></li>
+<li><span>RT1: 算各部分正確反應之平均反應時間</span></li>
+<li><span>RT2: 算各部分正確反應之平均反應時間</span></li>
+<li><span>RT3: 算各部分正確反應之平均反應時間</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>I_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 依照題目呈現順序編號，1~15</span></li>
+<li><span>NofDig: 記錄該題呈現的數列長度，5~9</span></li>
+<li><span>CorrDig: 記錄該題的正確答案(與呈現順序相反)。</span></li>
+<li><span>PressDig: 紀錄該題使用者鍵入的答案。</span></li>
+<li><span>Accuracy: 紀錄該題數字是否答對，每個位置記錄一次。</span></li>
+<li><span>Sum: 一個位置答對得 1 分，將答對的位置分數加起來。</span></li>
+<li><span>RT: 計算從底線出現開始填達到使用者跳到下一題的時間(按 Enter 鍵，或時間到)。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>I_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Score: 該回合總得分。將每一題得分加總。</span></li>
+<li><span>Acc: 以總得分除以總分(105)。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>J_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: {2:[json,json,json…],3:[json,json,json…],4:[json,json,json…]}</span>
+<h6 id="234…型別為整數而不是字串-是為N等級-與前-N-個方塊對比。第一個等級，N2，使用者須與前兩個方塊位置對比。" data-id="234…型別為整數而不是字串-是為N等級-與前-N-個方塊對比。第一個等級，N2，使用者須與前兩個方塊位置對比。"><a class="anchor hidden-xs" href="#234…型別為整數而不是字串-是為N等級-與前-N-個方塊對比。第一個等級，N2，使用者須與前兩個方塊位置對比。" title="234…型別為整數而不是字串-是為N等級-與前-N-個方塊對比。第一個等級，N2，使用者須與前兩個方塊位置對比。"><span class="octicon octicon-link"></span></a><span>2,3,4,…型別為整數而不是字串 是為N(等級) 與前 N 個方塊對比。第一個等級，N=2，使用者須與前兩個方塊位置對比。</span></h6>
+<span>json=&gt;</span>
+<ol>
+<li><span>Trial: 每個等級有 30+N 題，題號從 1~(30+N)。</span></li>
+<li><span>Position: 紀錄該題方塊出現的位置，上圖 18 為九宮格位置編碼</span></li>
+<li><span>CorrAns: 記錄該題正確反應，0 表示不須按鍵，1 表示須按鍵。</span></li>
+<li><span>Press: 記錄該題使用者是否有按鍵，0 表示沒按鍵，1 表示有按鍵反應。</span></li>
+<li><span>Accuracy: 記錄該題使用者是否做出正確反應。1 表示正確反應，0 表示錯誤反應</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>J_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>N: 紀錄使用者該回合最終 level，N 是多少。</span></li>
+<li><span>Acc: 整體正確率。</span></li>
+<li><span>Score: 本次作業總得分。</span></li>
+<li><span>back_Score2: 計算第一個 level，N=2，30 次反應的總得分。</span></li>
+<li><span>back_Score3: 計算第一個 level，N=3，30 次反應的總得分。如果使用者未執行第二個等級(N = 3)，則紀錄為 0。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>K_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 照題目呈現順序編號，1~120。</span></li>
+<li><span>Condition: 記錄該題中文字詞的屬性，正向詞§記錄為 1，負向詞(N)紀錄為 2，中性詞(M)記錄為 3。</span></li>
+<li><span>Pic: 記錄該題呈現的圖檔名稱</span></li>
+<li><span>Color: ：記錄該題呈現中文字詞的顏色。綠色紀錄為 1，紅色紀錄為 2，藍色紀錄為3，黃色紀錄為 4。</span></li>
+<li><span>Press: 記錄使用者選的顏色。綠色紀錄為 1(J)，紅色紀錄為 2(F)，藍色紀錄為3(S)，黃色紀錄為 4(L)。</span></li>
+<li><span>Acc: 如反應正確紀錄為 1，反應錯誤記錄為 0。</span></li>
+<li><span>RT: 記錄該題從中文字詞出現至使用者作出按鍵反應的時間。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>K_group</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: Json</span><br>
+<span>Json=&gt;</span>
+<ol>
+<li><span>Acc: 計算使用者該次作業的正確率</span></li>
+<li><span>RT: 計算使用者正確反應的平均反應時間。</span></li>
+<li><span>Positive: 算使用者正向詞題目§正確反應的平均反應時間</span></li>
+<li><span>Negative: 計算使用者負向詞題目(N)正確反應的平均反應時間。</span></li>
+<li><span>Middle: 計算使用者中性詞題目(M)正確反應的平均反應時間。單</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>L_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 每回合 40 題，1~40。</span></li>
+<li><span>filename: 該題所撥放的影片檔名。</span></li>
+<li><span>X: 紀錄該題落點正確 X 座標。</span></li>
+<li><span>Y: 紀錄該題落點正確 Y 座標。</span></li>
+<li><span>Sub_X: 紀錄該題使用者判斷之 X 座標。</span></li>
+<li><span>Sub_Y: 紀錄該題使用者判斷之 Y 座標。</span></li>
+<li><span>Spin: 錄該題正確旋轉，1 表示上旋、2 表示下旋、3 表示不轉、4 表示右旋側上旋、5 表示右旋側下旋、6 表示左旋側上旋、7 表示左旋側下旋。</span></li>
+<li><span>Ans: 紀錄該題使用者判斷的旋轉球路。編碼與 Spin 同。</span></li>
+<li><span>Acc: 1 表示答對，0 表示答錯</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>L_group</span>
+<ul>
+<li><span>null</span></li>
+</ul>
+</li>
+<li><span>M_one</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>Date: 202009301833</span></li>
+<li><span>data: [Json,Json,Json,…]</span><br>
+<span>each Json=&gt;</span>
+<ol>
+<li><span>Trail: 每回合 20 題，題號 1~20。</span></li>
+<li><span>file: 記錄該題撥放影片的名稱。</span></li>
+<li><span>CorrAns: 記錄該題正確答案選項號碼。</span></li>
+<li><span>Ans: 記錄該題使用者所選的項目號碼。</span></li>
+<li><span>Acc: 記錄該題使用者是否答對。如果答對紀錄為 1，答錯紀錄為 0。</span></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><span>M_group</span>
+<ul>
+<li><span>null</span></li>
+</ul>
+</li>
+<li><span>M_video</span>
+<ul>
+<li><span>pathname: 各影片檔名</span></li>
+<li><span>Corr: 幾次正確</span></li>
+<li><span>InCorr: 幾次錯誤</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>GQ_personal</span></p>
+<ul>
+<li><span>personal_critical_data</span><br>
+<span>A.正確率 B.反應速度 C.認知表現 D.認知屬性</span>
+<ul>
+<li><span>ID: A_1</span></li>
+<li><span>A1: 注意力網路</span></li>
+<li><span>A2: 眼神線索</span></li>
+<li><span>A3: 多目標追蹤</span></li>
+<li><span>A4: 衝動控制</span></li>
+<li><span>A5: 停止訊號</span></li>
+<li><span>A6: 逆序數字記憶</span></li>
+<li><span>A7: 空間記憶</span></li>
+<li><span>A8: 點協調作業</span></li>
+<li><span>A9: 運動抑制</span></li>
+<li><span>A10: 情緒觸發</span></li>
+<li><span>B1: 注意力網路</span></li>
+<li><span>B2: 眼神線索</span></li>
+<li><span>B3: 衝動控制</span></li>
+<li><span>B4: 停止訊號</span></li>
+<li><span>B5: 情緒觸發</span></li>
+<li><span>C1: 注意力網路</span></li>
+<li><span>C2: 眼神線索</span></li>
+<li><span>C3: 多目標追蹤</span></li>
+<li><span>C4: 衝動控制</span></li>
+<li><span>C5: 停止訊號</span></li>
+<li><span>C6: 逆序數字記憶</span></li>
+<li><span>C7: 空間記憶</span></li>
+<li><span>C8: 點協調作業</span></li>
+<li><span>C9: 運動抑制</span></li>
+<li><span>C10: 情緒觸發</span></li>
+</ul>
+</li>
+<li><span>personal_Date</span>
+<ul>
+<li><span>ID : XXX</span></li>
+<li><span>A ~ M : ISO制時間</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>EW</span></p>
+<ul>
+<li><span>personal_information</span>
+<ul>
+<li><span>ID: 登入帳號</span></li>
+<li><span>password: 登入密碼</span></li>
+<li><span>first: 第一次登入 true 不是第一次登入 false (bool)</span></li>
+</ul>
+</li>
+<li><span>personal_data</span>
+<ul>
+<li><span>ID: 登入帳號</span></li>
+<li><span>name: 姓名</span></li>
+<li><span>gender: male/female</span></li>
+<li><span>age: 數字</span></li>
+<li><span>birth: html5 date</span></li>
+<li><span>TW_ID: 身分證字號</span></li>
+<li><span>height: 身高</span></li>
+<li><span>weight: 體重</span></li>
+<li><span>phone: 電話號碼(手機)</span></li>
+<li><span>place: 地址</span></li>
+<li><span>mail: e-mail</span></li>
+<li><span>school: 填表者學校</span></li>
+<li><span>degree: 系級</span></li>
+<li><span>year: 球齡</span></li>
+<li><span>nice: 最佳競賽成績</span></li>
+<li><span>Ghand: 日常慣用手</span></li>
+<li><span>Phand: 競賽慣用手</span></li>
+<li><span>teacher: 教練</span></li>
+<li><span>oneExercise: 一對一每周練習時間</span></li>
+<li><span>groupExercise: 團體一周練習時間</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>data</span></p>
+<ul>
+<li><span>Mtable</span>
+<ul>
+<li><span>filepath:檔案位置</span></li>
+<li><span>X:球落點X</span></li>
+<li><span>Y:球落點Y</span></li>
+<li><span>ans: 問題答案,紀錄該題正確旋轉，1 表示上旋、2 表示下旋、3 表示不轉、4 表示右旋側上旋、5 表示右旋側下旋、6 表示左旋側上旋、7 表示左旋側下旋。</span></li>
+</ul>
+</li>
+<li><span>Ltable</span>
+<ul>
+<li><span>filepath:檔案位置</span></li>
+<li><span>ans1: 問題答案,1、正手 2、反手</span></li>
+<li><span>ans2: 問題答案,1、正手得分 2、反手得分 3、正手失分 4、反手失分</span></li>
+</ul>
+</li>
+<li><span>critical_value</span></li>
+</ul>
+</li>
+<li>
+<p><span>lock</span></p>
+<ul>
+<li><span>users</span>
+<ul>
+<li><span>name:usersCount</span></li>
+<li><span>count:1</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><span>QQ</span></p>
+<ul>
+<li><span>one_Q1</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q2</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_q3</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q4</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q5</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q6</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q7</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X… }</span></li>
+</ul>
+</li>
+<li><span>one_Q8</span>
+<ul>
+<li><span>{ID:帳號, Date:存入日期, data:json}</span></li>
+<li><span>json = { 1:X,2:X,3:X…76:X }</span></li>
+</ul>
+</li>
+<li><span>all</span>
+<ul>
+<li><span>{ID:帳號,…</span></li>
+<li><span>… =  Q1_1:X,Q1_2:X,Q1_3:X…Q8_76:X }</span></li>
+</ul>
+</li>
+<li><span>personal_Date</span>
+<ul>
+<li><span>ID : XXX</span></li>
+<li><span>Q1~Q8 : ISO制時間</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li class=""><a href="#資料庫設計" title="資料庫設計">資料庫設計</a><ul class="nav">
+<li><a href="#各collection名稱" title="各collection名稱">各collection名稱</a></li>
+<li><a href="#含參數填範例參數" title="含參數(填範例參數)">含參數(填範例參數)</a></li>
+<li><a href="#含參數填說明" title="含參數(填說明)">含參數(填說明)</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">全部展開</a><a class="back-to-top" href="#">回到頂部</a><a class="go-to-bottom" href="#">移至底部</a></div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
+        <div class="toc"><ul class="nav">
+<li class=""><a href="#資料庫設計" title="資料庫設計">資料庫設計</a><ul class="nav">
+<li><a href="#各collection名稱" title="各collection名稱">各collection名稱</a></li>
+<li><a href="#含參數填範例參數" title="含參數(填範例參數)">含參數(填範例參數)</a></li>
+<li><a href="#含參數填說明" title="含參數(填說明)">含參數(填說明)</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">全部展開</a><a class="back-to-top" href="#">回到頂部</a><a class="go-to-bottom" href="#">移至底部</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>

@@ -44,7 +44,7 @@ function jumpboard(req, res, type) {
         if (err) { warming(res, 2); throw err; }
         var table = db.db("board").collection(req.body.board_ID);
         var findThing = { hide: 'false' };
-        table.find(findThing, { projection: { _id: 0 } }).toArray(function (err, result) {
+        table.find(findThing, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, result) {
             if (err) { warming(res, 2); throw err; }
             db.close();
             //console.log(result);

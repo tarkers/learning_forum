@@ -95,7 +95,6 @@ router.post('/sign_in', async (req, res) => {
                 ID: req.body.ID
             }, function (err, found_personal_information) {
                 if (err) { warming(res, 2); throw err; }
-
                 //console.log("Input ID>>" + req.body.ID);
                 //console.log("Input password>>" + req.body.password);
                 if (found_personal_information == null) { //No user in database
@@ -111,6 +110,7 @@ router.post('/sign_in', async (req, res) => {
                         include: '<h1>重新進入網站可以再一次看到介紹</h1>',
                         result: "帳號不存在"
                     });
+                    found_connect.close();
                 } else { //Found user in database
                     //console.log('ID information>>');
                     //console.log(found_personal_information);
@@ -135,6 +135,7 @@ router.post('/sign_in', async (req, res) => {
                                     lover: found_lover,
                                     notice: found_notice
                                 });
+                                found_connect.close();
                             })
                         })
                     } else { //Wrong password
@@ -150,6 +151,7 @@ router.post('/sign_in', async (req, res) => {
                             include: '<h1>重新進入網站可以再一次看到介紹</h1>',
                             result: "密碼錯誤"
                         });
+                        found_connect.close();
                     }
                 }
             })
@@ -203,13 +205,14 @@ router.post('/register', async (req, router_result) => {
                                     if (err) { warming(router_result, 2); throw err; }
 
                                     var render_database = found_connect.db("data");
-                                    render_database.collection("page1").find({}, { projection: { _id: 0 } }).toArray(function (err, found_data) {
+                                    render_database.collection("page1").find({}, { projection: { _id: 0 } }).sort({ _id: 1 }).toArray(function (err, found_data) {
                                         if (err) { warming(router_result, 2); throw err; }
                                         //console.log("title>>")
                                         //console.log(found_data[0]['title'])
                                         //console.log("include>>")
                                         //console.log(found_data[1]['include'])
                                         sendEmail(req, router_result, mailTransport, found_data[0]['title'], found_data[1]['include']);
+                                        found_connect.close();
                                     });
                                     //render_database.collection("page1").findOne({}, function (err, render_page) {
                                     //    if (err) throw err;
@@ -242,8 +245,11 @@ router.post('/register', async (req, router_result) => {
                         else
                             pkg['title'] = "電子郵箱已存在 請更改郵箱再試一次";
                         router_result.render('Page1', pkg);
+                        found_connect.close();
                     }
+
                 })
+
         });
     } catch (err) {
         if (err) { warming(router_result, 2); throw err; }
@@ -285,7 +291,11 @@ router.get('/activate/:token', function (req, res) {
     var token = req.params.token.toString();
     MongoClient.connect(GetUrl("people"), { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
         if (err) { warming(res, 3); throw err; }
-        findToken(db, token).then(pkg => activateID(db, pkg)).then(deleteToken(db, token)).then(warming(res, 0)).catch(err => warming(res, 3));
+        findToken(db, token).then(pkg => activateID(db, pkg))
+            .then(deleteToken(db, token))
+            .then(warming(res, 0))
+            .catch(err => warming(res, 3))
+            .finally(pkg => db.close());
     });
 })
 
@@ -366,7 +376,8 @@ router.post('/ReSendMail', function (req, res) {
             .then(pkg => build(db, ID, pkg))
             .then(pkg => sendSecConfirmMail(pkg))
             .then(pkg => res.json(pkg))
-            .catch(error => res.json(error));
+            .catch(error => res.json(error))
+            .finally(pkg => db.close());
     });
 })
 
@@ -378,7 +389,7 @@ router.post('/ReSendMail', function (req, res) {
 //1.看是否存在,存在就取得密碼與信箱與激活狀態
 //不存在:null, 未認證: already
 //2.寄出密碼 成功:success
-function GetPasswordAndMail(db,ID) {
+function GetPasswordAndMail(db, ID) {
     return new Promise((resolve, reject) => {
         var table = db.db("people").collection("personal_information");
         table.findOne({ ID: ID }, { projection: { _id: 0 } }, function (err, result) {
@@ -401,7 +412,7 @@ function sendPassword(pkg) {
             to: pkg.mail, // 發給誰，用逗號分開
             subject: '高中教師社會科學增能平台密碼通知信', // 信件標題
             //text: 'XXXX', // 單純文字內容
-            html: '<h1>親愛的使用者您好</h1><h2>我們是高中教師社會科學增能平台, 您使用了本平台會員密碼通知功能, 您的密碼是<strong>' + pkg.password + '</strong>,謝謝您的使用</h2>' 
+            html: '<h1>親愛的使用者您好</h1><h2>我們是高中教師社會科學增能平台, 您使用了本平台會員密碼通知功能, 您的密碼是<strong>' + pkg.password + '</strong>,謝謝您的使用</h2>'
         }
         mailTransport.sendMail(mailOtions, function (error, info) {
             if (error) { reject({ result: 'error' }); throw error; }
@@ -417,7 +428,8 @@ router.post('/ForgetPassword', function (req, res) {
         GetPasswordAndMail(db, ID)
             .then(pkg => sendPassword(pkg))
             .then(pkg => res.json(pkg))
-            .catch(error => res.json(error));
+            .catch(error => res.json(error))
+            .finally(pkg => db.close());
     });
 })
 
@@ -456,7 +468,7 @@ router.post('/delete_lover', async (req, router_result) => {
                         "$unset": goal
                     }, function (err, ret) {
                         if (err) { warming(router_result, 2); throw err; }
-
+                        found_connect.close();
                         router_result.json({
                             result: "success"
                         })
@@ -508,7 +520,7 @@ router.post('/delete_notice', async (req, router_result) => {
                         "$unset": goal
                     }, function (err, ret) {
                         if (err) { warming(router_result, 2); throw err; }
-
+                        found_connect.close();
                         router_result.json({
                             result: "success"
                         })
@@ -543,6 +555,7 @@ router.post('/ChangeMe', async (req, res) => {
                     if (found_personal_information == null) { //No user in database
                         //console.log("No user in database");
                         warming(res, 3);
+                        found_connect.close();
                     } else { //Found user in database
                         //console.log('ID information>>');
                         //console.log(found_personal_information);
@@ -554,10 +567,12 @@ router.post('/ChangeMe', async (req, res) => {
                             }, function (err, ret) {
                                 if (err) { res.json({ result: "error" }); throw err; }
                                 else res.json({ result: "success" });
+                                found_connect.close();
                             })
                         } else { //Wrong password
                             //console.log("Wrong password")
                             res.json({ result: "error" });
+                            found_connect.close();
                         }
                     }
                 })
